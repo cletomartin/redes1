@@ -11,7 +11,7 @@ build:
 buildpdf:
 	jb build -W -n --builder pdflatex .
 
-publish: all
+publish: build buildpdf
 	mkdir _publish
 	mv _build/html/* _publish/
 	mv _build/latex/*.pdf _publish/redes1.pdf
