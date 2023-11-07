@@ -1,0 +1,17 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: Redes1
+author: Cleto Martín
+exclude_patterns:
+  - README.md
+
+execute:
+  execute_notebooks: off
+
+sphinx:
+  config:
+    language: es
+    html_show_copyright: false
+  extra_extensions:
+    - sphinx-prompt
