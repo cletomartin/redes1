@@ -5,6 +5,7 @@ title: Computer Networks I
 author: Cleto Martín
 exclude_patterns:
   - README.md
+  - .venv
 
 execute:
   execute_notebooks: off
