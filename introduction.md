@@ -190,9 +190,6 @@ There are different ways in which you could _access the Internet_:
 - Using _direct connection to the Internet_: for big organisations it is possible get a high-speed connection with a regional ISPs and connect its internets to the Internet.
 
 
-#### A brief history of the Internet
-
-
 #### Standards and administration
 
 The Internet is currently organised and managed by the following bodies:
@@ -203,3 +200,72 @@ The Internet is currently organised and managed by the following bodies:
   - _Internet Engineering Task Force_ (IETF): is a forum of working group, managed by the _Internet Engineering Steering Group_ (IESG) responsible of detecting problems and provide solutions to them.
     It is divided by _areas_ like applications, protocols, architecture, etc. There are _working groups_ on each area for developing solutions to specific topics.
   - _Internet Research Task Force_ (IRTF): is a forum of working group, managed by the _Internet Research Steering Group (IRSG) focused on long-term research topics about new technologies, architectures, applications, etc.
+
+
+The _Internet standards_ are a very thoroughly tested specification for a particular functionality of feature of the Internet.
+These standards will be followed by the Internet community so users and services can interoperate.
+
+Before of having an Internet standard fully approved, it must go through a review process:
+
+1. An _Internet draft_ is created in the first place.
+   This in a work-in-progress, non-official documment with a 6-month lifetime.
+1. If authorities recommend it, the Internet draft is published as a _Request For Comments_ (RFC) document.
+   A number is assigned to them and the RFCs will be assigned with a _maturity level_:
+
+   - _Proposed Standard_: at this level, the RFC has generated enough interest so some groups have started to test and implement it.
+   - _Draft Standard_: if two or more indenpendent and interopeable implementations have been done, the RFC will be elevated to this level.
+     Typically the original RFC will be modified as problems are expected to be found.
+   - _Internet Standard_: a draft standard reaches this level after a demostration of successful implementation.
+   - _Historic_: typically reserved for those RFC with historical interest like superseeded features.
+   - _Experimental_: RFCs that should not implemented on any Internet service in production.
+   - _Informational_: RFCs usually created by vendors that contain general or tutorial information.
+
+
+#### A brief history of the Internet
+
+The Internet evolved from a private network to a global one in about 40 years.
+These some of the milestones of the Internet's history:
+
+- **1950-1960**: Project RAND. Networking was limited to some terminals connected to a mainframe by means of leased lines.
+- **1962**: J.C.R. Licklider published "On-Line Man Computer Communication".
+- **1962**: Licklider was hired by DARPA to "interconnect the DoD main computers at Cheyenne Mountain, Pentagon and SAC" (ARPAnet).
+  Three network terminals were installed: Santa Monica, Berkeley and MIT.
+- **1962**: Leonard Kleinrock proposes packet switching.
+- **1968**: Douglas Engelbart and ARC presents the NLS. That event was known later as "The mother of all demos".
+  The NLS (oNLine System) was the first operating system including graphic interface, desktop, icons, mouse, windows, hyperlinks and video-conference.
+- **1969**: RFC 1 "Host software"
+- **1969**: First ARPANET: 4 nodes
+- **1971**: 15 nodes
+- **1971**: Ray Tomlinson sent the first email.
+- **1971**: FTP (File Transfer Protocol).
+- **1973**: Robert E. Kahn and Vinton Cerf work in a common internetwork protocol.
+- **1974**: RFC 675 "Specification of Internet Transmission Control Program", by Vinton Cerf.
+- **1981**: ARPANET has 213 nodes
+- **1981**: RFCs 791-793 define the basics of TCP/IP.
+- **1983**: The flag day, TCP/IP replaced all earlier protocols in ARPANET.
+- **1983**: Paul Mockapetris proposes DNS (Domain Name System).
+- **1983**: Berkeley Unix 4.2BSD includes the socket API.
+- **1984**: 4 Berkeley students write BIND (Berkeley Internet Name Domain). The DNS Unix first implementation.
+- **1985**: IETF (Internet Engineering Task Force) is created.
+- **1989**: First ISP "The World" in USA.
+- **1991**: Tim Berners-Lee (CERN) develop the first network based hypertext implementation and the HTTP protocol in the "WorldWideWeb" project.
+- **1993**: University of Illinois creates the Mosaic graphical web browser.
+- **1994**: Classless Inter-Domain Routing.
+- **1998**: IPv6.
+- **2008**: 1500 M-users.
+
+#### Economy around the Internet
+
+Nowdays the biggest and most-valued companies in the world has grown based on the existence of the Internet.
+These are a few examples of this type of companies:
+
+- _Amazon_: found in 1994 by Jeff Bezos, initially based on the e-commerce bussiness, runs Amazon Web Services (AWS)
+  which is used by companies and developers for running lots of Internet services.
+- _Wikipedia_:
+- _Google_:
+- _Meta_:
+- _Microsoft_:
+- _Social media_:
+  - _Tik Tok_:
+  - _Instagram_:
+  - _X_:
