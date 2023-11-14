@@ -16,3 +16,4 @@ sphinx:
     html_show_copyright: false
   extra_extensions:
     - sphinx-prompt
+    - sphinxemoji.sphinxemoji
