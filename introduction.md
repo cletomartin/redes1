@@ -143,6 +143,10 @@ There are 2 types of WANs:
 This mix of LANs and WANs is very common today. It creates the notion of _inter-network_ (or _internet_) where two or more networks are connected each other.
 Each network can use different technology and, as long they use the same communication rules, information can flow from and to different networks with no issues.
 
+```{note}
+Note the we are talking about an internet (with lowercase i) and as abstract concept.
+```
+
 As we introduced before, switched WANs are required when we need to connect multiple networks.
 It is required to form a _switched network_ between networks in other to create an internet.
 In a switched network, data must be forwarded between networks somehow.
@@ -162,14 +166,40 @@ It can be done using:
 
   Computer networks (and also telephone systems nowdays) work using this approach.
   A _router_ can receive packets from the hosts, queue/store them and send them to the other router individually.
-  Even if the link between routers is at full capacity, the fact that packets can be stored and queued
-
-
-- _Packet-switched_ networks:
-
-```{note}
-Note the we are talking about an internet (with lowercase i) and as abstract concept.
-```
+  Even if the link between routers is at full capacity, the fact each packets can be stored and queued by the routers make the network still functional, although some _delays_ might be introduced.
 
 ### The Internet
-### A brief history
+
+The most notable internet is the Internet (with uppercase I) and it is composed of thousands of interconnected networks.
+The structure can be described as following:
+
+- _Customer networks_: these are the end users that pay for a broadband connection for a home or an office.
+- _Provider networks_: a user pay to an Internet Service Provider (ISP) to connect their customer network to the provider network.
+  These providers (usually known as _regional ISPs_) pay for connecting their provider networks to the backbone networks of the Internet.
+- _Backbone networks_: these are managed by some ISP (usually known as _international ISPs_) and they are interconnected using _peering points_,
+  making that a message can be routed through the entire structure from one network to another.
+
+There are different ways in which you could _access the Internet_:
+
+- Using _telephone lines_: although not really common these days for end users,
+  the telephone infrastructure can be used for accessing the Internet using a _modem_ or a _DSL_ line.
+- Using _dedicated lines_: like fibre channel or TV cable, which is the most common way for end user's.
+  It provides high-speed access compared to the telephone lines.
+- Using _wireless lines_: there are remote locations in which case it is difficult to have wire-based technology.
+  For these cases wireless lines like satellite links can be used to access the internet.
+- Using _direct connection to the Internet_: for big organisations it is possible get a high-speed connection with a regional ISPs and connect its internets to the Internet.
+
+
+#### A brief history of the Internet
+
+
+#### Standards and administration
+
+The Internet is currently organised and managed by the following bodies:
+
+- _Internet Society_ (ISOC): is the main Internet organisation that provides support for the Internet standards and procedures.
+- _Internet Architecture Board_ (IAB): is the technical advisor of ISOC, focused on the technical and researching matters of the Internet community.
+  It has two main components:
+  - _Internet Engineering Task Force_ (IETF): is a forum of working group, managed by the _Internet Engineering Steering Group_ (IESG) responsible of detecting problems and provide solutions to them.
+    It is divided by _areas_ like applications, protocols, architecture, etc. There are _working groups_ on each area for developing solutions to specific topics.
+  - _Internet Research Task Force_ (IRTF): is a forum of working group, managed by the _Internet Research Steering Group (IRSG) focused on long-term research topics about new technologies, architectures, applications, etc.
