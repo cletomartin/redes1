@@ -13,7 +13,6 @@ A computer network is usually represented like a graph where:
   Nodes are considered _terminal_ devices while the connecting devices are typically used to interconnect other nodes or other networks.
 - The _links_ represent a connection between the nodes. These links may be wired or through wireless signals. We will see different types of connections during this course.
 
-
 ```{note}
 A network can be as small as 2 computers connected through a wired connection and it can be as large as millions of nodes.
 ```
@@ -208,15 +207,15 @@ These standards will be followed by the Internet community so users and services
 Before of having an Internet standard fully approved, it must go through a review process:
 
 1. An _Internet draft_ is created in the first place.
-   This in a work-in-progress, non-official documment with a 6-month lifetime.
+   This in a work-in-progress, non-official document with a 6-month lifetime.
 1. If authorities recommend it, the Internet draft is published as a _Request For Comments_ (RFC) document.
    A number is assigned to them and the RFCs will be assigned with a _maturity level_:
 
    - _Proposed Standard_: at this level, the RFC has generated enough interest so some groups have started to test and implement it.
-   - _Draft Standard_: if two or more indenpendent and interopeable implementations have been done, the RFC will be elevated to this level.
+   - _Draft Standard_: if two or more independent and interoperable implementations have been done, the RFC will be elevated to this level.
      Typically the original RFC will be modified as problems are expected to be found.
-   - _Internet Standard_: a draft standard reaches this level after a demostration of successful implementation.
-   - _Historic_: typically reserved for those RFC with historical interest like superseeded features.
+   - _Internet Standard_: a draft standard reaches this level after a demonstration of successful implementation.
+   - _Historic_: typically reserved for those RFC with historical interest like superseded features.
    - _Experimental_: RFCs that should not implemented on any Internet service in production.
    - _Informational_: RFCs usually created by vendors that contain general or tutorial information.
 
@@ -226,46 +225,62 @@ Before of having an Internet standard fully approved, it must go through a revie
 The Internet evolved from a private network to a global one in about 40 years.
 These some of the milestones of the Internet's history:
 
-- **1950-1960**: Project RAND. Networking was limited to some terminals connected to a mainframe by means of leased lines.
+- **Before 1960**: during these years, computer networks were limited to some terminals connected to a mainframe by leased lines.
+  The project RAND (Research ANd Development) started on 1947 with the aim of promoting the scientific knowledge for helping US security homeland.
+  Some of the research results of this project will have impact on the birth of the Internet years later.
+- **1961**: Leonard Kleinrock proposes packet switching.
 - **1962**: J.C.R. Licklider published "On-Line Man Computer Communication".
-- **1962**: Licklider was hired by DARPA to "interconnect the DoD main computers at Cheyenne Mountain, Pentagon and SAC" (ARPAnet).
+- **1962**: Licklider was hired by the Defense Advanced Research Projects Agency (DARPA) to "interconnect the Department of Defense (DoD) main computers at Cheyenne Mountain, Pentagon and SAC" (ARPAnet).
   Three network terminals were installed: Santa Monica, Berkeley and MIT.
-- **1962**: Leonard Kleinrock proposes packet switching.
-- **1968**: Douglas Engelbart and ARC presents the NLS. That event was known later as "The mother of all demos".
-  The NLS (oNLine System) was the first operating system including graphic interface, desktop, icons, mouse, windows, hyperlinks and video-conference.
-- **1969**: RFC 1 "Host software"
-- **1969**: First ARPANET: 4 nodes
-- **1971**: 15 nodes
-- **1971**: Ray Tomlinson sent the first email.
-- **1971**: FTP (File Transfer Protocol).
-- **1973**: Robert E. Kahn and Vinton Cerf work in a common internetwork protocol.
+- **1967**: Creation of ARPANET: a small network whose hosts would have an _Interface Message Processor_ (IMP) to communicate with other hosts.
+  The IMPs would be able to send and receive messages from other IMPs.
+  Leonard Kleinrock proposes packet switching.
+- **1968**: Douglas Engelbart and the Augmentation Research Center (ARC) present the oN-Line Ssystem (NLS),
+  a computer collaboration system where multiple users could interact.
+  That event was known later as "The mother of all demos".
+  The NLS was the first system including graphic interface, desktop, icons, mouse, windows, hyperlinks and video-conference.
+- **1969**: RFC 1 "Host software", specifying what is in the IMPs and what in hosts.
+- **1969**: First ARPANET: 4 nodes in University of California at Los Angeles, University of California at Santa Barbara, Stanford Research Institute, and University of Utah.
+- **1971**: ARPANET grows to 15 nodes. It worked with the Network Control Protocol (NCP).
+- **1971**: Ray Tomlinson sends the first email.
+- **1971**: File Transfer Protocol (FTP) is defined.
+- **1973**: Robert E. Kahn and Vinton Cerf work in a common internetwork protocol, as an improvement of NCP.
 - **1974**: RFC 675 "Specification of Internet Transmission Control Program", by Vinton Cerf.
-- **1981**: ARPANET has 213 nodes
+- **1977**: An internet of 3 different networks (ARPANET, packet radio, and packet satellite) was demonstrated.
+- **1981**: ARPANET has 213 nodes.
 - **1981**: RFCs 791-793 define the basics of TCP/IP.
-- **1983**: The flag day, TCP/IP replaced all earlier protocols in ARPANET.
-- **1983**: Paul Mockapetris proposes DNS (Domain Name System).
+- **1983**: 1 January was "the flag day": TCP/IP replaced all earlier protocols in ARPANET.
+- **1983**: Paul Mockapetris proposes the protocol Domain Name System (DNS).
 - **1983**: Berkeley Unix 4.2BSD includes the socket API.
-- **1984**: 4 Berkeley students write BIND (Berkeley Internet Name Domain). The DNS Unix first implementation.
-- **1985**: IETF (Internet Engineering Task Force) is created.
-- **1989**: First ISP "The World" in USA.
-- **1991**: Tim Berners-Lee (CERN) develop the first network based hypertext implementation and the HTTP protocol in the "WorldWideWeb" project.
+- **1984**: 4 Berkeley students write Berkeley Internet Name Domain (BIND), the DNS Unix first implementation.
+- **1985**: IETF is created.
+- **1989**: First ISP "TheWorld.com" in the US.
+- **1991**: Tim Berners-Lee (at CERN) develop the first network based hypertext implementation and the HTTP protocol in the "WorldWideWeb" project.
 - **1993**: University of Illinois creates the Mosaic graphical web browser.
 - **1994**: Classless Inter-Domain Routing.
 - **1998**: IPv6.
 - **2008**: 1500 M-users.
+- **2023**: 5200 M-users (90% in developed countries and 57% in developing countries)
 
 #### Economy around the Internet
 
 Nowdays the biggest and most-valued companies in the world has grown based on the existence of the Internet.
 These are a few examples of this type of companies:
 
-- _Amazon_: found in 1994 by Jeff Bezos, initially based on the e-commerce bussiness, runs Amazon Web Services (AWS)
+- _Amazon_: founded in 1994, initially based on the e-commerce bussiness, runs Amazon Web Services (AWS)
   which is used by companies and developers for running lots of Internet services.
-- _Wikipedia_:
-- _Google_:
-- _Meta_:
-- _Microsoft_:
-- _Social media_:
-  - _Tik Tok_:
-  - _Instagram_:
-  - _X_:
+  - Revenue (2022): $513.98 billion
+  - Employees (2022): 1,112,555
+- _Alphabet_: founded in 2015 for re-structuring Google, the famous web search engine.
+  - Revenue (2022): $282.8 billion
+  - Employees (2022): 181,798
+- _Meta_: founded in 2004 and originally as the social media Facebook, is an Internet-based company focused on communication and marketing research.
+  It is also the owner of Instagram and WhatsApp, among others.
+  - Revenue (2022): $116.61 billion
+  - Employees (2023): 66,185
+- _Microsoft_: founded in 1975 and they are currently focusing on its cloud service called Azure.
+  - Revenue (2023): $211.9 billion
+  - Employees (2023): 238,000
+- _ByteDance_: founded in 2012, they are the owners of TikTok.
+  - Revenue (2022): $85.2 billion
+  - Employees (2023): 150,000
