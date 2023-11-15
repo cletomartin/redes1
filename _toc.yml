@@ -5,4 +5,5 @@ format: jb-book
 root: main
 chapters:
   - file: introduction.md
-  - file: architectures.md
+  - file: architecture.md
+  - file: application.md
