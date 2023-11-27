@@ -104,4 +104,69 @@ For terminology simplicity, in this course we are going to follow an hybrid mode
 
 ## Encapsulation and decapsulation
 
+As we have seen intuitively in the previons sections, each layer groups data in different types.
+These groups are known as _Protocol Data Units_ (PDUs).
+PDUs are built by _encapsulating_ the data to be sent with extra information appended to the data.
+These extra information might be _headers_ (when they are placed before the data) and _tails_ (when they are placed after the data).
+
+In our hybrid model, there are the following PDUs:
+
+| Layer       | PDU      | Header? | Tail? |
+|-------------|----------|---------|-------|
+| Physical    | Bits     | N/A     | N/A   |
+| Data Link   | Frame    | Yes     | Yes   |
+| Network     | Datagram | Yes     | No    |
+| Transport   | Segment  | Yes     | No    |
+| Application | Message  | N/A     | N/A   |
+
+From top to bottom, the process of _encapsulation_ is as follows:
+
+1. The program builds the _message_ it needs to send.
+1. The message is split in _segments_ each one with a transport header for sending them.
+   This header will contain the transport address, usually port numbers (source and destination).
+1. Each segments is split in network _datagrams_ that will contain the logical addresses (source and destination) in a new header appended to it.
+1. For each network datagram, a set of data link _frames_ will be built and they will includy another header with the hardware adresses (source and destination).
+   At this level, a tail is usually appended so the frame is built with a fixed size.
+1. Each frame is analysed and each _bit_ is transformed into electric signals to be sent over the transmission medium.
+
+```{note}
+It is time to show the example of sending `Redes I` message via the stack UDP/IP/Ethernet.
+As all values are shown in hexadecimal, it is important to show the ASCII table so the message's bytes can be understood.
+```
+
 ## Addressing fundamentals
+
+We have seen 2 main addressing mechanisms: _physical_ and _logical_ addresses.
+The main differences are:
+
+- The physical addresses are closer to the lower-level layers. The logical address are usually at the higher-level layers.
+- The physical addresses are globally unique. The logical address is only unique in the network it belongs.
+- The physical addresses is not meant to be changed at any time. The logical address can change frequently.
+
+### Physical address
+
+For simplicity, in this course we are going to use _physical address_, _MAC address_, and _Ethernet address_ indistinctly.
+All of them is going to reference to the physical address that identifies nodes that are _directly connected_ (data-link layer).
+It is important to note that this addressing mechanism allows data exchange between nodes that are directly connected without any intermediate node or router.
+
+```{note}
+The example in the slides is a simplified data-link frame that is going to be sent to host `87` from the host `10`.
+All nodes are connected to the shared communication medium and only the destination host receives the frame.
+```
+
+### Logical address
+
+For simplicity, in this course we are going to use _logical address_, _network addresses_ and _IP address_ indistinctly.
+Both references to the address that identifies a node _within a network_ (network layer).
+It is important to note that this addressing mechanism allows data exchange between nodes that are not connected directly and networking devices (routers) will help on routing datagrams through different networks.
+
+```{note}
+The example in the slides is a 3-LAN network with simplified physical and network addresses.
+
+- The `A` node wants to send a datagram to node `P`.
+- The frame is sent to the first router as the `20` physical address is used.
+- The first router sees that the datagram is for `P` and, thanks to its routing tables, determines that it has to send it to the second router (physicall address `33`).
+  It also changes the source physical address to its own.
+- The second router sees that the datagram is for `P` and it knows that it belongs to its own network, so it just needs to use `95` as a destination address.
+  It also changes the source physical address to its own.
+```
