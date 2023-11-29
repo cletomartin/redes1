@@ -1,4 +1,4 @@
-(archs)=
+(arch)=
 # Network architecture
 
 This lesson introduces the concept of protocol layering, showing ISO and TCP/IP models.
