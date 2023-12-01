@@ -1,4 +1,4 @@
-(application)=
+b(application)=
 # Application layer
 
 This lesson describes in depth the application layer and describes multiple application-layer protocols.
@@ -49,11 +49,45 @@ There are 3 paradigms:
 
 ## Transport requirements
 
-TBD
+The application layer requires service from the transport layer.
+The kind of service and the performance needed is determined by the own nature of the application.
+The following metrics are usually relevant for most of applications:
+
+- _Data loss_: the amount of data that can be lost at different points of the communication path.
+  Some applications tolerate some degree of data loss (e.g. video transmission) whereas others require 100% reliable data transfer (e.g. file transfer).
+- _Bandwidth_: the amount of data transferred per time unit.
+  Some applications requires a minimum of bandwidth to be "usable" (e.g. videoconferencing) whereas others can adapt themselves to changes in available bandwidth (e.g. modern video players).
+- _Timing_ or _delay_: the amount of time between a request and its response.
+  Some applications requires a very limited delay to be "usable" (e.g. games) whereas others might tolerate higher delays (e.g. messaging).
+
+```{note}
+Show the table with different types of applications and their requirements of the transport layer
+```
+
+The Internet protocol stack provides 2 protocols: TCP and UDP.
+These protocols provide the following services:
+
+- _TCP service_: provided by the TCP protocol and has the following features:
+  1. _Connection-oriented_: a virtual connection is established between client and server.
+     This connection is created before client and server start to exchange transport messages.
+  1. _Reliable_: there is some level of guarantee that messages will arrive to destination.
+  1. _Flow control_: so the sender cannot overwhelm the receiver.
+  1. _Congestion control_: so the data flow is adapted by if the network is overloaded.
+
+  Note that TCP does not resolve some communication issues like _timing_ or _guaranteed bandwidth_.
+
+- _UDP service_: it does _not_ provide any of the TCP service features, so it is not reliable.
+
+We will study them in depth in the [transport](transport) chapter.
+
+```{note}
+Show the table with different protocols and the transport layer associated to them.
+```
 
 ## Implementation example
 
-A basic way to implement applications that require communication is using _sockets_ which is a facility provided by the operating system for sending and receiving data using by using the transport layer.
+One common way to implement applications that require communication is using the _socket interface_.
+Sockets are an abstraction provided by the operating system for sending and receiving data using by using the transport layer.
 The developer can choose what type of transport layer to use and many other parameters of the communication.
 
 ```{note}
@@ -74,6 +108,127 @@ python client.py
 ```
 
 ## Web and HTTP
+
+The World Wide Web (WWW or Web) is a distributed service that provides access to documents called web pages.
+The web page content has evolved from plain text to multimedia content like videos, audios, etc.
+These two features have made the web to be highly scalable:
+
+- Highly _distributed_: they can be placed in different physical locations.
+  The place where web pages are located is called _web sites_.
+- The are _linked_: they can refer to each other, even though they are not placed is the same server.
+  The concept from 1963 of _hypertext_, where a document can refer to another and the reader can access to it directly, has evolved to _hypermedia_ because the linked objects are not only text anymore (video, audio, etc.)
+
+It was originally created by Tim Berners-Lee in 1989 at CERN for allowing researchers to access scientific content from other researchers.
+
+### Web browser
+
+In order to get access to web pages and their content a special application is needed: a _web browser_ or _web client_.
+This program is able to request and receive content that is shown to the user.
+It also handles the user input and transform it into requests.
+
+```{note}
+Show the 3 components of the web browser.
+They work as follows:
+
+1. The _controller_ handles the user input and transform it into specific actions of the client programs.
+1. Each client program knows how to access a specific _protocol_, so if the user requested a document via HTTP, the HTTP client will be used to get it.
+1. Once the document is retrieved, the controller uses the _interpreters_ to render that document on the screen.
+```
+
+Web browsers handle 3 types of web pages:
+
+- _Static_ pages: these documents that are stored in the server and the client gets a copy as they are.
+  Typical static files are HTML, XML, XSL, XHTML, etc.
+
+  ```{note}
+  Good things:
+  - They are simple and fast.
+  - Low workload for the server.
+
+  Bad things:
+  - No dynamic content which limits application scopes.
+  - Hard to maintain as the web site grows.
+  ```
+
+- _Dynamic_ pages: when they are requested by the client, the server _generates_ the content that is returned to the user.
+  Each request might generate different content.
+
+  ```{note}
+  Good things:
+  - Content can be programmatically generated.
+
+  Bad things:
+  - High workload for the server.
+  - Slower than static files.
+  ```
+
+- _Active_ pages: when they are requested by the client, the server responds with a program that will be executed by the web browser.
+  This program will finally generate the web page that will be show to the user.
+
+  ```{note}
+  - Good things:
+    1. Content can be programmatically generated.
+    1. Low workload for the server.
+
+
+  - Bad things:
+    1. Web browsers need to run programs (become interpreters).
+    1. Security and privacy concerns.
+  ```
+
+
+Web pages can be referenced in the web browser using a Uniform Resource Locator (URL).
+A URL is a general mechanism for referencing objects in a structured way.
+This is its format:
+
+```text
+<method>://<host>[:<port>][/<path>]
+```
+
+Where:
+
+- `method` is the protocol to use. For example, `http` or `ftp`.
+- `host` is the IP or the host name of the server. For example, `google.com` or `www.hola.es`.
+- `port` is the destination port of the transport communication. By default is `80` for `http`.
+- `path` is the place of the target object. If not specified, it will take the root document (typically `index.html` in `http`).
+
+For example:
+
+```text
+http://www.someschool.edu/someDept/pic.gif
+ftp://my-server:631/contacts.csv
+```
+
+### The HTTP protocol
+
+The HyperText Transfer Protocol (HTTP) is a protocol that origianlly was created for retrieving web pages.
+It defines how to a client and a server have to be implemented in order to provide all the required operations.
+This protocol uses:
+
+- TCP as transport protocol.
+- The HTTP server will be listen at port 80.
+
+The clients sends _HTTP requests_ to the server and this returns _HTTP responses_.
+For example, a web browser exhanges HTTP messages with a web server to retrieve web pages.
+
+The protocol HTTP is _stateless_ meaning the server will not maintain information about past requests from clients.
+HTTP can be configured to use TCP in two different modes:
+
+1. **Nonpersistent HTTP**: for each web page object, there will be a new TCP connection.
+   This means that each HTTP request-response will generate a new TCP connection each time.
+
+   ```{note}
+   The example is a file HTML that includes an image.
+   There are 2 different TCP connections due to it is not persistent.
+   Note that each TCP connection needs the 3-way handshake to be established, which is expensive if there are lot of objects.
+   ```
+
+1. **Persistent HTTP**: multiple web page objects can be sent over the same TCP connection.
+   This reduces the amount of overhead required for each connection but might increases the amount of connections that a single server holds for a period of time.
+
+   ```{note}
+   The example now is much simpler than the nonpersistent one
+   ```
 
 ## HTTPS
 
