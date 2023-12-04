@@ -230,6 +230,58 @@ HTTP can be configured to use TCP in two different modes:
    The example now is much simpler than the nonpersistent one
    ```
 
+The HTTP procotol defines 2 types of messages:
+
+- **Requests**: messages sent from clients to the servers.
+  They have 4 fields:
+  1. _Request line_:
+     - Method: we will see them in depth a bit later.
+     - URL: the targeted object of the request.
+     - Version: the HTTP protocol version to use.
+  1. _Header lines_: headers are used to provide options and more context to the request.
+     It can be empty.
+  1. _Blank line_: just a line break made of 2 characters `CR` and `LF`.
+  1. _Body_: if the requests require to have data to be sent to the server,
+     the body may be the place for them.
+
+  ```{note}
+  Show the example of the HTTP request parts.
+  The `Connection` header indicates that this is a nonpersistent request.
+  ```
+
+  The main request methods are:
+
+  1. `GET`: retrieve a specific object or resource. Its body is body is empty but it can pass some information to the server using:
+     - The headers.
+     - The URL parameters e.g. `http://uclm.es/info?edificio=1&campus=CR`
+  1. `HEAD`: similar to `GET` but only retrieve metadata about the resource,
+     like the last time the resource was modified.
+  1. `PUT`: sends a document to the server which is the reverse of `GET`.
+  1. `POST`: sends some information that the server should add or manipulate, like form data.
+
+  ```{note}
+  Show the table of HTTP request headers.
+  Mention that `Cookie` will be seen in depth.
+  ```
+
+- **Responses**: messages sent by the servers to the clients.
+  They have 4 fields:
+  1. _Response line_:
+     - Version: the HTTP protocol version to use.
+     - Status code: an integer representing the response type.
+       We will see them in depth a bit later.
+     - Phrase: a string version of the status code.
+  1. _Header lines_: headers are used to provide more context to the client in the response.
+     It can be empty.
+  1. _Blank line_: just a line break made of 2 characters `CR` and `LF`.
+  1. _Body_: if the reponse includes data the body may be the place for them.
+
+
+```{note}
+Explanation on how to use `nc` and `curl`:
+
+```
+
 ## HTTPS
 
 ## SSH
