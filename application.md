@@ -262,9 +262,15 @@ The HTTP procotol defines 2 types of messages:
   ```{note}
   Show the table of HTTP request headers.
   Mention that `Cookie` will be seen in depth.
+
+  Also comment that the request headers shown in the slides are just of a subset of the standard ones.
+  There can be custom headers defined by the application themselves.
   ```
 
+  Apart from the request headers we have seen, The headers might also be
+
 - **Responses**: messages sent by the servers to the clients.
+
   They have 4 fields:
   1. _Response line_:
      - Version: the HTTP protocol version to use.
@@ -276,11 +282,75 @@ The HTTP procotol defines 2 types of messages:
   1. _Blank line_: just a line break made of 2 characters `CR` and `LF`.
   1. _Body_: if the reponse includes data the body may be the place for them.
 
+  The status codes are 3-digit integers whose meaning is divided in groups:
+
+  - `2XX`: successful group. `200` means the request was successful.
+  - `3XX`: redirection group. `301` means the requested object was moved to another location, specified by the `Location` reponse header.
+  - `4XX`: client-side error group: `400` means the request was not valid and `404` means the requested object was not found.
+  - `5XX`: server-side error group: `500` means a general server error happened and `505` means the server does not support the specified HTTTP version.
 
 ```{note}
-Explanation on how to use `nc` and `curl`:
 
+Comment that response headers shown in the slides are just of a subset of the standard ones.
+There can be custom headers defined by the application themselves.
+
+About the following examples of the slides:
+
+1. The HTTP GET example shows a GET request for the object `/usr/bin/image1` using HTTP version 1.1.
+   The tells to the server that it accepts both `gif` and `jpeg` images.
+   The server's reponse contains the image with a few more metadata: the server that relied, the image size, the format in which the image is encoded, etc.
+
+1. `httpbin.org` is a dummy HTTP server that provides information about the requests it receives. It can be useful for testing HTTP request development.
+   In this example we are using it to create a request using _netcat_. `nc` will create a TCP connection to port 80 and send the data we type on the console.
+   When a blank line is introduced, the GET request will be made.
+
+   Note that the connection is kept open. If you use `Connection: close` as header, after the request the connection will be closed.
+
+1. `curl` is a command-line tool for interacting with HTTP servers. It helps to create debug and create scripts that need to access resources via HTTP (download a file, request for a service, etc.).
+   In this example `curl` recevies a `301` meaning that `google.es` is actually `www.google.es`, `curl` creates another request to the new URL automatically.
+
+   You can show this step by step if you firstly don't use `-L` flag. That will make `curl` not following the new location automatically.
+
+1. In the HTTP PUT example the client requests the execution of a CGI `/cgi-bin/doc.pl` (a Perl script).
+   In this case, the request does contain input data (50 bytes) for the script.
+
+   The server runs the script with the input data and generates a response with a dynamic object that goes in the response body (2000 bytes).
+
+1. Again, `nc` can be used for creating a PUT request. Note that if `Content-Length` is not provided, the server will response as soon as the first blank line is sent.
 ```
+
+### Cookies
+
+As we previously said, the HTTP protocol is stateless.
+This means that the communication parts need to track any context or state related to the communication.
+For example, the server does not recall that a certain client already made a related request before.
+
+The use of HTTP in many different types of applications has forced the introduction to keep some context or state.
+For example, a shopping cart or authenticated users of a given web page are examples that having some kind of context will improve notabily the user experience.
+
+A way to implement this stateful mechanism is using _cookies_.
+A cookie is usually a string value that encondes information about the user and their context.
+For example it can include the domain name, user name, timestamps, etc.
+It is _created by the server_ and passed to the client for them to store it (in their file system) during the client's first request.
+The idea the client will send the cookie along their requests os the server can identify them and get the previous context.
+
+```{note}
+Explain the toy store example: the shopping cart is implemented using a cookie.
+Note that the headers used are `Set-Cookie` and `Cookie`.
+
+You can also show a cookie analyser like [this](https://termly.io/products/cookie-scanner/). Search for `http://uclm.es` there and you will see the cookies stored by the user.
+```
+
+### Proxies and web caches
+
+We have seen a direct communication bewteen clients and servers so far.
+However, it is possible to have intermmediate HTTP nodes that will act on behalf of the clients to contact the servers.
+These nodes are called _proxies_ and they are useful in multiple scenarios:
+
+- _Security and audit_: some work environments require to be secure and confidential.
+  The use of proxies is useful for auditing the activity of web browsing as well for applying policies for access restrictions (forbidden web sites, user access control, etc.).
+- _Caching content_: which improves the overall user experience and reduces the shared bandwidth (typically at WAN links).
+  We will see this example in depth later.
 
 ## HTTPS
 
