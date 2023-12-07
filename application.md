@@ -349,13 +349,110 @@ These nodes are called _proxies_ and they are useful in multiple scenarios:
 
 - _Security and audit_: some work environments require to be secure and confidential.
   The use of proxies is useful for auditing the activity of web browsing as well for applying policies for access restrictions (forbidden web sites, user access control, etc.).
+
+  ```{note}
+  Show the `curl` example with `api.ipify.org`. The returned IP is the public IP from where we requested the HTTP GET.
+  When we use a proxy with `http_proxy` envarionment variable, the returned IP will be the proxy one instead of the previous one.
+  If the example proxy IP does not work you can get different one from [this list](https://www.proxyscrape.com/free-proxy-list).
+  ```
+
 - _Caching content_: which improves the overall user experience and reduces the shared bandwidth (typically at WAN links).
-  We will see this example in depth later.
 
-## HTTPS
+  ```{note}
+  Show the diagram where 2 clients use a proxy as a web cache.
+  The first one requests an object that is _not_ cached, so the proxy has to retrieve it from source.
+  The second one requests an object that is cached so the response is much faster by saving an external call.
+  ```
+  The main reasons for using a web cache are:
 
-## SSH
+  1. Improve client's experience as the response time is reduce overall.
+  1. Reduce the use of the _access link_, i.e. the WAN connection that is typically shared across the organisation to access the Internet.
+  1. Helps to those content providers with lower resources to effectively deliver content.
+
+  ```{note}
+  Explain the numeric example of how a web cache improves the user experience without increasing the cost too much:
+
+  1. The response time for this case is `4.01` seconds.
+  1. Increasing the bandwidth of the access link will reduce the response time to `3.1` seconds.
+     This is usually an expensive upgrade.
+  1. Using a web cache with a 40% chance of hits and no access link upgrade, the average response time will be `3.6`.
+  ```
+
+## TLS and HTTPS
 
 ## DNS
 
-## P2P
+One important part of an URL is the _host name_ or _host address_.
+This can be the IP of the server but human users are not good at remembering sequences of 4 bytes.
+The Domain Name Service (DNS) is what helps in this situation: it provides a mapping between a host name made of characters to the corresponding IP addresses.
+In this context, we will say that _a host name is resolved to its IP_ when a host name is translated to its corresponding IP address.
+For example `google.es -> 142.250.200.131`.
+
+DNS can be seen as a _distributed and hierarchical database_ which is accessible via _name servers_.
+These name servers communicate with clients and routers using the _DNS protocol_ for resolving names.
+The service is distributed because it cannot be centralised for the following reasons:
+- Avoid single points of faiure.
+- If used globally, the amount of traffic will be huge to be handled by a centralised service.
+- Distance between clients and the central server will be different depending on the client's location.
+
+Apart from name resolving, DNS provides the following services too:
+- _Host aliases_: a server can be accessed by an _alias_ of a _canonical_ name.
+- _Mail_: it contains information about mail servers and its aliases.
+- _Load balancing_: there can be multiple IPs assigned to the same name.
+
+
+
+## SSH
+
+## P2P file sharing
+
+Peer-to-peer is a different paradigm of application communication.
+Instead of having a clearly separated role like client-server,
+each node of the network can act as a client or a server _at any time_.
+This is the reason because the nodes are known as _peers_.
+
+P2P is used in multiple applications these days:
+- File sharing.
+- Voice communication.
+- Blockchain.
+
+File sharing services are commonly implemented using a P2P.
+
+```{note}
+Show the P2P example about Alice and Bod file sharing.
+The key points to show are:
+1. All nodes can be servers so this type of communication can be _highly scalable_ and provide _high availiability_.
+1. The problem with this approach is the quality of the content distributed by the peers. It might be the case that some files are not fully available as there are parts none of the peers provide.
+```
+
+When peers ask for an object to the network, they need to know something how to locate other peers.
+A possible solution is to use a _centralised directory_ (as Napster was implemented originally).
+The idea is each peer will inform to a central server about how to be contacted and the content they can server.
+The problem with this approach is that the central directory is now a _single point of failure_.
+
+Another approach is to have multiple ways to maintain this peer directory.
+This is the case of BitTorrent, where people can distribute metadata files (`.torrent`) that hold information about peers and their content.
+On top of this, there are also multiple _tracker servers_ that keep track of the peers as well.
+This approach avoids the single point of failure and provide high availability to the peer directory.
+
+BitTorrent also improves the P2P file sharing service by making the following assumptions:
+
+1. All files are broken in blocks of 256KB.
+   Shorter sharing blocks allow peers to enter and leave the network more often without causing too much interruption to others.
+
+1. Those blocks that are not common are requested first in order to increase their availability.
+   That way, clients will balance the availability of the content evenly.
+
+1. The distribution of the metadata files is not managed by the P2P network itself.
+   It needs to be done with some other mechanism.
+
+   The metadata file usually contains:
+   - The name of the file.
+   - The total size of the file.
+   - The URL to a tracker.
+   - The length of each piece (usually 256KB).
+   - A list of hashes: one hash per piece.
+
+In order to encourage clients to share files, BitTorrent defines a client relationship policy _tit-for-tat_: at first, the client is collaborative but later it will replicate to others what others do to it.
+If the client shares lot of files, it will become a _seeder_ which will have better reputation across the network.
+However if the client do not share much and only downloads from others, it will become a _leech_ which will decrease its reputation.
