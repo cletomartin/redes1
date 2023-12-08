@@ -572,7 +572,51 @@ The following examples will be used for a better understanding:
 
 ## SSH
 
-The Secure SHell (SSH) protocol is
+The Secure SHell (SSH) protocol is was originally created for replacing the insecure protocol TELNET.
+The main use of this protocol is to open terminal sessions on remote servers (commands `ssh` or `PuTTy`).
+This is very useful, for example, for maintaining infrastructure remotely without the need of being physcailly present.
+However, this protocol is general enough so it can be used for other purposes:
+
+- File transfer: `sftp` and `scp` are applications that can transfer files securely over an insecure transport.
+- Port forwarding: this is a generalisation of sending and receiving data over a secure channel.
+  If we want to communicate 2 applications and provide a secure transport between them we can:
+  1. Create an SSH tunnel between both nodes.
+  1. Configure the end of each tunnel so the data received on through it will be redirected to the application ports.
+
+  This way, it is possible to encrypt any type of traffic (HTTP, DNS, etc.).
+
+The SSH stack defines 3 protocols:
+
+1. _SSH-TRANS_: this layer is closed to the transport layer and is in charge of creating a secured transport layer.
+   It will provide:
+   - _Confidentiality_ and _integrity_ of the data transmitted.
+   - _Compression_ which improves the performance of the communication.
+   - _Server authentication_ that allows the client to ensure the server is actually who claims it is.
+
+1. _SSH-AUTH_: once the secure transport is in place, SSH-AUTH allows client and server authenticate each other.
+   Client initiates its authentication and based on the protocol negotiated it may or may not get access to the server.
+   The mechanism is very similar to TLS.
+
+1. _SSH-CONN_: once the client and server are authenticated and ready for starting to exchange data,
+   this layer helps the client to create communication _channels_.
+   Each channel can be used for one purpose (remote command execution, file transfer, etc.).
+   This layer multiplexes data between the available channels.
+
+```{note}
+The SSH example requires to run a local SSH server.
+It can be done using the following command:
+
+:::
+docker run --rm -e PASSWORD_ACCESS=true -e USER_PASSWORD=redes1 -e USER_NAME=redes1 -ti linuxserver/openssh-server
+:::
+
+It would be good to explain briefly:
+
+- The first run just request the user name and password.
+- The second run show the verbose output where some part of the negotations between client and server is shown.
+- If we stop the SSH server and restart it again,
+  the host key has changed so SSH will warn us that the server is not the same as we firstly contacted.
+```
 
 ## P2P file sharing
 
