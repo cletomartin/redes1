@@ -525,6 +525,7 @@ The following examples will be used for a better understanding:
 
 1. Show `/etc/resvol.conf` and `host` command.
 1. Show `dig` command. The `PTR` record provides the domain name associated to an IP.
+```
 
 ## SSH
 
