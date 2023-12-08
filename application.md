@@ -380,6 +380,49 @@ These nodes are called _proxies_ and they are useful in multiple scenarios:
 
 ## TLS and HTTPS
 
+Nowadays, HTTP is used in very different environments.
+With more application being capable of providing services on the Internet,
+the need of having _secure communication_ between clients and servers have been important in the recent years.
+
+Think about the following applications:
+
+- A bank's web application where users can make payments.
+- Transport-related applications like a place for buying flight tickets.
+- Email web portals where people can receive and send emails from their accounts.
+
+These applications need to be protected from authorised use and HTTP nor TCP provide any help for this.
+This is where protocols like Transport Layer Secure (TLS) or Secure Sockets Layer (SSL) are designed for.
+The first one is the most recent version of the latter.
+It can be used by any application protocol but when it is used in conjunction with HTTP it is known as HTTPS.
+If a server supports HTTP with TLS, the URL changes from `http://` to `https://` and the protocol changes from `80` to `443`.
+
+TLS provides the following services:
+
+- _Fragmentation_: application messages are divided in fragments of $2^{14}$ bytes.
+- _Compression_ (optional): fragments are compressed with the algorithm negotiated by client and server.
+- _Integrity_: ensures that data is not modified on-transit.
+- _Confidentiality_: data is encrypted so unauthorised access is not possible.
+- _Framing_: a header is added to the encrypted payload creating a _frame_ which is passed to the transport layer.
+
+These are important given the shared nature of the Internet: there are many places where information can be accessed by unauthorised actors.
+
+TLS defines 4 protocols to achieve all these services:
+
+1. _Handshake protocol_: client and servers need to agree on TLS communication details like what algorithms to use, what type of encryption, etc.
+   Both also need to authenticate each other.
+   They have to make sure that the other part is actually a legit one.
+1. _ChangeCipherSpec protocol_: this protocol is used for signalling to client and server that when it is time to use for real the parameters and secrets exchanged during the handshake.
+1. _Alert protocol_: when an error is detected, client and server will use this protocol.
+1. _Record protocol_: all messages from the previous protocols will be processed by this layer that will transform the TLS messages into encrypted and signed frames.
+
+```{note}
+The example is just a TLS handshake to `google.es`.
+The real output is longer because it includes the certificates from the server.
+We do not need to explain them in detail, just mention that it is a way to authenticate that the server we are hitting is actually a Google's one.
+
+The result of the TLS handshake is correct and some of the encryption parameters are shown.
+```
+
 ## DNS
 
 One important part of an URL is the _host name_ or _host address_.
@@ -528,6 +571,8 @@ The following examples will be used for a better understanding:
 ```
 
 ## SSH
+
+The Secure SHell (SSH) protocol is
 
 ## P2P file sharing
 
