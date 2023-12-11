@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction &#8212; Computer Networks I</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'introduction';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Network architecture" href="architecture.html" />
+    <link rel="prev" title="Computer Networks I" href="main.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="main.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Computer Networks I</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="main.html">
+                    Computer Networks I
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Network architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="application.html">Application layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transport.html">Transport layer</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/introduction.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-a-computer-network">What’s a computer network?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-classification">Network classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-type-of-connection">By type of connection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-physical-topology">By physical topology</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-size">By size</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lan">LAN</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wan">WAN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inter-networks">Inter-networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-internet">The Internet</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#standards-and-administration">Standards and administration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-history-of-the-internet">A brief history of the Internet</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#economy-around-the-internet">Economy around the Internet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<span id="intro"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h1>
+<p>This lesson is an introduction to computer network concepts and the Internet.
+You can find the slides <a class="reference download internal" download="" href="_downloads/65c85fb96ef394f086d04b1c1a2cd950/introduction.odp"><span class="xref download myst">here</span></a>.</p>
+<section id="what-s-a-computer-network">
+<h2>What’s a computer network?<a class="headerlink" href="#what-s-a-computer-network" title="Permalink to this heading">#</a></h2>
+<p>A computer network is a set of <em>interconnected</em> computers that can <em>exchange</em> information.
+A computer network is usually represented like a graph where:</p>
+<ul class="simple">
+<li><p>The <em>nodes</em> may represent a <em>host</em> (like a PC or smartphone) or a <em>connecting device</em> (like a router or a switch).
+Nodes are considered <em>terminal</em> devices while the connecting devices are typically used to interconnect other nodes or other networks.</p></li>
+<li><p>The <em>links</em> represent a connection between the nodes. These links may be wired or through wireless signals. We will see different types of connections during this course.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A network can be as small as 2 computers connected through a wired connection and it can be as large as millions of nodes.</p>
+</div>
+<p>A network can be measured with the following <em>criteria</em>:</p>
+<ul>
+<li><p><em>Performance</em>: the network performance can be measured with in a different ways:</p>
+<ul class="simple">
+<li><p><em>Transit time</em>: the time needed by a message to travel between 2 nodes.</p></li>
+<li><p><em>Response time</em>: the time elapsed between a request and the arrival of its response.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>Throughput</em> (the amount of information during a period of time) and <em>delay</em> (the excessed time for a particular event) are often contradictory.</p>
+</div>
+</li>
+<li><p><em>Reliability</em>: typically measured by the frequency of <em>failures</em> in the network and its <em>robustness</em> during failures.</p></li>
+<li><p><em>Security</em>: whether the network is capable of protecting <em>unauthorised access</em>, <em>data loss</em> and <em>data manipulation</em>.</p></li>
+</ul>
+<p>The information in a network flows between the nodes through the links.
+These information flows can be:</p>
+<ul class="simple">
+<li><p><em>Simplex</em>: the information can only flow in one direction, from one node to another.
+For example: keyboards, TV signal.</p></li>
+<li><p><em>Half-duplex</em>: the information can flow in both directions although only one node can transmit at certain time.
+For example: walkie-talkies.</p></li>
+<li><p><em>Full-duplex</em>: the information can flow in both directions and both nodes can transmit at the same time.
+For example: telephone.</p></li>
+</ul>
+</section>
+<section id="network-classification">
+<h2>Network classification<a class="headerlink" href="#network-classification" title="Permalink to this heading">#</a></h2>
+<p>There are different criteria on which one could classify a computer network.</p>
+<section id="by-type-of-connection">
+<h3>By type of connection<a class="headerlink" href="#by-type-of-connection" title="Permalink to this heading">#</a></h3>
+<p>The link is the connection between two nodes of the network.
+This link can be of two types:</p>
+<ul class="simple">
+<li><p><em>Point-to-point</em>: the link is established between 2 nodes of the network and can only be used by them.
+They are typically wired although they can be wireless (e.g. the TV remote controller).</p></li>
+<li><p><em>Multipoint</em>: the link is established between nodes and it is shared across all of them.
+Since this is a shared medium, it has some problems that need to be addressed that are not present in a point-to-point link:</p>
+<ul>
+<li><p>Sharing the transmission medium and its bandwidth (<em>spatially</em> or <em>timely</em> shared).</p></li>
+<li><p>Addressing: in order to send information, we will have to use some <em>addressing mechanism</em> so each node will be identified with an address.
+This mechanism may support the following variations:</p>
+<ol class="arabic simple">
+<li><p><em>Unicast</em>: the address identifies a single node in thet network.</p></li>
+<li><p><em>Multicast</em>: the address identifies a subset of nodes of the network.</p></li>
+<li><p><em>Broadcast</em>: the address identifies all nodes of the network.</p></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="by-physical-topology">
+<h3>By physical topology<a class="headerlink" href="#by-physical-topology" title="Permalink to this heading">#</a></h3>
+<p>There is also another way to classify a network using the concept of <em>physical topology</em>.
+It describes they way the network is laid out physically, how the links are arranged and connect different set nodes to each other.
+The topology can be seen as a <em>geometric representation</em> of the links and the linking devices to one another.</p>
+<ul class="simple">
+<li><p><em>Mesh</em>: there is a point-to-point link from every node of the network to the rest of nodes.
+This means that for a network of <code class="docutils literal notranslate"><span class="pre">n</span></code> nodes, there will be <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">(</span> <span class="pre">n</span> <span class="pre">-</span> <span class="pre">1)</span> <span class="pre">/</span> <span class="pre">2</span></code> full-duplex links.</p>
+<ul>
+<li><p>Higher robustness: if a link or node fails, there are alternative paths so the network can still function.</p></li>
+<li><p>Higher security: communication happens in dedicated channels.</p></li>
+<li><p>Higher cost: requires lot of links</p></li>
+</ul>
+</li>
+<li><p><em>Star</em>: there is a point-to-point link between the nodes to a centralised hub.
+This hub will be used as a shared linking device and will interconnect all nodes.
+So for a network with <code class="docutils literal notranslate"><span class="pre">n</span></code> nodes, there will be exactly <code class="docutils literal notranslate"><span class="pre">n</span></code> full-duplex links, each of them going from a node to the hub.</p>
+<ul>
+<li><p>Lower cost: less complexity in terms of links required.</p></li>
+<li><p>Lower robustness: the hub is a <em>single point of failure</em>.</p></li>
+<li><p>Higher security: communication still happens in dedicated channels.</p></li>
+</ul>
+</li>
+<li><p><em>Bus</em>: there is a multipoint connection between nodes, a shared transmission medium (e.g. a cable called <em>backbone</em>) to which the nodes are attached (tapped).</p>
+<ul>
+<li><p>Lower cost: less complexity in terms of links.</p></li>
+<li><p>Limitation of the amount of nodes that can be attached.</p></li>
+<li><p>Requires some kind of control on how to use the shared media (addressing, access, etc.)</p></li>
+<li><p>In case of failure, localising the error can be challenging.</p></li>
+<li><p>Security concerns about unauthorised access.</p></li>
+<li><p>The shared medium is a single point of failure.</p></li>
+</ul>
+</li>
+<li><p><em>Ring</em>: each node of the network has 2 point-to-point connection to other 2 nodes on either side of it, forming a ring between all of them.
+The information flows in one direction reaching its destination jumping from one node to the following one in turn.</p>
+<ul>
+<li><p>Easy and cheap to implement.</p></li>
+<li><p>Each node can be now a potential single point of failure but the failure would be very easy to identify.</p></li>
+<li><p>The unidirectional flow makes them slow.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="by-size">
+<h3>By size<a class="headerlink" href="#by-size" title="Permalink to this heading">#</a></h3>
+<p>In terms of the network size, we can distinguish:</p>
+<ul class="simple">
+<li><p><em>IPN</em>: InterPlanetary y Delay Tolerant Networks (DTN).</p></li>
+<li><p>Global (Internet).</p></li>
+<li><p><em>WAN</em>: Wide Area Network – country or continents.</p></li>
+<li><p><em>MAN</em>: Metropolitan Area Network – towns or neighbourhoods.</p></li>
+<li><p><em>LAN</em>: Local Area Network – buildings or departments.</p></li>
+<li><p><em>PAN</em>: Personal Area Network – computes or desktops.</p></li>
+<li><p><em>SAN</em>: System Area Network  – embedded systems.</p></li>
+<li><p><em>NoC</em>: Network On Chip – networks in a integrated circuit.</p></li>
+</ul>
+<p>We are going to focus in LAN and WAN.</p>
+<section id="lan">
+<h4>LAN<a class="headerlink" href="#lan" title="Permalink to this heading">#</a></h4>
+<p>A Local Area Network usually consists on hosts connected to one another.
+They can use a shared bus (multipoing is not really common nowdays) or having connecting device where each node has a point-to-point connection to it (e.g. a switch or router).
+Logically, it represents a network of nodes that can send information between them and node addresses identify each of them uniquely within the network.
+It is common that today’s LANs can reach transmission rates of 10Gbps and typically use a <em>simple topology</em>.</p>
+<p>LANs are not rarely used in isolation.
+Instead, they are connected to other LANs using WAN connections.</p>
+</section>
+<section id="wan">
+<h4>WAN<a class="headerlink" href="#wan" title="Permalink to this heading">#</a></h4>
+<p>A Wide Area Network brings together connecting devices like routers and their associated hosts.
+The links of a WAN are typically point-to-point between network devices (not hosts) and it is used for connecting larger entities like organisations or countries.</p>
+<p>There are 2 types of WANs:</p>
+<ul class="simple">
+<li><p><em>Point-to-point WAN</em>: where 2 connecting devices are connected to bring 2 different networks together.</p></li>
+<li><p><em>Switched WAN</em>: when we need to connect multiple point-to-point WANs together then we will need to use switches between the connecting devices.
+As we will see soon, this is the structure of the backbone of global communication today.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="inter-networks">
+<h2>Inter-networks<a class="headerlink" href="#inter-networks" title="Permalink to this heading">#</a></h2>
+<p>This mix of LANs and WANs is very common today. It creates the notion of <em>inter-network</em> (or <em>internet</em>) where two or more networks are connected each other.
+Each network can use different technology and, as long they use the same communication rules, information can flow from and to different networks with no issues.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note the we are talking about an internet (with lowercase i) and as abstract concept.</p>
+</div>
+<p>As we introduced before, switched WANs are required when we need to connect multiple networks.
+It is required to form a <em>switched network</em> between networks in other to create an internet.
+In a switched network, data must be forwarded between networks somehow.
+It can be done using:</p>
+<ul>
+<li><p><em>Circuit-switched</em> networks: the switches activate (or deactivate) connections between ends.
+This connections are established once and are kept active during all the data transmission until it is closed.
+This connection is called <em>circuit</em>.</p>
+<p>An example of this type of switched WAN is the “old” telephone system.
+The idea is that telephone terminals are connected to the switch and switches are connected with high-capacity links between them.
+Unless all telephone circutis are used at the same time, the high-capacity link will be not used at full capacity.</p>
+</li>
+<li><p><em>Packet-switched</em> networks: instead of opening connections between communication ends,
+the ideas is to break down the data into small <em>packets</em> that are transmited individually.
+This means that the packets can now be stored and sent later and organise the transmission differently than in a continous communication scenario.</p>
+<p>Computer networks (and also telephone systems nowdays) work using this approach.
+A <em>router</em> can receive packets from the hosts, queue/store them and send them to the other router individually.
+Even if the link between routers is at full capacity, the fact each packets can be stored and queued by the routers make the network still functional, although some <em>delays</em> might be introduced.</p>
+</li>
+</ul>
+<section id="the-internet">
+<h3>The Internet<a class="headerlink" href="#the-internet" title="Permalink to this heading">#</a></h3>
+<p>The most notable internet is the Internet (with uppercase I) and it is composed of thousands of interconnected networks.
+The structure can be described as following:</p>
+<ul class="simple">
+<li><p><em>Customer networks</em>: these are the end users that pay for a broadband connection for a home or an office.</p></li>
+<li><p><em>Provider networks</em>: a user pay to an Internet Service Provider (ISP) to connect their customer network to the provider network.
+These providers (usually known as <em>regional ISPs</em>) pay for connecting their provider networks to the backbone networks of the Internet.</p></li>
+<li><p><em>Backbone networks</em>: these are managed by some ISP (usually known as <em>international ISPs</em>) and they are interconnected using <em>peering points</em>,
+making that a message can be routed through the entire structure from one network to another.</p></li>
+</ul>
+<p>There are different ways in which you could <em>access the Internet</em>:</p>
+<ul class="simple">
+<li><p>Using <em>telephone lines</em>: although not really common these days for end users,
+the telephone infrastructure can be used for accessing the Internet using a <em>modem</em> or a <em>DSL</em> line.</p></li>
+<li><p>Using <em>dedicated lines</em>: like fibre channel or TV cable, which is the most common way for end user’s.
+It provides high-speed access compared to the telephone lines.</p></li>
+<li><p>Using <em>wireless lines</em>: there are remote locations in which case it is difficult to have wire-based technology.
+For these cases wireless lines like satellite links can be used to access the internet.</p></li>
+<li><p>Using <em>direct connection to the Internet</em>: for big organisations it is possible get a high-speed connection with a regional ISPs and connect its internets to the Internet.</p></li>
+</ul>
+<section id="standards-and-administration">
+<h4>Standards and administration<a class="headerlink" href="#standards-and-administration" title="Permalink to this heading">#</a></h4>
+<p>The Internet is currently organised and managed by the following bodies:</p>
+<ul class="simple">
+<li><p><em>Internet Society</em> (ISOC): is the main Internet organisation that provides support for the Internet standards and procedures.</p></li>
+<li><p><em>Internet Architecture Board</em> (IAB): is the technical advisor of ISOC, focused on the technical and researching matters of the Internet community.
+It has two main components:</p>
+<ul>
+<li><p><em>Internet Engineering Task Force</em> (IETF): is a forum of working group, managed by the <em>Internet Engineering Steering Group</em> (IESG) responsible of detecting problems and provide solutions to them.
+It is divided by <em>areas</em> like applications, protocols, architecture, etc. There are <em>working groups</em> on each area for developing solutions to specific topics.</p></li>
+<li><p><em>Internet Research Task Force</em> (IRTF): is a forum of working group, managed by the _Internet Research Steering Group (IRSG) focused on long-term research topics about new technologies, architectures, applications, etc.</p></li>
+</ul>
+</li>
+</ul>
+<p>The <em>Internet standards</em> are a very thoroughly tested specification for a particular functionality of feature of the Internet.
+These standards will be followed by the Internet community so users and services can interoperate.</p>
+<p>Before of having an Internet standard fully approved, it must go through a review process:</p>
+<ol class="arabic simple">
+<li><p>An <em>Internet draft</em> is created in the first place.
+This in a work-in-progress, non-official document with a 6-month lifetime.</p></li>
+<li><p>If authorities recommend it, the Internet draft is published as a <em>Request For Comments</em> (RFC) document.
+A number is assigned to them and the RFCs will be assigned with a <em>maturity level</em>:</p>
+<ul class="simple">
+<li><p><em>Proposed Standard</em>: at this level, the RFC has generated enough interest so some groups have started to test and implement it.</p></li>
+<li><p><em>Draft Standard</em>: if two or more independent and interoperable implementations have been done, the RFC will be elevated to this level.
+Typically the original RFC will be modified as problems are expected to be found.</p></li>
+<li><p><em>Internet Standard</em>: a draft standard reaches this level after a demonstration of successful implementation.</p></li>
+<li><p><em>Historic</em>: typically reserved for those RFC with historical interest like superseded features.</p></li>
+<li><p><em>Experimental</em>: RFCs that should not implemented on any Internet service in production.</p></li>
+<li><p><em>Informational</em>: RFCs usually created by vendors that contain general or tutorial information.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="a-brief-history-of-the-internet">
+<h4>A brief history of the Internet<a class="headerlink" href="#a-brief-history-of-the-internet" title="Permalink to this heading">#</a></h4>
+<p>The Internet evolved from a private network to a global one in about 40 years.
+These some of the milestones of the Internet’s history:</p>
+<ul class="simple">
+<li><p><strong>Before 1960</strong>: during these years, computer networks were limited to some terminals connected to a mainframe by leased lines.
+The project RAND (Research ANd Development) started on 1947 with the aim of promoting the scientific knowledge for helping US security homeland.
+Some of the research results of this project will have impact on the birth of the Internet years later.</p></li>
+<li><p><strong>1961</strong>: Leonard Kleinrock proposes packet switching.</p></li>
+<li><p><strong>1962</strong>: J.C.R. Licklider published “On-Line Man Computer Communication”.</p></li>
+<li><p><strong>1962</strong>: Licklider was hired by the Defense Advanced Research Projects Agency (DARPA) to “interconnect the Department of Defense (DoD) main computers at Cheyenne Mountain, Pentagon and SAC” (ARPAnet).
+Three network terminals were installed: Santa Monica, Berkeley and MIT.</p></li>
+<li><p><strong>1967</strong>: Creation of ARPANET: a small network whose hosts would have an <em>Interface Message Processor</em> (IMP) to communicate with other hosts.
+The IMPs would be able to send and receive messages from other IMPs.
+Leonard Kleinrock proposes packet switching.</p></li>
+<li><p><strong>1968</strong>: Douglas Engelbart and the Augmentation Research Center (ARC) present the oN-Line Ssystem (NLS),
+a computer collaboration system where multiple users could interact.
+That event was known later as “The mother of all demos”.
+The NLS was the first system including graphic interface, desktop, icons, mouse, windows, hyperlinks and video-conference.</p></li>
+<li><p><strong>1969</strong>: RFC 1 “Host software”, specifying what is in the IMPs and what in hosts.</p></li>
+<li><p><strong>1969</strong>: First ARPANET: 4 nodes in University of California at Los Angeles, University of California at Santa Barbara, Stanford Research Institute, and University of Utah.</p></li>
+<li><p><strong>1971</strong>: ARPANET grows to 15 nodes. It worked with the Network Control Protocol (NCP).</p></li>
+<li><p><strong>1971</strong>: Ray Tomlinson sends the first email.</p></li>
+<li><p><strong>1971</strong>: File Transfer Protocol (FTP) is defined.</p></li>
+<li><p><strong>1973</strong>: Robert E. Kahn and Vinton Cerf work in a common internetwork protocol, as an improvement of NCP.</p></li>
+<li><p><strong>1974</strong>: RFC 675 “Specification of Internet Transmission Control Program”, by Vinton Cerf.</p></li>
+<li><p><strong>1977</strong>: An internet of 3 different networks (ARPANET, packet radio, and packet satellite) was demonstrated.</p></li>
+<li><p><strong>1981</strong>: ARPANET has 213 nodes.</p></li>
+<li><p><strong>1981</strong>: RFCs 791-793 define the basics of TCP/IP.</p></li>
+<li><p><strong>1983</strong>: 1 January was “the flag day”: TCP/IP replaced all earlier protocols in ARPANET.</p></li>
+<li><p><strong>1983</strong>: Paul Mockapetris proposes the protocol Domain Name System (DNS).</p></li>
+<li><p><strong>1983</strong>: Berkeley Unix 4.2BSD includes the socket API.</p></li>
+<li><p><strong>1984</strong>: 4 Berkeley students write Berkeley Internet Name Domain (BIND), the DNS Unix first implementation.</p></li>
+<li><p><strong>1985</strong>: IETF is created.</p></li>
+<li><p><strong>1989</strong>: First ISP “<a class="reference external" href="http://TheWorld.com">TheWorld.com</a>” in the US.</p></li>
+<li><p><strong>1991</strong>: Tim Berners-Lee (at CERN) develop the first network based hypertext implementation and the HTTP protocol in the “WorldWideWeb” project.</p></li>
+<li><p><strong>1993</strong>: University of Illinois creates the Mosaic graphical web browser.</p></li>
+<li><p><strong>1994</strong>: Classless Inter-Domain Routing.</p></li>
+<li><p><strong>1998</strong>: IPv6.</p></li>
+<li><p><strong>2008</strong>: 1500 M-users.</p></li>
+<li><p><strong>2023</strong>: 5200 M-users (90% in developed countries and 57% in developing countries)</p></li>
+</ul>
+</section>
+<section id="economy-around-the-internet">
+<h4>Economy around the Internet<a class="headerlink" href="#economy-around-the-internet" title="Permalink to this heading">#</a></h4>
+<p>Nowdays the biggest and most-valued companies in the world has grown based on the existence of the Internet.
+These are a few examples of this type of companies:</p>
+<ul class="simple">
+<li><p><em>Amazon</em>: founded in 1994, initially based on the e-commerce bussiness, runs Amazon Web Services (AWS)
+which is used by companies and developers for running lots of Internet services.</p>
+<ul>
+<li><p>Revenue (2022): $513.98 billion</p></li>
+<li><p>Employees (2022): 1,112,555</p></li>
+</ul>
+</li>
+<li><p><em>Alphabet</em>: founded in 2015 for re-structuring Google, the famous web search engine.</p>
+<ul>
+<li><p>Revenue (2022): $282.8 billion</p></li>
+<li><p>Employees (2022): 181,798</p></li>
+</ul>
+</li>
+<li><p><em>Meta</em>: founded in 2004 and originally as the social media Facebook, is an Internet-based company focused on communication and marketing research.
+It is also the owner of Instagram and WhatsApp, among others.</p>
+<ul>
+<li><p>Revenue (2022): $116.61 billion</p></li>
+<li><p>Employees (2023): 66,185</p></li>
+</ul>
+</li>
+<li><p><em>Microsoft</em>: founded in 1975 and they are currently focusing on its cloud service called Azure.</p>
+<ul>
+<li><p>Revenue (2023): $211.9 billion</p></li>
+<li><p>Employees (2023): 238,000</p></li>
+</ul>
+</li>
+<li><p><em>ByteDance</em>: founded in 2012, they are the owners of TikTok.</p>
+<ul>
+<li><p>Revenue (2022): $85.2 billion</p></li>
+<li><p>Employees (2023): 150,000</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="main.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Computer Networks I</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="architecture.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Network architecture</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-a-computer-network">What’s a computer network?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-classification">Network classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-type-of-connection">By type of connection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-physical-topology">By physical topology</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-size">By size</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lan">LAN</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wan">WAN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inter-networks">Inter-networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-internet">The Internet</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#standards-and-administration">Standards and administration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-history-of-the-internet">A brief history of the Internet</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#economy-around-the-internet">Economy around the Internet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cleto Martín
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

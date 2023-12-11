@@ -1,0 +1,673 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Network architecture &#8212; Computer Networks I</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'architecture';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application layer" href="application.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="main.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Computer Networks I</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="main.html">
+                    Computer Networks I
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Network architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="application.html">Application layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transport.html">Transport layer</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/architecture.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Network architecture</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-models">Reference models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#osi">OSI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp-ip">TCP/IP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hybrid-model">Hybrid model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#encapsulation-and-decapsulation">Encapsulation and decapsulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#addressing-fundamentals">Addressing fundamentals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-address">Physical address</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logical-address">Logical address</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="network-architecture">
+<span id="arch"></span><h1>Network architecture<a class="headerlink" href="#network-architecture" title="Permalink to this heading">#</a></h1>
+<p>This lesson introduces the concept of protocol layering, showing ISO and TCP/IP models.
+You can find the slides <a class="reference download internal" download="" href="_downloads/8587437cff0967e8aee670f6f1897e01/architecture.odp"><span class="xref download myst">here</span></a>.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>A network architecture describes how a network is organised, its components and its <em>protocols</em> or communication rule set.</p>
+<p>When the communication is simple we may need a simple <em>protocol</em> to reach an effective exchange of information between peers.
+However, automating this communication is usually a complex process that requires the implementation of specific rules (protocols) in order to be achieved.
+In fact, even a simple human conversation can have hidden complexity underneath:</p>
+<ul class="simple">
+<li><p>They should talk a language that both can understand.</p></li>
+<li><p>They should respect the other’s turn before talking.</p></li>
+<li><p>It is expected to follow good manners. For example, say hello, ask for things kindly, farewell before leaving, etc.</p></li>
+</ul>
+<p>This examples gets even more complicated if we introduce new variables:</p>
+<ul class="simple">
+<li><p>The speakers do not share a common language so they need some translation mechanism.</p></li>
+<li><p>The speakers are located apart from one another.</p></li>
+</ul>
+<p>If we want to deal with complex communication problems, we will have to divide each problem into simpler functions or tasks that will collaborate each other in order to get the overall communication done.
+This is an intuitive idea of <em>protocol layering</em>:
+divide the communication problem into different phases which solve <em>a particular issue/problem</em> of the overall communication process and <em>delegate</em> the rest to other phases to other layers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Philosopher’s analogy is an illustrative example. See that each layer of the communication use a information useful at its own level.
+For example, the translator has a field called <code class="docutils literal notranslate"><span class="pre">L</span></code> for the language and the sender uses the fax number.</p>
+</div>
+<p>Protocol layering organises the communication mechanism in layers that:</p>
+<ul class="simple">
+<li><p>Are sorted by <em>abstraction level</em>, from the end user to the transmission medium.</p></li>
+<li><p>Require functionality from upper layers and provide it to the lower ones.</p></li>
+<li><p>At both ends, each layer can be seen as they maintain a virtual conversation that makes sense at the layer’s level.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Two principles of protocol layering:</p>
+<ol class="arabic simple">
+<li><p>Each layer should be able to perform two opposite tasks: for example send/receive, or encrypt/decrypt.</p></li>
+<li><p>Each layer should share the same object at both ends of the communication. For example, an encryption layer should have a chiphertext at both ends.</p></li>
+</ol>
+</div>
+</section>
+<section id="reference-models">
+<h2>Reference models<a class="headerlink" href="#reference-models" title="Permalink to this heading">#</a></h2>
+<p>In this section two main reference protocol models are shown. They describe how different protocol layers can cooperate so a computer network can be implemented.
+Depending of the defined details, the model can be <em>more specific</em> by describing the detailed behaviour of each layer and the protocols used,
+or it can be <em>more general</em> defining the model conceptually.</p>
+<section id="osi">
+<h3>OSI<a class="headerlink" href="#osi" title="Permalink to this heading">#</a></h3>
+<p>The Open System Interconnection (OSI) model is a reference model created by the ISO by the late 1970s. This is a general and conceptual model that can be used for describing other computer communication models too.</p>
+<p>This model defines 3 key components for each layer:</p>
+<ol class="arabic simple">
+<li><p><strong>Service</strong>: the functionality that a layer provides.</p></li>
+<li><p><strong>Interface</strong>: the mechanism on how to get the service from a layer.</p></li>
+<li><p><strong>Protocol</strong>: the communication rule set between the communication ends of a layer.</p></li>
+</ol>
+<p>From bottom to top, the layers of this model are:</p>
+<ol class="arabic simple">
+<li><p><strong>Physical</strong>: it is in charged of transforming bits into electrical/mechanical signals and its reverse operation.
+This layer is very dependant of the transmission medium. Both ends of this layer send and receive <em>bits</em>.</p></li>
+<li><p><strong>Data link</strong>: provides data transmission between nodes that are directly connected (cable, air, etc.).
+The data transmission is grouped in set of bytes called <em>frames</em>.
+At this level nodes need to have some addressing mechanism and a common one, used in multiple types of networks, is the <em>Media Access Control</em> (MAC) address.</p></li>
+<li><p><strong>Network</strong>: provides data transmission between nodes that are not directly connected.
+At this level, a source node can send data to a target node and some intermediate nodes (<em>routers</em>) will help on retransmitting the message until it reaches its destination.
+The data is grouped in <em>datagrams</em> or <em>packets</em> and this layer also needs an addressing mechanism.
+Nodes will have a <em>logical address</em> and the most common one is the IP address.</p></li>
+<li><p><strong>Transport</strong>: provides a logical connection between two programs of different nodes.
+Both nodes can maintain multiple logical connections.
+The data is grouped in <em>segments</em> or <em>user datagrams</em> depending of the protocol used and it also requires an addressing mechanism which usually is a <em>port</em> number.</p></li>
+<li><p><strong>Session</strong>: provides a way to establish a session for a logical connection. The session provides the mechanism for a <em>reliable</em> communication and synchronisation between the nodes.</p></li>
+<li><p><strong>Presentation</strong>: it mainly provides the <em>data conversion</em> (also known <em>serialisation</em>) of complex data structures that need to be sent.
+It can also provide data encryption/decryption or compression/decompression.</p></li>
+<li><p><strong>Application</strong>: provides the highest-level communication between 2 programs and it is specific of the programs themselves (email, web browsers, remote commands, etc.)</p></li>
+</ol>
+</section>
+<section id="tcp-ip">
+<h3>TCP/IP<a class="headerlink" href="#tcp-ip" title="Permalink to this heading">#</a></h3>
+<p>The TCP/IP model is published a few years after the first implementations where already in used so it was an attempt to formalise its use and development.
+It is a more specific model as it describes what protocols should be used at some levels although other layers are not fully defined.
+The semantics of each layer are very similar to the OSI one.</p>
+<p>The layers of the TCP/IP model, from top to bottom:</p>
+<ol class="arabic simple">
+<li><p><strong>Application</strong>: any protocol used by the 2 programs involved in the communication.</p></li>
+<li><p><strong>Transport</strong>: defines 2 possible transport protocols:</p>
+<ul class="simple">
+<li><p><em>Transport Control Protocol</em> (TCP)</p></li>
+<li><p><em>User Datagram Protocol</em> (UDP)</p></li>
+</ul>
+</li>
+<li><p><strong>Inter-network</strong>: defines the <em>Internet Protocol</em> (IP) used for transmitting data between nodes across different networks.</p></li>
+<li><p><strong>Host to net</strong>: allow IP datagrams to be delivered (or rejected) to another host of the same network.</p></li>
+</ol>
+</section>
+<section id="hybrid-model">
+<h3>Hybrid model<a class="headerlink" href="#hybrid-model" title="Permalink to this heading">#</a></h3>
+<p>The OSI and TCP/IP models are very similar. In fact, as the OSI model is so general, it can be simplified so it is adjusted to the TCP/IP model’s layers.
+For terminology simplicity, in this course we are going to follow an hybrid model with 5 layers:</p>
+<ul class="simple">
+<li><p>Application</p></li>
+<li><p>Transport</p></li>
+<li><p>Network</p></li>
+<li><p>Data link</p></li>
+<li><p>Physical</p></li>
+</ul>
+</section>
+</section>
+<section id="encapsulation-and-decapsulation">
+<h2>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Permalink to this heading">#</a></h2>
+<p>As we have seen intuitively in the previons sections, each layer groups data in different types.
+These groups are known as <em>Protocol Data Units</em> (PDUs).
+PDUs are built by <em>encapsulating</em> the data to be sent with extra information appended to the data.
+These extra information might be <em>headers</em> (when they are placed before the data) and <em>tails</em> (when they are placed after the data).</p>
+<p>In our hybrid model, there are the following PDUs:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Layer</p></th>
+<th class="head"><p>PDU</p></th>
+<th class="head"><p>Header?</p></th>
+<th class="head"><p>Tail?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Physical</p></td>
+<td><p>Bits</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data Link</p></td>
+<td><p>Frame</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Network</p></td>
+<td><p>Datagram</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Transport</p></td>
+<td><p>Segment</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Application</p></td>
+<td><p>Message</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+<p>From top to bottom, the process of <em>encapsulation</em> is as follows:</p>
+<ol class="arabic simple">
+<li><p>The program builds the <em>message</em> it needs to send.</p></li>
+<li><p>The message is split in <em>segments</em> each one with a transport header for sending them.
+This header will contain the transport address, usually port numbers (source and destination).</p></li>
+<li><p>Each segments is split in network <em>datagrams</em> that will contain the logical addresses (source and destination) in a new header appended to it.</p></li>
+<li><p>For each network datagram, a set of data link <em>frames</em> will be built and they will includy another header with the hardware adresses (source and destination).
+At this level, a tail is usually appended so the frame is built with a fixed size.</p></li>
+<li><p>Each frame is analysed and each <em>bit</em> is transformed into electric signals to be sent over the transmission medium.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is time to show the example of sending <code class="docutils literal notranslate"><span class="pre">Redes</span> <span class="pre">I</span></code> message via the stack UDP/IP/Ethernet.
+As all values are shown in hexadecimal, it is important to show the ASCII table so the message’s bytes can be understood.</p>
+</div>
+</section>
+<section id="addressing-fundamentals">
+<h2>Addressing fundamentals<a class="headerlink" href="#addressing-fundamentals" title="Permalink to this heading">#</a></h2>
+<p>We have seen 2 main addressing mechanisms: <em>physical</em> and <em>logical</em> addresses.
+The main differences are:</p>
+<ul class="simple">
+<li><p>The physical addresses are closer to the lower-level layers. The logical address are usually at the higher-level layers.</p></li>
+<li><p>The physical addresses are globally unique. The logical address is only unique in the network it belongs.</p></li>
+<li><p>The physical addresses is not meant to be changed at any time. The logical address can change frequently.</p></li>
+</ul>
+<section id="physical-address">
+<h3>Physical address<a class="headerlink" href="#physical-address" title="Permalink to this heading">#</a></h3>
+<p>For simplicity, in this course we are going to use <em>physical address</em>, <em>MAC address</em>, and <em>Ethernet address</em> indistinctly.
+All of them is going to reference to the physical address that identifies nodes that are <em>directly connected</em> (data-link layer).
+It is important to note that this addressing mechanism allows data exchange between nodes that are directly connected without any intermediate node or router.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example in the slides is a simplified data-link frame that is going to be sent to host <code class="docutils literal notranslate"><span class="pre">87</span></code> from the host <code class="docutils literal notranslate"><span class="pre">10</span></code>.
+All nodes are connected to the shared communication medium and only the destination host receives the frame.</p>
+</div>
+</section>
+<section id="logical-address">
+<h3>Logical address<a class="headerlink" href="#logical-address" title="Permalink to this heading">#</a></h3>
+<p>For simplicity, in this course we are going to use <em>logical address</em>, <em>network addresses</em> and <em>IP address</em> indistinctly.
+Both references to the address that identifies a node <em>within a network</em> (network layer).
+It is important to note that this addressing mechanism allows data exchange between nodes that are not connected directly and networking devices (routers) will help on routing datagrams through different networks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example in the slides is a 3-LAN network with simplified physical and network addresses.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">A</span></code> node wants to send a datagram to node <code class="docutils literal notranslate"><span class="pre">P</span></code>.</p></li>
+<li><p>The frame is sent to the first router as the <code class="docutils literal notranslate"><span class="pre">20</span></code> physical address is used.</p></li>
+<li><p>The first router sees that the datagram is for <code class="docutils literal notranslate"><span class="pre">P</span></code> and, thanks to its routing tables, determines that it has to send it to the second router (physicall address <code class="docutils literal notranslate"><span class="pre">33</span></code>).
+It also changes the source physical address to its own.</p></li>
+<li><p>The second router sees that the datagram is for <code class="docutils literal notranslate"><span class="pre">P</span></code> and it knows that it belongs to its own network, so it just needs to use <code class="docutils literal notranslate"><span class="pre">95</span></code> as a destination address.
+It also changes the source physical address to its own.</p></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="application.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Application layer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-models">Reference models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#osi">OSI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp-ip">TCP/IP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hybrid-model">Hybrid model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#encapsulation-and-decapsulation">Encapsulation and decapsulation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#addressing-fundamentals">Addressing fundamentals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-address">Physical address</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logical-address">Logical address</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cleto Martín
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

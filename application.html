@@ -1,0 +1,1186 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Application layer &#8212; Computer Networks I</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'application';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Transport layer" href="transport.html" />
+    <link rel="prev" title="Network architecture" href="architecture.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="main.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Computer Networks I</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="main.html">
+                    Computer Networks I
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Network architecture</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Application layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transport.html">Transport layer</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/application.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Application layer</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paradigms">Paradigms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transport-requirements">Transport requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-example">Implementation example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#web-and-http">Web and HTTP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#web-browser">Web browser</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-http-protocol">The HTTP protocol</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cookies">Cookies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proxies-and-web-caches">Proxies and web caches</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tls-and-https">TLS and HTTPS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dns">DNS</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-structure">Hierarchical structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-servers">DNS servers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-resolution-mechanism">DNS resolution mechanism</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-records">DNS records</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-messages">DNS messages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh">SSH</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p-file-sharing">P2P file sharing</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <p>b(application)=</p>
+<section class="tex2jax_ignore mathjax_ignore" id="application-layer">
+<h1>Application layer<a class="headerlink" href="#application-layer" title="Permalink to this heading">#</a></h1>
+<p>This lesson describes in depth the application layer and describes multiple application-layer protocols.
+You can find the slides <a class="reference download internal" download="" href="_downloads/398536d305b5a578a74201be787cadde/application.odp"><span class="xref download myst">here</span></a>.</p>
+<p>As it has already mentioned in the <a class="reference internal" href="architecture.html#arch"><span class="std std-ref">architecture</span></a> chapter,
+the each protocol layer provides a certain service to the upper-level layer and requires functionality from the lower one.
+In this case, the application layer is at the top of the stack so:</p>
+<ol class="arabic simple">
+<li><p>It <em>provides</em> service to the user: from the user point of view, there is a <em>logical connection</em> between its application and the remote one as they were directly connected sharing messages.
+Obviously, this connection is actually performed by the lower-level layers down to the physical layer.</p></li>
+<li><p>It <em>uses</em> the transport layer to send its <em>messages</em>: depending on the selected transport protocol the message deliveries could be guaranteed or not.</p></li>
+</ol>
+<p>There are <em>public-domain</em> protocols, defined in RFCs, like HTTP or DNS, and <em>proprietary</em> protocols like Skype or WhatsApp.
+Since the public-domain ones are standardised and publicly available they are typically adopted for a better interoperability between different manufacturers.</p>
+<p>The application-level protocol defines mainly the following features:</p>
+<ul class="simple">
+<li><p><strong>Messages</strong>: the valid syntax and structure of messages (fields and values), the meaning of the messages (semantics), and the types of messages (e.g. requests, reponses, control, etc.)</p></li>
+<li><p><strong>Message processing</strong>: those rules about how and when messages should be processed.</p></li>
+</ul>
+<section id="paradigms">
+<h2>Paradigms<a class="headerlink" href="#paradigms" title="Permalink to this heading">#</a></h2>
+<p>The application layer communicates two or more applications.
+The role of the applications that take during the data exchange defines the <em>paradigm</em> of the communication.
+There are 3 paradigms:</p>
+<ol class="arabic">
+<li><p><strong>Client-Server</strong>: this is the most traditional one where the client contacts the server which is always on-line waiting for clients to connect.
+The client <em>initiates the connection</em> to server in order to perform a <em>request</em> and the server replies to that operation with a <em>response</em>:</p>
+<ul class="simple">
+<li><p>Multiple clients can connect to the same server.</p></li>
+<li><p>Clients cannot connect directly to each other.</p></li>
+<li><p>The server has to be always reachable by clients.</p></li>
+</ul>
+<p>Applications using this paradigm usually provides 2 different programs: the client application and the server application.</p>
+</li>
+<li><p><strong>Peer-to-Peer</strong>: the main problem with the client-server paradigm is that the server side becomes a <em>single-point-of-failure</em> (SPOF) and it often needs to be replicated.
+This replication might not be easy to implement in some cases.</p>
+<p>The alternative paradigm is to have a network of <em>peers</em>, i.e. nodes that can <em>request</em> and <em>response</em> messages.
+This means that:</p>
+<ul class="simple">
+<li><p>There is not a central entity that needs to be always available.</p></li>
+<li><p>The system can grow just by adding nodes to the network but they are difficult to manage and control.</p></li>
+</ul>
+<p>P2P systems are used in some limited context.</p>
+</li>
+<li><p><strong>Mixed</strong>: some applications used both client-server and P2P paradigms at the same time, depending of the operation they are performing.
+For example, the lookup operations of available peers can be done with a client-server approach whereas the connection between peers would be done via P2P.</p></li>
+</ol>
+</section>
+<section id="transport-requirements">
+<h2>Transport requirements<a class="headerlink" href="#transport-requirements" title="Permalink to this heading">#</a></h2>
+<p>The application layer requires service from the transport layer.
+The kind of service and the performance needed is determined by the own nature of the application.
+The following metrics are usually relevant for most of applications:</p>
+<ul class="simple">
+<li><p><em>Data loss</em>: the amount of data that can be lost at different points of the communication path.
+Some applications tolerate some degree of data loss (e.g. video transmission) whereas others require 100% reliable data transfer (e.g. file transfer).</p></li>
+<li><p><em>Bandwidth</em>: the amount of data transferred per time unit.
+Some applications requires a minimum of bandwidth to be “usable” (e.g. videoconferencing) whereas others can adapt themselves to changes in available bandwidth (e.g. modern video players).</p></li>
+<li><p><em>Timing</em> or <em>delay</em>: the amount of time between a request and its response.
+Some applications requires a very limited delay to be “usable” (e.g. games) whereas others might tolerate higher delays (e.g. messaging).</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the table with different types of applications and their requirements of the transport layer</p>
+</div>
+<p>The Internet protocol stack provides 2 protocols: TCP and UDP.
+These protocols provide the following services:</p>
+<ul>
+<li><p><em>TCP service</em>: provided by the TCP protocol and has the following features:</p>
+<ol class="arabic simple">
+<li><p><em>Connection-oriented</em>: a virtual connection is established between client and server.
+This connection is created before client and server start to exchange transport messages.</p></li>
+<li><p><em>Reliable</em>: there is some level of guarantee that messages will arrive to destination.</p></li>
+<li><p><em>Flow control</em>: so the sender cannot overwhelm the receiver.</p></li>
+<li><p><em>Congestion control</em>: so the data flow is adapted by if the network is overloaded.</p></li>
+</ol>
+<p>Note that TCP does not resolve some communication issues like <em>timing</em> or <em>guaranteed bandwidth</em>.</p>
+</li>
+<li><p><em>UDP service</em>: it does <em>not</em> provide any of the TCP service features, so it is not reliable.</p></li>
+</ul>
+<p>We will study them in depth in the <a class="reference internal" href="transport.html"><span class="doc std std-doc">transport</span></a> chapter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the table with different protocols and the transport layer associated to them.</p>
+</div>
+</section>
+<section id="implementation-example">
+<h2>Implementation example<a class="headerlink" href="#implementation-example" title="Permalink to this heading">#</a></h2>
+<p>One common way to implement applications that require communication is using the <em>socket interface</em>.
+Sockets are an abstraction provided by the operating system for sending and receiving data using by using the transport layer.
+The developer can choose what type of transport layer to use and many other parameters of the communication.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can show a trivial <a class="reference download internal" download="" href="_downloads/3a5b317da70c172817ef958240b60a07/client.py"><span class="xref download myst">client</span></a> and <a class="reference download internal" download="" href="_downloads/869d3e9426c5b5d2e96b73cf5b3cca99/server.py"><span class="xref download myst">server</span></a> applications.
+Students do not need to understand everything, just the overall process and get in contact with the concept of socket.</p>
+<p>Firstly run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">server</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>And in a different terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">client</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="web-and-http">
+<h2>Web and HTTP<a class="headerlink" href="#web-and-http" title="Permalink to this heading">#</a></h2>
+<p>The World Wide Web (WWW or Web) is a distributed service that provides access to documents called web pages.
+The web page content has evolved from plain text to multimedia content like videos, audios, etc.
+These two features have made the web to be highly scalable:</p>
+<ul class="simple">
+<li><p>Highly <em>distributed</em>: they can be placed in different physical locations.
+The place where web pages are located is called <em>web sites</em>.</p></li>
+<li><p>The are <em>linked</em>: they can refer to each other, even though they are not placed is the same server.
+The concept from 1963 of <em>hypertext</em>, where a document can refer to another and the reader can access to it directly, has evolved to <em>hypermedia</em> because the linked objects are not only text anymore (video, audio, etc.)</p></li>
+</ul>
+<p>It was originally created by Tim Berners-Lee in 1989 at CERN for allowing researchers to access scientific content from other researchers.</p>
+<section id="web-browser">
+<h3>Web browser<a class="headerlink" href="#web-browser" title="Permalink to this heading">#</a></h3>
+<p>In order to get access to web pages and their content a special application is needed: a <em>web browser</em> or <em>web client</em>.
+This program is able to request and receive content that is shown to the user.
+It also handles the user input and transform it into requests.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the 3 components of the web browser.
+They work as follows:</p>
+<ol class="arabic simple">
+<li><p>The <em>controller</em> handles the user input and transform it into specific actions of the client programs.</p></li>
+<li><p>Each client program knows how to access a specific <em>protocol</em>, so if the user requested a document via HTTP, the HTTP client will be used to get it.</p></li>
+<li><p>Once the document is retrieved, the controller uses the <em>interpreters</em> to render that document on the screen.</p></li>
+</ol>
+</div>
+<p>Web browsers handle 3 types of web pages:</p>
+<ul>
+<li><p><em>Static</em> pages: these documents that are stored in the server and the client gets a copy as they are.
+Typical static files are HTML, XML, XSL, XHTML, etc.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Good things:</p>
+<ul class="simple">
+<li><p>They are simple and fast.</p></li>
+<li><p>Low workload for the server.</p></li>
+</ul>
+<p>Bad things:</p>
+<ul class="simple">
+<li><p>No dynamic content which limits application scopes.</p></li>
+<li><p>Hard to maintain as the web site grows.</p></li>
+</ul>
+</div>
+</li>
+<li><p><em>Dynamic</em> pages: when they are requested by the client, the server <em>generates</em> the content that is returned to the user.
+Each request might generate different content.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Good things:</p>
+<ul class="simple">
+<li><p>Content can be programmatically generated.</p></li>
+</ul>
+<p>Bad things:</p>
+<ul class="simple">
+<li><p>High workload for the server.</p></li>
+<li><p>Slower than static files.</p></li>
+</ul>
+</div>
+</li>
+<li><p><em>Active</em> pages: when they are requested by the client, the server responds with a program that will be executed by the web browser.
+This program will finally generate the web page that will be show to the user.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Good things:</p>
+<ol class="arabic simple">
+<li><p>Content can be programmatically generated.</p></li>
+<li><p>Low workload for the server.</p></li>
+</ol>
+</li>
+<li><p>Bad things:</p>
+<ol class="arabic simple">
+<li><p>Web browsers need to run programs (become interpreters).</p></li>
+<li><p>Security and privacy concerns.</p></li>
+</ol>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+<p>Web pages can be referenced in the web browser using a Uniform Resource Locator (URL).
+A URL is a general mechanism for referencing objects in a structured way.
+This is its format:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&lt;method&gt;://&lt;host&gt;[:&lt;port&gt;][/&lt;path&gt;]
+</pre></div>
+</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code> is the protocol to use. For example, <code class="docutils literal notranslate"><span class="pre">http</span></code> or <code class="docutils literal notranslate"><span class="pre">ftp</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host</span></code> is the IP or the host name of the server. For example, <code class="docutils literal notranslate"><span class="pre">google.com</span></code> or <code class="docutils literal notranslate"><span class="pre">www.hola.es</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code> is the destination port of the transport communication. By default is <code class="docutils literal notranslate"><span class="pre">80</span></code> for <code class="docutils literal notranslate"><span class="pre">http</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> is the place of the target object. If not specified, it will take the root document (typically <code class="docutils literal notranslate"><span class="pre">index.html</span></code> in <code class="docutils literal notranslate"><span class="pre">http</span></code>).</p></li>
+</ul>
+<p>For example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>http://www.someschool.edu/someDept/pic.gif
+ftp://my-server:631/contacts.csv
+</pre></div>
+</div>
+</section>
+<section id="the-http-protocol">
+<h3>The HTTP protocol<a class="headerlink" href="#the-http-protocol" title="Permalink to this heading">#</a></h3>
+<p>The HyperText Transfer Protocol (HTTP) is a protocol that origianlly was created for retrieving web pages.
+It defines how to a client and a server have to be implemented in order to provide all the required operations.
+This protocol uses:</p>
+<ul class="simple">
+<li><p>TCP as transport protocol.</p></li>
+<li><p>The HTTP server will be listen at port 80.</p></li>
+</ul>
+<p>The clients sends <em>HTTP requests</em> to the server and this returns <em>HTTP responses</em>.
+For example, a web browser exhanges HTTP messages with a web server to retrieve web pages.</p>
+<p>The protocol HTTP is <em>stateless</em> meaning the server will not maintain information about past requests from clients.
+HTTP can be configured to use TCP in two different modes:</p>
+<ol class="arabic">
+<li><p><strong>Nonpersistent HTTP</strong>: for each web page object, there will be a new TCP connection.
+This means that each HTTP request-response will generate a new TCP connection each time.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example is a file HTML that includes an image.
+There are 2 different TCP connections due to it is not persistent.
+Note that each TCP connection needs the 3-way handshake to be established, which is expensive if there are lot of objects.</p>
+</div>
+</li>
+<li><p><strong>Persistent HTTP</strong>: multiple web page objects can be sent over the same TCP connection.
+This reduces the amount of overhead required for each connection but might increases the amount of connections that a single server holds for a period of time.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example now is much simpler than the nonpersistent one</p>
+</div>
+</li>
+</ol>
+<p>The HTTP procotol defines 2 types of messages:</p>
+<ul>
+<li><p><strong>Requests</strong>: messages sent from clients to the servers.
+They have 4 fields:</p>
+<ol class="arabic simple">
+<li><p><em>Request line</em>:</p>
+<ul class="simple">
+<li><p>Method: we will see them in depth a bit later.</p></li>
+<li><p>URL: the targeted object of the request.</p></li>
+<li><p>Version: the HTTP protocol version to use.</p></li>
+</ul>
+</li>
+<li><p><em>Header lines</em>: headers are used to provide options and more context to the request.
+It can be empty.</p></li>
+<li><p><em>Blank line</em>: just a line break made of 2 characters <code class="docutils literal notranslate"><span class="pre">CR</span></code> and <code class="docutils literal notranslate"><span class="pre">LF</span></code>.</p></li>
+<li><p><em>Body</em>: if the requests require to have data to be sent to the server,
+the body may be the place for them.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the example of the HTTP request parts.
+The <code class="docutils literal notranslate"><span class="pre">Connection</span></code> header indicates that this is a nonpersistent request.</p>
+</div>
+<p>The main request methods are:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span></code>: retrieve a specific object or resource. Its body is body is empty but it can pass some information to the server using:</p>
+<ul class="simple">
+<li><p>The headers.</p></li>
+<li><p>The URL parameters e.g. <code class="docutils literal notranslate"><span class="pre">http://uclm.es/info?edificio=1&amp;campus=CR</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HEAD</span></code>: similar to <code class="docutils literal notranslate"><span class="pre">GET</span></code> but only retrieve metadata about the resource,
+like the last time the resource was modified.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PUT</span></code>: sends a document to the server which is the reverse of <code class="docutils literal notranslate"><span class="pre">GET</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span></code>: sends some information that the server should add or manipulate, like form data.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the table of HTTP request headers.
+Mention that <code class="docutils literal notranslate"><span class="pre">Cookie</span></code> will be seen in depth.</p>
+<p>Also comment that the request headers shown in the slides are just of a subset of the standard ones.
+There can be custom headers defined by the application themselves.</p>
+</div>
+<p>Apart from the request headers we have seen, The headers might also be</p>
+</li>
+<li><p><strong>Responses</strong>: messages sent by the servers to the clients.</p>
+<p>They have 4 fields:</p>
+<ol class="arabic simple">
+<li><p><em>Response line</em>:</p>
+<ul class="simple">
+<li><p>Version: the HTTP protocol version to use.</p></li>
+<li><p>Status code: an integer representing the response type.
+We will see them in depth a bit later.</p></li>
+<li><p>Phrase: a string version of the status code.</p></li>
+</ul>
+</li>
+<li><p><em>Header lines</em>: headers are used to provide more context to the client in the response.
+It can be empty.</p></li>
+<li><p><em>Blank line</em>: just a line break made of 2 characters <code class="docutils literal notranslate"><span class="pre">CR</span></code> and <code class="docutils literal notranslate"><span class="pre">LF</span></code>.</p></li>
+<li><p><em>Body</em>: if the reponse includes data the body may be the place for them.</p></li>
+</ol>
+<p>The status codes are 3-digit integers whose meaning is divided in groups:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">2XX</span></code>: successful group. <code class="docutils literal notranslate"><span class="pre">200</span></code> means the request was successful.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">3XX</span></code>: redirection group. <code class="docutils literal notranslate"><span class="pre">301</span></code> means the requested object was moved to another location, specified by the <code class="docutils literal notranslate"><span class="pre">Location</span></code> reponse header.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4XX</span></code>: client-side error group: <code class="docutils literal notranslate"><span class="pre">400</span></code> means the request was not valid and <code class="docutils literal notranslate"><span class="pre">404</span></code> means the requested object was not found.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">5XX</span></code>: server-side error group: <code class="docutils literal notranslate"><span class="pre">500</span></code> means a general server error happened and <code class="docutils literal notranslate"><span class="pre">505</span></code> means the server does not support the specified HTTTP version.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Comment that response headers shown in the slides are just of a subset of the standard ones.
+There can be custom headers defined by the application themselves.</p>
+<p>About the following examples of the slides:</p>
+<ol class="arabic">
+<li><p>The HTTP GET example shows a GET request for the object <code class="docutils literal notranslate"><span class="pre">/usr/bin/image1</span></code> using HTTP version 1.1.
+The tells to the server that it accepts both <code class="docutils literal notranslate"><span class="pre">gif</span></code> and <code class="docutils literal notranslate"><span class="pre">jpeg</span></code> images.
+The server’s reponse contains the image with a few more metadata: the server that relied, the image size, the format in which the image is encoded, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">httpbin.org</span></code> is a dummy HTTP server that provides information about the requests it receives. It can be useful for testing HTTP request development.
+In this example we are using it to create a request using <em>netcat</em>. <code class="docutils literal notranslate"><span class="pre">nc</span></code> will create a TCP connection to port 80 and send the data we type on the console.
+When a blank line is introduced, the GET request will be made.</p>
+<p>Note that the connection is kept open. If you use <code class="docutils literal notranslate"><span class="pre">Connection:</span> <span class="pre">close</span></code> as header, after the request the connection will be closed.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">curl</span></code> is a command-line tool for interacting with HTTP servers. It helps to create debug and create scripts that need to access resources via HTTP (download a file, request for a service, etc.).
+In this example <code class="docutils literal notranslate"><span class="pre">curl</span></code> recevies a <code class="docutils literal notranslate"><span class="pre">301</span></code> meaning that <code class="docutils literal notranslate"><span class="pre">google.es</span></code> is actually <code class="docutils literal notranslate"><span class="pre">www.google.es</span></code>, <code class="docutils literal notranslate"><span class="pre">curl</span></code> creates another request to the new URL automatically.</p>
+<p>You can show this step by step if you firstly don’t use <code class="docutils literal notranslate"><span class="pre">-L</span></code> flag. That will make <code class="docutils literal notranslate"><span class="pre">curl</span></code> not following the new location automatically.</p>
+</li>
+<li><p>In the HTTP PUT example the client requests the execution of a CGI <code class="docutils literal notranslate"><span class="pre">/cgi-bin/doc.pl</span></code> (a Perl script).
+In this case, the request does contain input data (50 bytes) for the script.</p>
+<p>The server runs the script with the input data and generates a response with a dynamic object that goes in the response body (2000 bytes).</p>
+</li>
+<li><p>Again, <code class="docutils literal notranslate"><span class="pre">nc</span></code> can be used for creating a PUT request. Note that if <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> is not provided, the server will response as soon as the first blank line is sent.</p></li>
+</ol>
+</div>
+</section>
+<section id="cookies">
+<h3>Cookies<a class="headerlink" href="#cookies" title="Permalink to this heading">#</a></h3>
+<p>As we previously said, the HTTP protocol is stateless.
+This means that the communication parts need to track any context or state related to the communication.
+For example, the server does not recall that a certain client already made a related request before.</p>
+<p>The use of HTTP in many different types of applications has forced the introduction to keep some context or state.
+For example, a shopping cart or authenticated users of a given web page are examples that having some kind of context will improve notabily the user experience.</p>
+<p>A way to implement this stateful mechanism is using <em>cookies</em>.
+A cookie is usually a string value that encondes information about the user and their context.
+For example it can include the domain name, user name, timestamps, etc.
+It is <em>created by the server</em> and passed to the client for them to store it (in their file system) during the client’s first request.
+The idea the client will send the cookie along their requests os the server can identify them and get the previous context.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Explain the toy store example: the shopping cart is implemented using a cookie.
+Note that the headers used are <code class="docutils literal notranslate"><span class="pre">Set-Cookie</span></code> and <code class="docutils literal notranslate"><span class="pre">Cookie</span></code>.</p>
+<p>You can also show a cookie analyser like <a class="reference external" href="https://termly.io/products/cookie-scanner/">this</a>. Search for <code class="docutils literal notranslate"><span class="pre">http://uclm.es</span></code> there and you will see the cookies stored by the user.</p>
+</div>
+</section>
+<section id="proxies-and-web-caches">
+<h3>Proxies and web caches<a class="headerlink" href="#proxies-and-web-caches" title="Permalink to this heading">#</a></h3>
+<p>We have seen a direct communication bewteen clients and servers so far.
+However, it is possible to have intermmediate HTTP nodes that will act on behalf of the clients to contact the servers.
+These nodes are called <em>proxies</em> and they are useful in multiple scenarios:</p>
+<ul>
+<li><p><em>Security and audit</em>: some work environments require to be secure and confidential.
+The use of proxies is useful for auditing the activity of web browsing as well for applying policies for access restrictions (forbidden web sites, user access control, etc.).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the <code class="docutils literal notranslate"><span class="pre">curl</span></code> example with <code class="docutils literal notranslate"><span class="pre">api.ipify.org</span></code>. The returned IP is the public IP from where we requested the HTTP GET.
+When we use a proxy with <code class="docutils literal notranslate"><span class="pre">http_proxy</span></code> envarionment variable, the returned IP will be the proxy one instead of the previous one.
+If the example proxy IP does not work you can get different one from <a class="reference external" href="https://www.proxyscrape.com/free-proxy-list">this list</a>.</p>
+</div>
+</li>
+<li><p><em>Caching content</em>: which improves the overall user experience and reduces the shared bandwidth (typically at WAN links).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the diagram where 2 clients use a proxy as a web cache.
+The first one requests an object that is <em>not</em> cached, so the proxy has to retrieve it from source.
+The second one requests an object that is cached so the response is much faster by saving an external call.</p>
+</div>
+<p>The main reasons for using a web cache are:</p>
+<ol class="arabic simple">
+<li><p>Improve client’s experience as the response time is reduce overall.</p></li>
+<li><p>Reduce the use of the <em>access link</em>, i.e. the WAN connection that is typically shared across the organisation to access the Internet.</p></li>
+<li><p>Helps to those content providers with lower resources to effectively deliver content.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Explain the numeric example of how a web cache improves the user experience without increasing the cost too much:</p>
+<ol class="arabic simple">
+<li><p>The response time for this case is <code class="docutils literal notranslate"><span class="pre">4.01</span></code> seconds.</p></li>
+<li><p>Increasing the bandwidth of the access link will reduce the response time to <code class="docutils literal notranslate"><span class="pre">3.1</span></code> seconds.
+This is usually an expensive upgrade.</p></li>
+<li><p>Using a web cache with a 40% chance of hits and no access link upgrade, the average response time will be <code class="docutils literal notranslate"><span class="pre">3.6</span></code>.</p></li>
+</ol>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="tls-and-https">
+<h2>TLS and HTTPS<a class="headerlink" href="#tls-and-https" title="Permalink to this heading">#</a></h2>
+<p>Nowadays, HTTP is used in very different environments.
+With more application being capable of providing services on the Internet,
+the need of having <em>secure communication</em> between clients and servers have been important in the recent years.</p>
+<p>Think about the following applications:</p>
+<ul class="simple">
+<li><p>A bank’s web application where users can make payments.</p></li>
+<li><p>Transport-related applications like a place for buying flight tickets.</p></li>
+<li><p>Email web portals where people can receive and send emails from their accounts.</p></li>
+</ul>
+<p>These applications need to be protected from authorised use and HTTP nor TCP provide any help for this.
+This is where protocols like Transport Layer Secure (TLS) or Secure Sockets Layer (SSL) are designed for.
+The first one is the most recent version of the latter.
+It can be used by any application protocol but when it is used in conjunction with HTTP it is known as HTTPS.
+If a server supports HTTP with TLS, the URL changes from <code class="docutils literal notranslate"><span class="pre">http://</span></code> to <code class="docutils literal notranslate"><span class="pre">https://</span></code> and the protocol changes from <code class="docutils literal notranslate"><span class="pre">80</span></code> to <code class="docutils literal notranslate"><span class="pre">443</span></code>.</p>
+<p>TLS provides the following services:</p>
+<ul class="simple">
+<li><p><em>Fragmentation</em>: application messages are divided in fragments of <span class="math notranslate nohighlight">\(2^{14}\)</span> bytes.</p></li>
+<li><p><em>Compression</em> (optional): fragments are compressed with the algorithm negotiated by client and server.</p></li>
+<li><p><em>Integrity</em>: ensures that data is not modified on-transit.</p></li>
+<li><p><em>Confidentiality</em>: data is encrypted so unauthorised access is not possible.</p></li>
+<li><p><em>Framing</em>: a header is added to the encrypted payload creating a <em>frame</em> which is passed to the transport layer.</p></li>
+</ul>
+<p>These are important given the shared nature of the Internet: there are many places where information can be accessed by unauthorised actors.</p>
+<p>TLS defines 4 protocols to achieve all these services:</p>
+<ol class="arabic simple">
+<li><p><em>Handshake protocol</em>: client and servers need to agree on TLS communication details like what algorithms to use, what type of encryption, etc.
+Both also need to authenticate each other.
+They have to make sure that the other part is actually a legit one.</p></li>
+<li><p><em>ChangeCipherSpec protocol</em>: this protocol is used for signalling to client and server that when it is time to use for real the parameters and secrets exchanged during the handshake.</p></li>
+<li><p><em>Alert protocol</em>: when an error is detected, client and server will use this protocol.</p></li>
+<li><p><em>Record protocol</em>: all messages from the previous protocols will be processed by this layer that will transform the TLS messages into encrypted and signed frames.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example is just a TLS handshake to <code class="docutils literal notranslate"><span class="pre">google.es</span></code>.
+The real output is longer because it includes the certificates from the server.
+We do not need to explain them in detail, just mention that it is a way to authenticate that the server we are hitting is actually a Google’s one.</p>
+<p>The result of the TLS handshake is correct and some of the encryption parameters are shown.</p>
+</div>
+</section>
+<section id="dns">
+<h2>DNS<a class="headerlink" href="#dns" title="Permalink to this heading">#</a></h2>
+<p>One important part of an URL is the <em>host name</em> or <em>host address</em>.
+This can be the IP of the server but human users are not good at remembering sequences of 4 bytes.
+The Domain Name Service (DNS) is what helps in this situation: it provides a mapping between a host name made of characters to the corresponding IP addresses.
+In this context, we will say that <em>a host name is resolved to its IP</em> when a host name is translated to its corresponding IP address.
+For example <code class="docutils literal notranslate"><span class="pre">google.es</span> <span class="pre">-&gt;</span> <span class="pre">142.250.200.131</span></code>.</p>
+<p>DNS can be seen as a <em>distributed and hierarchical database</em> which is accessible via <em>name servers</em>.
+These name servers communicate with clients and routers using the <em>DNS protocol</em> for resolving names.
+The service is distributed because it cannot be centralised for the following reasons:</p>
+<ul class="simple">
+<li><p>Avoid single points of faiure.</p></li>
+<li><p>If used globally, the amount of traffic will be huge to be handled by a centralised service.</p></li>
+<li><p>Distance between clients and the central server will be different depending on the client’s location.</p></li>
+</ul>
+<p>Apart from name resolving, DNS provides the following services too:</p>
+<ul class="simple">
+<li><p><em>Host aliases</em>: a server can be accessed by an <em>alias</em> of a <em>canonical</em> name.</p></li>
+<li><p><em>Mail</em>: it contains information about mail servers and its aliases.</p></li>
+<li><p><em>Load balancing</em>: there can be multiple IPs assigned to the same name.</p></li>
+</ul>
+<section id="hierarchical-structure">
+<h3>Hierarchical structure<a class="headerlink" href="#hierarchical-structure" title="Permalink to this heading">#</a></h3>
+<p>DNS uses a <em>hierarchical</em> name space.
+This means that DNS names are structured in a specific way so each part of the structure corresponds to a certain level of the DNS server structure.</p>
+<p>The structure of DNS names can be seen like a <em>tree</em>:</p>
+<ul class="simple">
+<li><p>Each node in the tree has a <em>label</em> no longer than 63 characters.</p></li>
+<li><p>The root node has an empty label.</p></li>
+<li><p>A node can be referenced by its <em>domain name</em>, the path of labels separated by dots.
+If the domain name goes from the target node to the root node is known as <em>fully qualified domain name</em> (FQDN).</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example of <code class="docutils literal notranslate"><span class="pre">pc1.dept.uni.edu.</span></code>, we can show that:</p>
+<ul class="simple">
+<li><p>That’s a FQDN.</p></li>
+<li><p>We have 5 labels: <code class="docutils literal notranslate"><span class="pre">pc1</span></code>, <code class="docutils literal notranslate"><span class="pre">dept</span></code>, <code class="docutils literal notranslate"><span class="pre">uni</span></code>, <code class="docutils literal notranslate"><span class="pre">edu</span></code> and the empty label of the root node.</p></li>
+<li><p>We have 4 domain names: <code class="docutils literal notranslate"><span class="pre">pc1.</span></code>, <code class="docutils literal notranslate"><span class="pre">dept.</span></code>, <code class="docutils literal notranslate"><span class="pre">uni.</span></code> and <code class="docutils literal notranslate"><span class="pre">edu.</span></code>.</p></li>
+</ul>
+<p>It is good to say that a <em>domain</em> is any subtree of the name space.
+For example: <code class="docutils literal notranslate"><span class="pre">dept.uni.edu.</span></code> is a domain.</p>
+</div>
+<p>The DNS servers are structured in a very similar way so they can be scalable to a large distributed system.
+Each node of the tree might have a corresponding server that provides the information of all the nodes under that domain name.
+This is known as <em>zone</em> and the servers responsible of a zone create a <em>zone file</em> with a list of all nodes under that domain.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example, the <code class="docutils literal notranslate"><span class="pre">com</span></code> zone is huge so if the com DNS servers need to create the list of all nodes under this domain would not be scalable.
+For that reason, subdomains like <code class="docutils literal notranslate"><span class="pre">yahoo.com</span></code> or <code class="docutils literal notranslate"><span class="pre">amazom.com</span></code> will hold the zone file for their own domains.
+That way the <code class="docutils literal notranslate"><span class="pre">com</span></code> server can refer to any of the subdomains if more detailed information is needed.</p>
+</div>
+</section>
+<section id="dns-servers">
+<h3>DNS servers<a class="headerlink" href="#dns-servers" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><em>Root servers</em>: there are 13 root name servers worldwide, each of them named after a letter (from A to M).
+They do not really store too much information as the details are delegated to other subdomain servers.</p></li>
+<li><p><em>Top-Level Domain servers</em>: these are placed at the following level of the root servers and they are responsible of domains like <code class="docutils literal notranslate"><span class="pre">com</span></code>, <code class="docutils literal notranslate"><span class="pre">edu</span></code>, etc.
+and also top-level country domains like <code class="docutils literal notranslate"><span class="pre">es</span></code>, <code class="docutils literal notranslate"><span class="pre">uk</span></code>, etc.
+They usually do not hold detailed information about other domains of their zone.</p></li>
+<li><p><em>Authoritative DNS servers</em>: these servers are contacted by TLD ones as they are delegated to managed a subdomain and know all the hosts within their zone.
+For example, <code class="docutils literal notranslate"><span class="pre">google.com.</span></code> has <code class="docutils literal notranslate"><span class="pre">ns1.google.com</span></code> as one of the authoritative servers for their domain.</p></li>
+<li><p><em>Local name server</em>: it is the name server that DNS clients will contact directly when they need to create a DNS query for resolving names.
+It can be maintained by an ISP or an organisation.</p></li>
+</ul>
+</section>
+<section id="dns-resolution-mechanism">
+<h3>DNS resolution mechanism<a class="headerlink" href="#dns-resolution-mechanism" title="Permalink to this heading">#</a></h3>
+<p>When a DNS client creates a query for a specific DNS name, it will firstly contact to its local name server and, if it does <em>not</em> know the answer, it will trigger the query to the rest of the DNS network.
+At that point, two strategies are possible: <em>recursive</em> or <em>iterative</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example shows two ways on how the name resolution of <code class="docutils literal notranslate"><span class="pre">gaia.cs.umass.edu</span></code> can take place:</p>
+<ol class="arabic simple">
+<li><p><em>Recursive</em>: the local DNS server contacts a root server. The root server does not know about <code class="docutils literal notranslate"><span class="pre">gaia.cs.umass.edu</span></code> and asks for more information to <code class="docutils literal notranslate"><span class="pre">.edu</span></code> TLD server.
+The TLD server does not know about <code class="docutils literal notranslate"><span class="pre">gaia.cs.umass.edu</span></code> but it knows that for <code class="docutils literal notranslate"><span class="pre">cs.umass.edu</span></code> can contact to <code class="docutils literal notranslate"><span class="pre">dns.cs.umass.edu</span></code> authoritative server so it asks for it.
+This final authoritative server knows the answer for <code class="docutils literal notranslate"><span class="pre">gaia.cs.umass.edu</span></code> so the response goes back through all the previous path.</p></li>
+<li><p><em>Iterative</em>: the order of the DNS queries are the same but it is performed by the local name server instead by each DNS server in turn.
+For that to be possible, those servers that do not know the answer for <code class="docutils literal notranslate"><span class="pre">gaia.cs.umass.edu</span></code> will have to provide a server to ask instead.</p></li>
+</ol>
+</div>
+<p>Recursive queries clearly <em>simplifies the implementation</em> of the local server but puts a <em>burden</em> on the root and TLD servers.
+Iterative queries makes the local name server to work more on each query and remove the pressure from the root and TLD servers.
+This approach is more interesting for a global service like DNS.</p>
+<p>In both cases, for DNS to scale and function properly in a global context, it is important that responses can be <em>cached</em>.
+Caching responses for a period of time known as time-to-live (TTL) will reduce the amount of queries in the DNS network.
+For example, the TLD servers are usually cached by the local name servers so the root name servers are not queried very often.</p>
+</section>
+<section id="dns-records">
+<h3>DNS records<a class="headerlink" href="#dns-records" title="Permalink to this heading">#</a></h3>
+<p>As we said before, DNS is a distributed database.
+This database defines different types of <em>records</em> that will hold information about the nodes.
+They are stored as <em>resource records</em> (RR) with the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">domain</span> <span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">class</span><span class="p">,</span> <span class="n">ttl</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><em>Domain name</em>: identifies the resource record.</p></li>
+<li><p><em>Type</em>: the way the value needs to be interpreted (we will see more later).</p></li>
+<li><p><em>Class</em>: can be different values but we are only interested in <code class="docutils literal notranslate"><span class="pre">IN</span></code> (means Internet).</p></li>
+<li><p><em>Value</em>: the value of the record.</p></li>
+</ul>
+<p>These are some types:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">A</span></code> record: defines the IP for a given hostname,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NS</span></code> record: defines the authoritative name server for a given domain.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNAME</span></code> record: defines an alias for a canonical name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MX</span></code> record: defines the mail server for a given name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SOA</span></code> record: provides information of a zone and domain.</p></li>
+</ul>
+</section>
+<section id="dns-messages">
+<h3>DNS messages<a class="headerlink" href="#dns-messages" title="Permalink to this heading">#</a></h3>
+<p>The messages can be <em>queries</em> or <em>replies</em>.
+Both use exactly the same message format:</p>
+<ul class="simple">
+<li><p><em>Header</em>: 6 fields of 2 bytes each (12 bytes):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">identification</span></code>: an 2-byte integer that will be generated during the query and will be used in the replies to identify the original query.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flags</span></code>: a set of bits representing different conditions of the message. For example:</p>
+<ul>
+<li><p><em>Is this a query or reply?</em></p></li>
+<li><p><em>Is this reply authoritative?</em></p></li>
+<li><p>Error status.</p></li>
+</ul>
+</li>
+<li><p>The rest of the fields depend on if we send a query or receive a reply and point to the next variable section.</p></li>
+</ul>
+</li>
+<li><p><em>Content</em>: these fields might include the questions for queries and the responses for the replies.</p></li>
+</ul>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following examples will be used for a better understanding:</p>
+<ol class="arabic">
+<li><p>Adding a new DNS record like <code class="docutils literal notranslate"><span class="pre">redes1-esi.es</span></code> requires that an entity that is authorised for it (a <em>registrar</em>)
+updates the TLD servers with new information.
+In this example we use a domain provider like IONOS to:</p>
+<ul class="simple">
+<li><p>Register our domain <code class="docutils literal notranslate"><span class="pre">redes1-esi.es</span></code>.</p></li>
+<li><p>Point <code class="docutils literal notranslate"><span class="pre">www.redes1-esi.es</span></code> to our web server at <code class="docutils literal notranslate"><span class="pre">10.20.30.40</span></code>.</p></li>
+</ul>
+<p>Once it is done, people could access our new web site by doing the normal resolve mechanism:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">www.redes1-esi.es</span></code> will contact to the <code class="docutils literal notranslate"><span class="pre">.es</span></code> TLD server.</p></li>
+<li><p>The TLD server will say it does not know about it but we should contact <code class="docutils literal notranslate"><span class="pre">ns1029.ui-dns.de</span></code> for getting more information.</p></li>
+<li><p>The DNS client will contact this new name server and it will return the answer thanks to the A record it holds.</p></li>
+</ul>
+</li>
+<li><p>Show <code class="docutils literal notranslate"><span class="pre">/etc/resvol.conf</span></code> and <code class="docutils literal notranslate"><span class="pre">host</span></code> command.</p></li>
+<li><p>Show <code class="docutils literal notranslate"><span class="pre">dig</span></code> command. The <code class="docutils literal notranslate"><span class="pre">PTR</span></code> record provides the domain name associated to an IP.</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="ssh">
+<h2>SSH<a class="headerlink" href="#ssh" title="Permalink to this heading">#</a></h2>
+<p>The Secure SHell (SSH) protocol is was originally created for replacing the insecure protocol TELNET.
+The main use of this protocol is to open terminal sessions on remote servers (commands <code class="docutils literal notranslate"><span class="pre">ssh</span></code> or <code class="docutils literal notranslate"><span class="pre">PuTTy</span></code>).
+This is very useful, for example, for maintaining infrastructure remotely without the need of being physcailly present.
+However, this protocol is general enough so it can be used for other purposes:</p>
+<ul>
+<li><p>File transfer: <code class="docutils literal notranslate"><span class="pre">sftp</span></code> and <code class="docutils literal notranslate"><span class="pre">scp</span></code> are applications that can transfer files securely over an insecure transport.</p></li>
+<li><p>Port forwarding: this is a generalisation of sending and receiving data over a secure channel.
+If we want to communicate 2 applications and provide a secure transport between them we can:</p>
+<ol class="arabic simple">
+<li><p>Create an SSH tunnel between both nodes.</p></li>
+<li><p>Configure the end of each tunnel so the data received on through it will be redirected to the application ports.</p></li>
+</ol>
+<p>This way, it is possible to encrypt any type of traffic (HTTP, DNS, etc.).</p>
+</li>
+</ul>
+<p>The SSH stack defines 3 protocols:</p>
+<ol class="arabic simple">
+<li><p><em>SSH-TRANS</em>: this layer is closed to the transport layer and is in charge of creating a secured transport layer.
+It will provide:</p>
+<ul class="simple">
+<li><p><em>Confidentiality</em> and <em>integrity</em> of the data transmitted.</p></li>
+<li><p><em>Compression</em> which improves the performance of the communication.</p></li>
+<li><p><em>Server authentication</em> that allows the client to ensure the server is actually who claims it is.</p></li>
+</ul>
+</li>
+<li><p><em>SSH-AUTH</em>: once the secure transport is in place, SSH-AUTH allows client and server authenticate each other.
+Client initiates its authentication and based on the protocol negotiated it may or may not get access to the server.
+The mechanism is very similar to TLS.</p></li>
+<li><p><em>SSH-CONN</em>: once the client and server are authenticated and ready for starting to exchange data,
+this layer helps the client to create communication <em>channels</em>.
+Each channel can be used for one purpose (remote command execution, file transfer, etc.).
+This layer multiplexes data between the available channels.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The SSH example requires to run a local SSH server.
+It can be done using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="o">--</span><span class="n">rm</span> <span class="o">-</span><span class="n">e</span> <span class="n">PASSWORD_ACCESS</span><span class="o">=</span><span class="n">true</span> <span class="o">-</span><span class="n">e</span> <span class="n">USER_PASSWORD</span><span class="o">=</span><span class="n">redes1</span> <span class="o">-</span><span class="n">e</span> <span class="n">USER_NAME</span><span class="o">=</span><span class="n">redes1</span> <span class="o">-</span><span class="n">ti</span> <span class="n">linuxserver</span><span class="o">/</span><span class="n">openssh</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+<p>It would be good to explain briefly:</p>
+<ul class="simple">
+<li><p>The first run just request the user name and password.</p></li>
+<li><p>The second run show the verbose output where some part of the negotations between client and server is shown.</p></li>
+<li><p>If we stop the SSH server and restart it again,
+the host key has changed so SSH will warn us that the server is not the same as we firstly contacted.</p></li>
+</ul>
+</div>
+</section>
+<section id="p2p-file-sharing">
+<h2>P2P file sharing<a class="headerlink" href="#p2p-file-sharing" title="Permalink to this heading">#</a></h2>
+<p>Peer-to-peer is a different paradigm of application communication.
+Instead of having a clearly separated role like client-server,
+each node of the network can act as a client or a server <em>at any time</em>.
+This is the reason because the nodes are known as <em>peers</em>.</p>
+<p>P2P is used in multiple applications these days:</p>
+<ul class="simple">
+<li><p>File sharing.</p></li>
+<li><p>Voice communication.</p></li>
+<li><p>Blockchain.</p></li>
+</ul>
+<p>File sharing services are commonly implemented using a P2P.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the P2P example about Alice and Bod file sharing.
+The key points to show are:</p>
+<ol class="arabic simple">
+<li><p>All nodes can be servers so this type of communication can be <em>highly scalable</em> and provide <em>high availiability</em>.</p></li>
+<li><p>The problem with this approach is the quality of the content distributed by the peers. It might be the case that some files are not fully available as there are parts none of the peers provide.</p></li>
+</ol>
+</div>
+<p>When peers ask for an object to the network, they need to know something how to locate other peers.
+A possible solution is to use a <em>centralised directory</em> (as Napster was implemented originally).
+The idea is each peer will inform to a central server about how to be contacted and the content they can server.
+The problem with this approach is that the central directory is now a <em>single point of failure</em>.</p>
+<p>Another approach is to have multiple ways to maintain this peer directory.
+This is the case of BitTorrent, where people can distribute metadata files (<code class="docutils literal notranslate"><span class="pre">.torrent</span></code>) that hold information about peers and their content.
+On top of this, there are also multiple <em>tracker servers</em> that keep track of the peers as well.
+This approach avoids the single point of failure and provide high availability to the peer directory.</p>
+<p>BitTorrent also improves the P2P file sharing service by making the following assumptions:</p>
+<ol class="arabic">
+<li><p>All files are broken in blocks of 256KB.
+Shorter sharing blocks allow peers to enter and leave the network more often without causing too much interruption to others.</p></li>
+<li><p>Those blocks that are not common are requested first in order to increase their availability.
+That way, clients will balance the availability of the content evenly.</p></li>
+<li><p>The distribution of the metadata files is not managed by the P2P network itself.
+It needs to be done with some other mechanism.</p>
+<p>The metadata file usually contains:</p>
+<ul class="simple">
+<li><p>The name of the file.</p></li>
+<li><p>The total size of the file.</p></li>
+<li><p>The URL to a tracker.</p></li>
+<li><p>The length of each piece (usually 256KB).</p></li>
+<li><p>A list of hashes: one hash per piece.</p></li>
+</ul>
+</li>
+</ol>
+<p>In order to encourage clients to share files, BitTorrent defines a client relationship policy <em>tit-for-tat</em>: at first, the client is collaborative but later it will replicate to others what others do to it.
+If the client shares lot of files, it will become a <em>seeder</em> which will have better reputation across the network.
+However if the client do not share much and only downloads from others, it will become a <em>leech</em> which will decrease its reputation.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="architecture.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Network architecture</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="transport.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Transport layer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paradigms">Paradigms</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transport-requirements">Transport requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-example">Implementation example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#web-and-http">Web and HTTP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#web-browser">Web browser</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-http-protocol">The HTTP protocol</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cookies">Cookies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proxies-and-web-caches">Proxies and web caches</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tls-and-https">TLS and HTTPS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dns">DNS</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-structure">Hierarchical structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-servers">DNS servers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-resolution-mechanism">DNS resolution mechanism</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-records">DNS records</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dns-messages">DNS messages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh">SSH</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p-file-sharing">P2P file sharing</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cleto Martín
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
