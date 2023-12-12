@@ -170,3 +170,7 @@ The example in the slides is a 3-LAN network with simplified physical and networ
 - The second router sees that the datagram is for `P` and it knows that it belongs to its own network, so it just needs to use `95` as a destination address.
   It also changes the source physical address to its own.
 ```
+
+## Exercises
+
+> TBD

@@ -291,7 +291,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -307,6 +309,29 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services">Services</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#port-addressing-and-sockets">Port addressing and sockets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encapsulation-and-decapsulation">Encapsulation and decapsulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiplexing-and-demultiplexing">Multiplexing and demultiplexing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control">Flow control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-control">Error control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connectionless-and-connection-oriented-protocols">Connectionless and connection-oriented protocols</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transport-layer-protocols-in-tcp-ip-suite">Transport-layer protocols in TCP/IP suite</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#udp">UDP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -318,6 +343,47 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="transport-layer">
 <h1>Transport layer<a class="headerlink" href="#transport-layer" title="Permalink to this heading">#</a></h1>
+<p>This lesson describes in depth the transport layer and describes some protocols for reliable data transmission.
+You can find the slides <a class="reference download internal" download="" href="_downloads/ff636a4051d34dee3bf1ed498d618481/transport.odp"><span class="xref download myst">here</span></a>.</p>
+<section id="services">
+<h2>Services<a class="headerlink" href="#services" title="Permalink to this heading">#</a></h2>
+<section id="port-addressing-and-sockets">
+<h3>Port addressing and sockets<a class="headerlink" href="#port-addressing-and-sockets" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="encapsulation-and-decapsulation">
+<h3>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="multiplexing-and-demultiplexing">
+<h3>Multiplexing and demultiplexing<a class="headerlink" href="#multiplexing-and-demultiplexing" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="flow-control">
+<h3>Flow control<a class="headerlink" href="#flow-control" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="error-control">
+<h3>Error control<a class="headerlink" href="#error-control" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="connectionless-and-connection-oriented-protocols">
+<h3>Connectionless and connection-oriented protocols<a class="headerlink" href="#connectionless-and-connection-oriented-protocols" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+<section id="transport-layer-protocols-in-tcp-ip-suite">
+<h2>Transport-layer protocols in TCP/IP suite<a class="headerlink" href="#transport-layer-protocols-in-tcp-ip-suite" title="Permalink to this heading">#</a></h2>
+<section id="udp">
+<h3>UDP<a class="headerlink" href="#udp" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="tcp">
+<h3>TCP<a class="headerlink" href="#tcp" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+<section id="reliable-protocols">
+<h2>Reliable protocols<a class="headerlink" href="#reliable-protocols" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<blockquote>
+<div><p>TBD</p>
+</div></blockquote>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -365,6 +431,35 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#services">Services</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#port-addressing-and-sockets">Port addressing and sockets</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encapsulation-and-decapsulation">Encapsulation and decapsulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiplexing-and-demultiplexing">Multiplexing and demultiplexing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control">Flow control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-control">Error control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connectionless-and-connection-oriented-protocols">Connectionless and connection-oriented protocols</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transport-layer-protocols-in-tcp-ip-suite">Transport-layer protocols in TCP/IP suite</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#udp">UDP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
