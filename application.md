@@ -670,3 +670,8 @@ BitTorrent also improves the P2P file sharing service by making the following as
 In order to encourage clients to share files, BitTorrent defines a client relationship policy _tit-for-tat_: at first, the client is collaborative but later it will replicate to others what others do to it.
 If the client shares lot of files, it will become a _seeder_ which will have better reputation across the network.
 However if the client do not share much and only downloads from others, it will become a _leech_ which will decrease its reputation.
+
+
+## Exercises
+
+> TBD
