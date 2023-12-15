@@ -65,6 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'transport';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Network layer" href="network.html" />
     <link rel="prev" title="Application layer" href="application.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -166,6 +167,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Network architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="application.html">Application layer</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Transport layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data-link.html">Data-link layer</a></li>
 </ul>
 
     </div>
@@ -328,7 +331,12 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-protocol">Simple protocol</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-and-wait">Stop and wait</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#go-back-n">Go back N</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
             </nav>
@@ -345,19 +353,105 @@ document.write(`
 <h1>Transport layer<a class="headerlink" href="#transport-layer" title="Permalink to this heading">#</a></h1>
 <p>This lesson describes in depth the transport layer and describes some protocols for reliable data transmission.
 You can find the slides <a class="reference download internal" download="" href="_downloads/ff636a4051d34dee3bf1ed498d618481/transport.odp"><span class="xref download myst">here</span></a>.</p>
+<p>The transport layer provides a way to communicate <em>processes</em> that are located in different places.
+These means that two applications can send and receive messages as they were directly connected.
+The transport layer uses the network layer to transmit information between hosts.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is important to remark the difference between the transport and network layer: the network layer’s domain is the hosts whereas the transport layer’s domain is the processes (applications) that run on these hosts.</p>
+</div>
+<p>In this section we are going to study the services provided by the transport layer to the application layer.</p>
 <section id="services">
 <h2>Services<a class="headerlink" href="#services" title="Permalink to this heading">#</a></h2>
+<p>In this section some general concepts and transport-layer services are described.
+These services are provided to the application layer.</p>
 <section id="port-addressing-and-sockets">
 <h3>Port addressing and sockets<a class="headerlink" href="#port-addressing-and-sockets" title="Permalink to this heading">#</a></h3>
+<p>As it has been already mentioned, the transport layer communicates processes running on hosts.
+Because an application could send data to one or more applications on another host, some kind of process addressing would be required.
+The transport layer uses <em>port numbers</em> for distinguish applications within a server.</p>
+<p>Using the client-server paradigm:</p>
+<ul class="simple">
+<li><p>A server application uses a <em>fixed</em> port so all clients can contact to it.
+It is usually said that <em>an application is listening on port X</em> to describe</p></li>
+<li><p>A client application uses an <em>ephemeral</em> port: its existence only lasts while communication takes place and can be changed the next time.</p></li>
+</ul>
+<p>Although we have not get into the <a class="reference internal" href="network.html"><span class="doc std std-doc">network layer</span></a>, every hosts has its own network address (usually an IP address).
+The port number is a <em>higher-level</em> address as it points to an application running on the host:</p>
+<ul class="simple">
+<li><p>The IP address selects the host.</p></li>
+<li><p>The port number selects the application of the host.</p></li>
+</ul>
+<p>The combination of IP address + port number is known as <em>socket address</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is what we used in our example of socket programming: <code class="docutils literal notranslate"><span class="pre">s.connect((HOST,</span> <span class="pre">PORT))</span></code>.</p>
+</div>
+<p>The standard organisation ICANN has defined the following port ranges:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Well-known</p></td>
+<td><p>0-1023</p></td>
+<td><p>Controlled by IANA</p></td>
+</tr>
+<tr class="row-odd"><td><p>Registered</p></td>
+<td><p>1024-49151</p></td>
+<td><p>Registered by IANA but not controlled</p></td>
+</tr>
+<tr class="row-even"><td><p>Dynamic</p></td>
+<td><p>49152-65535</p></td>
+<td><p>Temporary and private ports</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Explore <code class="docutils literal notranslate"><span class="pre">/etc/services</span></code> and show the different applications associated with the port numbers.
+Also mention that there can be 2 ports for a speific applications (TCP and UDP).</p>
+</div>
 </section>
 <section id="encapsulation-and-decapsulation">
 <h3>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Permalink to this heading">#</a></h3>
+<p>As any intermediate layer, the transport layer receives messages from the application layer and from the network layer:</p>
+<ul class="simple">
+<li><p><em>Encapsulation</em>: application messages are transformed into <em>segments</em> or <em>datagrams</em> (depending on the transport protocol we use).
+The application message (the <em>payload</em>) is appended with a <em>transport header</em> that describes its content and has useful information for the receiver to consume.
+This process happens on the <em>sender</em> side.</p></li>
+<li><p><em>Decapsulation</em>: the transport layer processes each segments or datagrams coming from the network layer.
+It removes the transport header and passes the payload to the application network.
+This process happens on the <em>receiver</em> side.</p></li>
+</ul>
 </section>
 <section id="multiplexing-and-demultiplexing">
 <h3>Multiplexing and demultiplexing<a class="headerlink" href="#multiplexing-and-demultiplexing" title="Permalink to this heading">#</a></h3>
+<p>Multiple processes can be communicating all at the same time, exchanging information with different remote processes.
+The transport layer needs to be able to perform the following operations in order to achieve this:</p>
+<ul class="simple">
+<li><p><em>Multiplexing</em>: <em>many</em> processes will use the transport layer as <em>one</em> logical channel.
+This is performed at the sender side.</p></li>
+<li><p><em>Demultiplexing</em>: the information that comes from the transport layer’s logical channel needs to be deliver to the right process.
+This is performed at the receiver side.</p></li>
+</ul>
 </section>
 <section id="flow-control">
 <h3>Flow control<a class="headerlink" href="#flow-control" title="Permalink to this heading">#</a></h3>
+<p>It is important to control the amount of data a sender can <em>produce</em> and a reciever can <em>consume</em>.
+There needs to be a <em>balance</em> between them:</p>
+<ul class="simple">
+<li><p>If the sender produces too few data, the reciever might be idle.</p></li>
+<li><p>If the sender produces too much data, the reciever can be overwhelmed.</p></li>
+<li><p>Circunstances might change as communication progresses (e.g. the receiver might get slower because of it is busy with something else).</p></li>
+</ul>
+<p>In general, the process of delivery might happen in 2 ways:</p>
+<ul class="simple">
+<li><p><em>Push</em>: the sender produces the data as it is</p></li>
+</ul>
 </section>
 <section id="error-control">
 <h3>Error control<a class="headerlink" href="#error-control" title="Permalink to this heading">#</a></h3>
@@ -377,6 +471,15 @@ You can find the slides <a class="reference download internal" download="" href=
 </section>
 <section id="reliable-protocols">
 <h2>Reliable protocols<a class="headerlink" href="#reliable-protocols" title="Permalink to this heading">#</a></h2>
+<section id="simple-protocol">
+<h3>Simple protocol<a class="headerlink" href="#simple-protocol" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="stop-and-wait">
+<h3>Stop and wait<a class="headerlink" href="#stop-and-wait" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="go-back-n">
+<h3>Go back N<a class="headerlink" href="#go-back-n" title="Permalink to this heading">#</a></h3>
+</section>
 </section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
@@ -425,6 +528,15 @@ You can find the slides <a class="reference download internal" download="" href=
         <p class="prev-next-title">Application layer</p>
       </div>
     </a>
+    <a class="right-next"
+       href="network.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Network layer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -454,7 +566,12 @@ You can find the slides <a class="reference download internal" download="" href=
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-protocol">Simple protocol</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stop-and-wait">Stop and wait</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#go-back-n">Go back N</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
   </nav></div>
