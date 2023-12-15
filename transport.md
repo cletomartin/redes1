@@ -55,6 +55,16 @@ Explore `/etc/services` and show the different applications associated with the 
 Also mention that there can be 2 ports for a speific applications (TCP and UDP).
 ```
 
+```{note}
+Explain the example of using `nc` for creating a local TCP server and listen on port 12345.
+With `netstat` you can explore the processes that are currently listening:
+
+- `-l`: shows only those processes in `LISTEN` status.
+- `-p`: shows the program names.
+- `-t`: shows only TCP.
+- `-n`: shows IPs instead of hostnames.
+```
+
 ### Encapsulation and decapsulation
 
 As any intermediate layer, the transport layer receives messages from the application layer and from the network layer:
@@ -86,13 +96,65 @@ There needs to be a _balance_ between them:
 - If the sender produces too much data, the reciever can be overwhelmed.
 - Circunstances might change as communication progresses (e.g. the receiver might get slower because of it is busy with something else).
 
-In general, the process of delivery might happen in 2 ways:
+In general, a process may deliver data in 2 ways:
 
-- _Push_: the sender produces the data as it is
+- _Pull_: the receiver _requests_ for more data to the sender.
+  In this case, there is no need of flow control mechanism as the receiver can request data as needed.
+
+- _Push_: the sender delivers the data _as it is produced_.
+  This mechanism requires some kind of control as the receiver can be overwhelmed or being idle.
+
+This pull and push model is used differently across the components of the transport layer:
+
+- _Between the sender application and the transport layer_: the application _pushes_ data to the transport layer,
+  so there is a flow control mechanism between them.
+
+- _Between the sender's transport layer and the receiver's transport layer_: when segments/datagrams are ready, the sender's transport layer _pushes_ them to the receiver's one.
+  Another flow control mechanism is needed here too.
+
+- _Between the receiver's transport layer and the receiver application_: the reciever application _pulls_ data from the its transport layer.
+  In this case, a flow control mechanism is not required as the application consumes data on-demand.
+
+The transport layer provides this flow control mechanism as we will see by the end of this chapter.
 
 ### Error control
 
+The transport layer might work on top of an _unreliable network layer_. That's the case, for example, for the TCP/IP stack.
+For this reason, the transport layer provides a way to detect errors of the data transmitted.
+Specifically, it has to deal with:
+
+1. _Corruption detection_:data might be modified during their trip across the network.
+   The transport layer provides a mechanism for detecting this type of data and discard them.
+1. _Loss detection_: data packets might be lost so the transport layer will provide a way to detect this loss and request for being resent.
+1. _Duplicate detection_: data packets might arrive duplicated for multiple reasons so the transport layer will discard any duplicated packet.
+1. _Out-of-order detection_: data packets might arrive in different order due to network conditions so the transport layer will detect it and re-order them properly.
+
+All these are achieved using these mechanisms:
+
+- _Checksums_: numerical values generated from the sent data. They can be used by the receiver for checking that the data haven't been altered.
+- _Sequence numbers_: packets are tagged with a increasing number so the order can be checked by the receiver.
+- _Acknowledgement_: when packets are received, the receiver will have to acknowledge its arrival to the sender.
+  Thus, the sender knows which packets arrived and which ones did not.
+- _Timers_: as the network is not reliable, sender and receiver will use different timers that will expire if data are not acknowledged on time or expected replies never arrive.
+
 ### Connectionless and connection-oriented protocols
+
+Since the transport layer might work on different context and applications,
+it is possible that not all features might be required because another layer is already providing them or they are not required for a particular context.
+For these reason, the transport layer might be:
+
+- _Connectionless_: the data is sent in _atomic chunks_. These chunks, known as _datagrams_, do not have any kind of relationship between each other.
+  They are individual packets that the reciever will treat as separated units.
+  The datagrams are sent in order but the transport layer _will not_ guarantee that the packets arrive in order to the application or prevent their loss.
+
+  This type of transport-layer protocols just provide a simple mechanism of sending packets from one application to another, without really providing extra services.
+  This is the case of UDP.
+
+  ```{note}
+  In the example, the packets arrive out of order and they are passed to the receiver's application as they arrive, without any flwo or error control
+  ```
+
+- _Connection-oriented_:
 
 ## Transport-layer protocols in TCP/IP suite
 
