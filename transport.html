@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'transport';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -323,6 +325,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiplexing-and-demultiplexing">Multiplexing and demultiplexing</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control">Flow control</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-control">Error control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#congestion-control">Congestion control</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connectionless-and-connection-oriented-protocols">Connectionless and connection-oriented protocols</a></li>
 </ul>
 </li>
@@ -498,6 +501,14 @@ Thus, the sender knows which packets arrived and which ones did not.</p></li>
 <li><p><em>Timers</em>: as the network is not reliable, sender and receiver will use different timers that will expire if data are not acknowledged on time or expected replies never arrive.</p></li>
 </ul>
 </section>
+<section id="congestion-control">
+<h3>Congestion control<a class="headerlink" href="#congestion-control" title="Permalink to this heading">#</a></h3>
+<p>Congestion may happen on any system shared by different users that try to make use of it at the same time.
+A congested network is a network where nodes <em>need to wait</em> for transmitting data.</p>
+<p>The networking nodes (e.g. routers) use queues internally for dispatching packets to different routes.
+These queues can be full if the networking nodes cannot consume packets at higher rate than they arrive.
+The problem usually happens at network level and it manifests at transport layer too.</p>
+</section>
 <section id="connectionless-and-connection-oriented-protocols">
 <h3>Connectionless and connection-oriented protocols<a class="headerlink" href="#connectionless-and-connection-oriented-protocols" title="Permalink to this heading">#</a></h3>
 <p>Since the transport layer might work on different context and applications,
@@ -535,6 +546,61 @@ This is the case of TCP.</p>
 <p>We are going to focus on UDP and TCP. SCTP offers more complex services than TCP and it is used only in few context.</p>
 <section id="udp">
 <h3>UDP<a class="headerlink" href="#udp" title="Permalink to this heading">#</a></h3>
+<p>The User Datagram Protocol (UDP) is the <em>conectionless</em> transport protocol included in the TCP/IP protocol suite.
+It should be consider <em>unreliable</em> so it is up to the application layer to provide reliability if it is required.
+This protocol is useful when a minimal overhead is required (e.g. real-time applications) and reliability/control is not strongly required (e.g. video/audio transmission).</p>
+<p>UDP uses <em>user datagrams</em> (or just <em>datagrams</em>) as packets.
+It has a fixed header of 8 bytes:</p>
+<ul class="simple">
+<li><p>2 bytes for the <em>source port</em>.</p></li>
+<li><p>2 bytes for the <em>destination port</em>.</p></li>
+<li><p>2 bytes for the <em>total length</em> of the data.
+This means that a datagram can carry up-to 64KB (<span class="math notranslate nohighlight">\(2^{16}\)</span> bytes).</p></li>
+<li><p>2 bytes for an <em>optional checksum</em>.</p></li>
+</ul>
+<p>In essence, UDP provides no more than process-to-process communication on top of of the network layer:</p>
+<ul class="simple">
+<li><p>It is connectionless.</p></li>
+<li><p>No flow control.</p></li>
+<li><p>No error control although the optional checksum might be used by the application layer.</p></li>
+<li><p>No congestion control.</p></li>
+</ul>
+<p>When an application requires a UDP port, the operating system creates 2 queues: <em>incoming</em> and <em>outgoing</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show some of the well-known UDP protocols.</p>
+<p>In Debian, you can install <code class="docutils literal notranslate"><span class="pre">inetsim</span></code> which includes many fake servers for different UDP protocols:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">inetsim</span>
+</pre></div>
+</div>
+<p>Make sure that the Echo UDP service is running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span>  <span class="n">inetsim</span> <span class="n">status</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">echo</span>
+</pre></div>
+</div>
+<p>In one terminal, you can show the log of <code class="docutils literal notranslate"><span class="pre">inetsim</span></code> so people can see the actions taken by each server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">tail</span> <span class="o">-</span><span class="n">f</span>  <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">inetsim</span><span class="o">/</span><span class="n">service</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+<p>Then you can use the following to show it working:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nc -u 127.0.0.1 7
+Hello!
+Hello!
+</pre></div>
+</div>
+<p>Another interesting example is Daytime.
+Show <a class="reference external" href="https://datatracker.ietf.org/doc/html/rfc867">RFC867</a> at UDP datagram.
+You can run the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nc -u 127.0.0.1 13
+type whatever
+Sat Dec 16 16:15:40 2023
+</pre></div>
+</div>
+<p>Also show the <a class="reference download internal" download="" href="_downloads/2f856c193d33d32f768a5dd418dbd6b1/main.py"><span class="xref download myst">DNS example</span></a>.
+Just run it with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python src/simple-dns/main.py
+</pre></div>
+</div>
+</div>
 </section>
 <section id="tcp">
 <h3>TCP<a class="headerlink" href="#tcp" title="Permalink to this heading">#</a></h3>
@@ -629,6 +695,7 @@ This is the case of TCP.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiplexing-and-demultiplexing">Multiplexing and demultiplexing</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control">Flow control</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-control">Error control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#congestion-control">Congestion control</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connectionless-and-connection-oriented-protocols">Connectionless and connection-oriented protocols</a></li>
 </ul>
 </li>
