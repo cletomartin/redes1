@@ -514,12 +514,25 @@ This is the case of UDP.</p>
 <p>In the example, the packets arrive out of order and they are passed to the receiver’s application as they arrive, without any flwo or error control</p>
 </div>
 </li>
-<li><p><em>Connection-oriented</em>:</p></li>
+<li><p><em>Connection-oriented</em>: the data is sent through a <em>logical connection</em> between the sender and reciever.
+The connection should be <em>established</em> before sending data and has to be <em>closed</em> afterwards.
+The packets transported through a specific connection are related each other: they belong to the same context of communication.</p>
+<p>This type of transport-layer protocols provide a more sophisticated set of services and can be used over unreliable layers like the network layer as
+flow and error controls are implemented.
+This is the case of TCP.</p>
+</li>
 </ul>
 </section>
 </section>
 <section id="transport-layer-protocols-in-tcp-ip-suite">
 <h2>Transport-layer protocols in TCP/IP suite<a class="headerlink" href="#transport-layer-protocols-in-tcp-ip-suite" title="Permalink to this heading">#</a></h2>
+<p>TCP/IP protocol stack defines 3 transport protocols that can be used:</p>
+<ul class="simple">
+<li><p>UDP: User Datagram Procotol (connectionless)</p></li>
+<li><p>TCP: Transmission Control Protocol (connection-oriented)</p></li>
+<li><p>SCTP: Stream Control Transmission Protocol (connection-oriented that supports multiple redundant paths).</p></li>
+</ul>
+<p>We are going to focus on UDP and TCP. SCTP offers more complex services than TCP and it is used only in few context.</p>
 <section id="udp">
 <h3>UDP<a class="headerlink" href="#udp" title="Permalink to this heading">#</a></h3>
 </section>
