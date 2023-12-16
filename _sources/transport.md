@@ -195,7 +195,12 @@ It has a fixed header of 8 bytes:
 - 2 bytes for the _destination port_.
 - 2 bytes for the _total length_ of the data.
   This means that a datagram can carry up-to 64KB ($2^{16}$ bytes).
-- 2 bytes for an _optional checksum_.
+- 2 bytes for an _optional checksum_:
+  - If checksum is not desired, then it will be filled with 0s.
+  - Checksum is calculated by adding all together in chunks of 16-bits the following:
+    1. A _pseudoheader_ of source IP, destination IP, protocol type and UDP length.
+	1. The UDP header.
+	1. The UDP data.
 
 In essence, UDP provides no more than process-to-process communication on top of of the network layer:
 
