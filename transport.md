@@ -137,6 +137,16 @@ All these are achieved using these mechanisms:
   Thus, the sender knows which packets arrived and which ones did not.
 - _Timers_: as the network is not reliable, sender and receiver will use different timers that will expire if data are not acknowledged on time or expected replies never arrive.
 
+### Congestion control
+
+Congestion may happen on any system shared by different users that try to make use of it at the same time.
+A congested network is a network where nodes _need to wait_ for transmitting data.
+
+The networking nodes (e.g. routers) use queues internally for dispatching packets to different routes.
+These queues can be full if the networking nodes cannot consume packets at higher rate than they arrive.
+The problem usually happens at network level and it manifests at transport layer too.
+
+
 ### Connectionless and connection-oriented protocols
 
 Since the transport layer might work on different context and applications,
@@ -174,7 +184,77 @@ We are going to focus on UDP and TCP. SCTP offers more complex services than TCP
 
 ### UDP
 
+The User Datagram Protocol (UDP) is the _conectionless_ transport protocol included in the TCP/IP protocol suite.
+It should be consider _unreliable_ so it is up to the application layer to provide reliability if it is required.
+This protocol is useful when a minimal overhead is required (e.g. real-time applications) and reliability/control is not strongly required (e.g. video/audio transmission).
+
+UDP uses _user datagrams_ (or just _datagrams_) as packets.
+It has a fixed header of 8 bytes:
+
+- 2 bytes for the _source port_.
+- 2 bytes for the _destination port_.
+- 2 bytes for the _total length_ of the data.
+  This means that a datagram can carry up-to 64KB ($2^{16}$ bytes).
+- 2 bytes for an _optional checksum_.
+
+In essence, UDP provides no more than process-to-process communication on top of of the network layer:
+
+- It is connectionless.
+- No flow control.
+- No error control although the optional checksum might be used by the application layer.
+- No congestion control.
+
+When an application requires a UDP port, the operating system creates 2 queues: _incoming_ and _outgoing_.
+
+```{note}
+Show some of the well-known UDP protocols.
+
+In Debian, you can install `inetsim` which includes many fake servers for different UDP protocols:
+
+:::
+sudo apt install inetsim
+:::
+
+Make sure that the Echo UDP service is running:
+
+:::
+sudo service  inetsim status | grep echo
+:::
+
+In one terminal, you can show the log of `inetsim` so people can see the actions taken by each server:
+
+:::
+sudo tail -f  /var/log/inetsim/service.log
+:::
+
+Then you can use the following to show it working:
+
+:::
+$ nc -u 127.0.0.1 7
+Hello!
+Hello!
+:::
+
+Another interesting example is Daytime.
+Show [RFC867](https://datatracker.ietf.org/doc/html/rfc867) at UDP datagram.
+You can run the following:
+
+:::
+$ nc -u 127.0.0.1 13
+type whatever
+Sat Dec 16 16:15:40 2023
+:::
+
+Also show the [DNS example](src/simple-dns/main.py).
+Just run it with:
+
+:::
+$ python src/simple-dns/main.py
+:::
+```
+
 ### TCP
+
 
 ## Reliable protocols
 
