@@ -154,9 +154,23 @@ For these reason, the transport layer might be:
   In the example, the packets arrive out of order and they are passed to the receiver's application as they arrive, without any flwo or error control
   ```
 
-- _Connection-oriented_:
+- _Connection-oriented_: the data is sent through a _logical connection_ between the sender and reciever.
+  The connection should be _established_ before sending data and has to be _closed_ afterwards.
+  The packets transported through a specific connection are related each other: they belong to the same context of communication.
+
+  This type of transport-layer protocols provide a more sophisticated set of services and can be used over unreliable layers like the network layer as
+  flow and error controls are implemented.
+  This is the case of TCP.
 
 ## Transport-layer protocols in TCP/IP suite
+
+TCP/IP protocol stack defines 3 transport protocols that can be used:
+
+- UDP: User Datagram Procotol (connectionless)
+- TCP: Transmission Control Protocol (connection-oriented)
+- SCTP: Stream Control Transmission Protocol (connection-oriented that supports multiple redundant paths).
+
+We are going to focus on UDP and TCP. SCTP offers more complex services than TCP and it is used only in few context.
 
 ### UDP
 
