@@ -615,6 +615,27 @@ Just run it with:</p>
 </section>
 <section id="tcp">
 <h3>TCP<a class="headerlink" href="#tcp" title="Permalink to this heading">#</a></h3>
+<p>The Transmission Control Protocol (TCP) is a <em>connection-oriented</em> protocol that provides a reliable packet transport to the application layer:</p>
+<ul class="simple">
+<li><p>It is based on a combination of <em>Go Back N</em> and _Selective-Repeat_algorithms.
+Lost and corrupted packets are retransmitted.</p></li>
+<li><p>It uses mandatory <em>checksums</em> for error control.</p></li>
+<li><p>Use of control messages like ACKs for ensuring packets are received.</p></li>
+</ul>
+<p>TCP is a complex protocol where client <em>establishes a connection</em> before exchanging data with the server.
+At the end of the communication, the connection is closed.</p>
+<p>TCP can be described as a <em>Finate State Machine</em> (FSM).
+The machine is really a program receiving/sending data and jumping between states.
+The next state will depend on:</p>
+<ul class="simple">
+<li><p>The information received</p></li>
+<li><p>The specific state where the machine is in.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Show the state diagram.
+The machine starts in <code class="docutils literal notranslate"><span class="pre">LISTEN</span></code> state. In that state, if a <code class="docutils literal notranslate"><span class="pre">SYN</span></code> message is sent, the machine changes to <code class="docutils literal notranslate"><span class="pre">SYN_SENT</span></code> state.</p>
+</div>
 </section>
 </section>
 <section id="reliable-protocols">

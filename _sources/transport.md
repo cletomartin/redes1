@@ -260,6 +260,26 @@ $ python src/simple-dns/main.py
 
 ### TCP
 
+The Transmission Control Protocol (TCP) is a _connection-oriented_ protocol that provides a reliable packet transport to the application layer:
+
+- It is based on a combination of _Go Back N_ and _Selective-Repeat_algorithms.
+  Lost and corrupted packets are retransmitted.
+- It uses mandatory _checksums_ for error control.
+- Use of control messages like ACKs for ensuring packets are received.
+
+TCP is a complex protocol where client _establishes a connection_ before exchanging data with the server.
+At the end of the communication, the connection is closed.
+
+TCP can be described as a _Finate State Machine_ (FSM).
+The machine is really a program receiving/sending data and jumping between states.
+The next state will depend on:
+- The information received
+- The specific state where the machine is in.
+
+```{note}
+Show the state diagram.
+The machine starts in `LISTEN` state. In that state, if a `SYN` message is sent, the machine changes to `SYN_SENT` state.
+```
 
 ## Reliable protocols
 
