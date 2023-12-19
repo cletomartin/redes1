@@ -89,12 +89,12 @@ The transport layer needs to be able to perform the following operations in orde
 
 ### Flow control
 
-It is important to control the amount of data a sender can _produce_ and a reciever can _consume_.
+It is important to control the amount of data a sender can _produce_ and a receiver can _consume_.
 There needs to be a _balance_ between them:
 
-- If the sender produces too few data, the reciever might be idle.
-- If the sender produces too much data, the reciever can be overwhelmed.
-- Circunstances might change as communication progresses (e.g. the receiver might get slower because of it is busy with something else).
+- If the sender produces too few data, the receiver might be idle.
+- If the sender produces too much data, the receiver can be overwhelmed.
+- Circumstances might change as communication progresses (e.g. the receiver might get slower because of it is busy with something else).
 
 In general, a process may deliver data in 2 ways:
 
@@ -112,7 +112,7 @@ This pull and push model is used differently across the components of the transp
 - _Between the sender's transport layer and the receiver's transport layer_: when segments/datagrams are ready, the sender's transport layer _pushes_ them to the receiver's one.
   Another flow control mechanism is needed here too.
 
-- _Between the receiver's transport layer and the receiver application_: the reciever application _pulls_ data from the its transport layer.
+- _Between the receiver's transport layer and the receiver application_: the receiver application _pulls_ data from the its transport layer.
   In this case, a flow control mechanism is not required as the application consumes data on-demand.
 
 The transport layer provides this flow control mechanism as we will see by the end of this chapter.
@@ -154,7 +154,7 @@ it is possible that not all features might be required because another layer is 
 For these reason, the transport layer might be:
 
 - _Connectionless_: the data is sent in _atomic chunks_. These chunks, known as _datagrams_, do not have any kind of relationship between each other.
-  They are individual packets that the reciever will treat as separated units.
+  They are individual packets that the receiver will treat as separated units.
   The datagrams are sent in order but the transport layer _will not_ guarantee that the packets arrive in order to the application or prevent their loss.
 
   This type of transport-layer protocols just provide a simple mechanism of sending packets from one application to another, without really providing extra services.
@@ -164,7 +164,7 @@ For these reason, the transport layer might be:
   In the example, the packets arrive out of order and they are passed to the receiver's application as they arrive, without any flwo or error control
   ```
 
-- _Connection-oriented_: the data is sent through a _logical connection_ between the sender and reciever.
+- _Connection-oriented_: the data is sent through a _logical connection_ between the sender and receiver.
   The connection should be _established_ before sending data and has to be _closed_ afterwards.
   The packets transported through a specific connection are related each other: they belong to the same context of communication.
 
@@ -184,7 +184,7 @@ We are going to focus on UDP and TCP. SCTP offers more complex services than TCP
 
 ### UDP
 
-The User Datagram Protocol (UDP) is the _conectionless_ transport protocol included in the TCP/IP protocol suite.
+The User Datagram Protocol (UDP) is the _connectionless_ transport protocol included in the TCP/IP protocol suite.
 It should be consider _unreliable_ so it is up to the application layer to provide reliability if it is required.
 This protocol is useful when a minimal overhead is required (e.g. real-time applications) and reliability/control is not strongly required (e.g. video/audio transmission).
 
@@ -198,7 +198,7 @@ It has a fixed header of 8 bytes:
 - 2 bytes for an _optional checksum_:
   - If checksum is not desired, then it will be filled with 0s.
   - Checksum is calculated by adding all together in chunks of 16-bits the following:
-    1. A _pseudoheader_ of source IP, destination IP, protocol type and UDP length.
+    1. A _pseudo-header_ of source IP, destination IP, protocol type and UDP length.
 	1. The UDP header.
 	1. The UDP data.
 
@@ -280,6 +280,56 @@ The next state will depend on:
 Show the state diagram.
 The machine starts in `LISTEN` state. In that state, if a `SYN` message is sent, the machine changes to `SYN_SENT` state.
 ```
+
+TCP provides a _stream delivery service_.
+This means that the information is transmitted as a stream of bytes from the client to the server.
+From the client and server points of view, there is an imaginary pipe _connected_ to both ends where bytes arrive in order to the other side.
+
+TCP packets are called _segments_ and the segments of a specific connection are related each other.
+This means that the fields in the headers are logically connected to previous and following segments so they can be reassembled when received.
+
+```{note}
+We will see this more in depth in the following sections but it is worth mention the _circular buffers_.
+This technique is used by TCP for providing reliability and flow control:
+
+- On the sender side, they keep two types of segments:
+  1. The ones ready to be sent: these segments are built straighaway from the data coming from the application layer.
+  1. The ones already sent: when segments are already sent, the buffer can rotate and move on.
+
+- On the receirver side, they keep two types of segments:
+  1. The ones just received but not read: those are waiting to be read by the applicatio.
+  1. The ones read by the application: when segments are read, the buffer can rotate and move on.
+```
+
+One of the important header fields are the _sequence number_ and the _acknowledgement number_.
+They both define the _numbering system_ of TCP that allows:
+- Reliability: as they provide confirmation of the reception.
+- Flow control: they define the amount of data the receiver is able to digest.
+
+TCP assigns numbers to the data. This _byte number_ is:
+- Different for each direction of the communication.
+- Initially generated randomly. It does not need to correlate to the data that is meant to be sent.
+
+  ```{note}
+  For example: we want to sent 6000 bytes of data.
+  If the first byte is numbered as 5432 (generated randomly) the last byte will be $5432 + 6000 - 1 = 11431$
+  ```
+
+TCP also assigns numbers to each segment. This is known as _sequence number_ and it is generated as follows:
+
+- The _initial sequence number_ for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).
+- The following sequence number will be the previous segment's sequence number plus the number of bytes carried by this previous segment.
+
+   ```{note}
+   The example of the slide is the transmission of a file of 5000 bytes in 5 segments.
+   If the first byte was labeled as 10001, the:
+   - The first sequence segment will be 10001 and it will contain 1000 bytes.
+     The range of the byte numbers will be from 10001 to $10001 + 1000 - 1 = 11000$
+   ```
+
+  TCP segments can carry data and/or control information. Sequence numbers are _only_ use when data is carried.
+  For those segments that only carries control information, the meaning of their sequence number is different: they are not related with the data transmission.
+  As we will see later, for the future sequence numbers, these segments just consume 1 sequence number (as the carried 1 byte).
 
 ## Reliable protocols
 

@@ -455,12 +455,12 @@ This is performed at the receiver side.</p></li>
 </section>
 <section id="flow-control">
 <h3>Flow control<a class="headerlink" href="#flow-control" title="Permalink to this heading">#</a></h3>
-<p>It is important to control the amount of data a sender can <em>produce</em> and a reciever can <em>consume</em>.
+<p>It is important to control the amount of data a sender can <em>produce</em> and a receiver can <em>consume</em>.
 There needs to be a <em>balance</em> between them:</p>
 <ul class="simple">
-<li><p>If the sender produces too few data, the reciever might be idle.</p></li>
-<li><p>If the sender produces too much data, the reciever can be overwhelmed.</p></li>
-<li><p>Circunstances might change as communication progresses (e.g. the receiver might get slower because of it is busy with something else).</p></li>
+<li><p>If the sender produces too few data, the receiver might be idle.</p></li>
+<li><p>If the sender produces too much data, the receiver can be overwhelmed.</p></li>
+<li><p>Circumstances might change as communication progresses (e.g. the receiver might get slower because of it is busy with something else).</p></li>
 </ul>
 <p>In general, a process may deliver data in 2 ways:</p>
 <ul class="simple">
@@ -475,7 +475,7 @@ This mechanism requires some kind of control as the receiver can be overwhelmed 
 so there is a flow control mechanism between them.</p></li>
 <li><p><em>Between the sender’s transport layer and the receiver’s transport layer</em>: when segments/datagrams are ready, the sender’s transport layer <em>pushes</em> them to the receiver’s one.
 Another flow control mechanism is needed here too.</p></li>
-<li><p><em>Between the receiver’s transport layer and the receiver application</em>: the reciever application <em>pulls</em> data from the its transport layer.
+<li><p><em>Between the receiver’s transport layer and the receiver application</em>: the receiver application <em>pulls</em> data from the its transport layer.
 In this case, a flow control mechanism is not required as the application consumes data on-demand.</p></li>
 </ul>
 <p>The transport layer provides this flow control mechanism as we will see by the end of this chapter.</p>
@@ -516,7 +516,7 @@ it is possible that not all features might be required because another layer is 
 For these reason, the transport layer might be:</p>
 <ul>
 <li><p><em>Connectionless</em>: the data is sent in <em>atomic chunks</em>. These chunks, known as <em>datagrams</em>, do not have any kind of relationship between each other.
-They are individual packets that the reciever will treat as separated units.
+They are individual packets that the receiver will treat as separated units.
 The datagrams are sent in order but the transport layer <em>will not</em> guarantee that the packets arrive in order to the application or prevent their loss.</p>
 <p>This type of transport-layer protocols just provide a simple mechanism of sending packets from one application to another, without really providing extra services.
 This is the case of UDP.</p>
@@ -525,7 +525,7 @@ This is the case of UDP.</p>
 <p>In the example, the packets arrive out of order and they are passed to the receiver’s application as they arrive, without any flwo or error control</p>
 </div>
 </li>
-<li><p><em>Connection-oriented</em>: the data is sent through a <em>logical connection</em> between the sender and reciever.
+<li><p><em>Connection-oriented</em>: the data is sent through a <em>logical connection</em> between the sender and receiver.
 The connection should be <em>established</em> before sending data and has to be <em>closed</em> afterwards.
 The packets transported through a specific connection are related each other: they belong to the same context of communication.</p>
 <p>This type of transport-layer protocols provide a more sophisticated set of services and can be used over unreliable layers like the network layer as
@@ -546,7 +546,7 @@ This is the case of TCP.</p>
 <p>We are going to focus on UDP and TCP. SCTP offers more complex services than TCP and it is used only in few context.</p>
 <section id="udp">
 <h3>UDP<a class="headerlink" href="#udp" title="Permalink to this heading">#</a></h3>
-<p>The User Datagram Protocol (UDP) is the <em>conectionless</em> transport protocol included in the TCP/IP protocol suite.
+<p>The User Datagram Protocol (UDP) is the <em>connectionless</em> transport protocol included in the TCP/IP protocol suite.
 It should be consider <em>unreliable</em> so it is up to the application layer to provide reliability if it is required.
 This protocol is useful when a minimal overhead is required (e.g. real-time applications) and reliability/control is not strongly required (e.g. video/audio transmission).</p>
 <p>UDP uses <em>user datagrams</em> (or just <em>datagrams</em>) as packets.
@@ -561,7 +561,7 @@ This means that a datagram can carry up-to 64KB (<span class="math notranslate n
 <li><p>If checksum is not desired, then it will be filled with 0s.</p></li>
 <li><p>Checksum is calculated by adding all together in chunks of 16-bits the following:</p>
 <ol class="arabic simple">
-<li><p>A <em>pseudoheader</em> of source IP, destination IP, protocol type and UDP length.</p></li>
+<li><p>A <em>pseudo-header</em> of source IP, destination IP, protocol type and UDP length.</p></li>
 <li><p>The UDP header.</p></li>
 <li><p>The UDP data.</p></li>
 </ol>
@@ -636,6 +636,65 @@ The next state will depend on:</p>
 <p>Show the state diagram.
 The machine starts in <code class="docutils literal notranslate"><span class="pre">LISTEN</span></code> state. In that state, if a <code class="docutils literal notranslate"><span class="pre">SYN</span></code> message is sent, the machine changes to <code class="docutils literal notranslate"><span class="pre">SYN_SENT</span></code> state.</p>
 </div>
+<p>TCP provides a <em>stream delivery service</em>.
+This means that the information is transmitted as a stream of bytes from the client to the server.
+From the client and server points of view, there is an imaginary pipe <em>connected</em> to both ends where bytes arrive in order to the other side.</p>
+<p>TCP packets are called <em>segments</em> and the segments of a specific connection are related each other.
+This means that the fields in the headers are logically connected to previous and following segments so they can be reassembled when received.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We will see this more in depth in the following sections but it is worth mention the <em>circular buffers</em>.
+This technique is used by TCP for providing reliability and flow control:</p>
+<ul class="simple">
+<li><p>On the sender side, they keep two types of segments:</p>
+<ol class="arabic simple">
+<li><p>The ones ready to be sent: these segments are built straighaway from the data coming from the application layer.</p></li>
+<li><p>The ones already sent: when segments are already sent, the buffer can rotate and move on.</p></li>
+</ol>
+</li>
+<li><p>On the receirver side, they keep two types of segments:</p>
+<ol class="arabic simple">
+<li><p>The ones just received but not read: those are waiting to be read by the applicatio.</p></li>
+<li><p>The ones read by the application: when segments are read, the buffer can rotate and move on.</p></li>
+</ol>
+</li>
+</ul>
+</div>
+<p>One of the important header fields are the <em>sequence number</em> and the <em>acknowledgement number</em>.
+They both define the <em>numbering system</em> of TCP that allows:</p>
+<ul class="simple">
+<li><p>Reliability: as they provide confirmation of the reception.</p></li>
+<li><p>Flow control: they define the amount of data the receiver is able to digest.</p></li>
+</ul>
+<p>TCP assigns numbers to the data. This <em>byte number</em> is:</p>
+<ul>
+<li><p>Different for each direction of the communication.</p></li>
+<li><p>Initially generated randomly. It does not need to correlate to the data that is meant to be sent.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example: we want to sent 6000 bytes of data.
+If the first byte is numbered as 5432 (generated randomly) the last byte will be <span class="math notranslate nohighlight">\(5432 + 6000 - 1 = 11431\)</span></p>
+</div>
+</li>
+</ul>
+<p>TCP also assigns numbers to each segment. This is known as <em>sequence number</em> and it is generated as follows:</p>
+<ul>
+<li><p>The <em>initial sequence number</em> for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).</p></li>
+<li><p>The following sequence number will be the previous segment’s sequence number plus the number of bytes carried by this previous segment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example of the slide is the transmission of a file of 5000 bytes in 5 segments.
+If the first byte was labeled as 10001, the:</p>
+<ul class="simple">
+<li><p>The first sequence segment will be 10001 and it will contain 1000 bytes.
+The range of the byte numbers will be from 10001 to <span class="math notranslate nohighlight">\(10001 + 1000 - 1 = 11000\)</span></p></li>
+</ul>
+</div>
+<p>TCP segments can carry data and/or control information. Sequence numbers are <em>only</em> use when data is carried.
+For those segments that only carries control information, the meaning of their sequence number is different: they are not related with the data transmission.
+As we will see later, for the future sequence numbers, these segments just consume 1 sequence number (as the carried 1 byte).</p>
+</li>
+</ul>
 </section>
 </section>
 <section id="reliable-protocols">
