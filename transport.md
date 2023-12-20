@@ -317,7 +317,7 @@ TCP assigns numbers to the data. This _byte number_ is:
 
 TCP also assigns numbers to each segment. This is known as _sequence number_ and it is generated as follows:
 
-- The _initial sequence number_ for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).
+- The _initial sequence number_ (ISN) for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).
 - The following sequence number will be the previous segment's sequence number plus the number of bytes carried by this previous segment.
 
    ```{note}
@@ -330,6 +330,49 @@ TCP also assigns numbers to each segment. This is known as _sequence number_ and
   TCP segments can carry data and/or control information. Sequence numbers are _only_ use when data is carried.
   For those segments that only carries control information, the meaning of their sequence number is different: they are not related with the data transmission.
   As we will see later, for the future sequence numbers, these segments just consume 1 sequence number (as the carried 1 byte).
+
+On top of the sequence number, TCP header can also include an _acknowledgement number_.
+The value of this number is the next byte number of the last one received.
+In other words, _it is the number of the next byte expected_.
+For example: if `ack = 5643` it means that all bytes until `5642` has been recieved and we are waiting for the next one.
+Of course, it does _not_ mean the total bytes received are 5642 because the initial byte number is random and it is likely it was not 0.
+
+#### The TCP segment
+
+A segment has two parts:
+
+- A header that can be between 20-60 bytes.
+- The payload of the TCP segment.
+
+The TCP header has the following structure:
+
+- _Source port address_
+- _Destination port address_
+- _Sequence number_: if needed, it is the value of the first byte number carried by the segment.
+  Initially it takes a random ISN as value.
+- _Acknowledgement number_: if needed, it is the value of the byte number expected.
+  The previous byte number has been received properly.
+- _Header length_: measured in 4-byte words. This field is 4-bit long and since the header can be from 20 to 60 bytes, the values of this field might be from 5 to 15.
+- _Control bits_: a 6-bit field where each bit categorise the segment:
+  - `URG`: the segment carries urgent data so the urgent pointer field is valid.
+  - `ACK`: the segment is an acknowledgement.
+  - `PSH`: the segment data should be pushed to the reciever application without waiting for buffers or windows.
+  - `RST`: the segment requires the connection to be reset.
+  - `SYN`: the segment requests the synchronisation of sequence numbers.
+  - `FIN`: the segment requests the termination of the connection.
+- _Window size_: gives the information to the sender of the the maximum amount of data that the receiver wants to receive.
+  Thus, the sender will have to respect this value.
+- _Checksum_: it is mandatory in TCP and it is calculated very similarly to UDP's one (it adds the pseudo-header on top of the TCP segment).
+- _Urgent pointer_: if `URG` was set, this field points to the first byte within the segment where the urgent data is placed.
+- _Options and padding_: this optional field might incorporate extra data up to 40 bytes.
+
+
+#### The TCP connection establishmetn
+
+#### The TCP data transfer
+
+#### The TCP connection termination
+
 
 ## Reliable protocols
 
