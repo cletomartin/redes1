@@ -882,11 +882,66 @@ All the recieved data in this time period will be acknowledged by the client.</p
 </section>
 <section id="reliable-protocols">
 <h2>Reliable protocols<a class="headerlink" href="#reliable-protocols" title="Permalink to this heading">#</a></h2>
+<p>As we have mentioned, TCP is a complex protocol that uses different techniques for achieving flow, error and congestion control.
+In this section we are going to explore some of the protocols that provide reliability.</p>
 <section id="simple-protocol">
 <h3>Simple protocol<a class="headerlink" href="#simple-protocol" title="Permalink to this heading">#</a></h3>
+<p>The simplest protocol that provides reliability is the one that works on ideal conditions:</p>
+<ul class="simple">
+<li><p>No packet is lost.</p></li>
+<li><p>There is no corrupted packets along the way.</p></li>
+<li><p>All packets arrive in order.</p></li>
+</ul>
+<p>Under this cirscunstancies, the protocol can be connectionless and there is no need of flow/error/congestion control.
+However these are ideal conditions that almost never happen in reality.</p>
 </section>
 <section id="stop-and-wait">
 <h3>Stop and wait<a class="headerlink" href="#stop-and-wait" title="Permalink to this heading">#</a></h3>
+<p>This protocol is the simplest way to provide flow and error control to an unreliable network.
+It uses a <em>sliding window</em> of size 1, which means that the sender has to wait for the ACK of a packet before sending a new one.
+With this simple approach, the flow control is provided (the reciever only sends the ACK when it is ready to receive more).</p>
+<p>In this protocol, the following mechanisms are used:</p>
+<ul class="simple">
+<li><p><em>ACK for each packet</em>: which means a sliding window of size 1.</p></li>
+<li><p><em>Sequence numbers</em>: the amount of sequence numbers depends on the size of the sliding window.
+It uses <span class="math notranslate nohighlight">\(mod 2^{m}\)</span>. This is the same as saying that it goes from 0 to <span class="math notranslate nohighlight">\(2^{m}-1\)</span>.
+In this case, the sequence numbers will be 0 and 1.</p></li>
+<li><p><em>Checksum</em>.</p></li>
+<li><p><em>Timers</em>: for each packet sent. If no ACK is recieved and timeout expires the packet will be retransmitted.</p></li>
+</ul>
+<p>In general, the sliding window size <span class="math notranslate nohighlight">\(N\)</span> depends of a variable <span class="math notranslate nohighlight">\(m\)</span>: <span class="math notranslate nohighlight">\(N = 2^{m}-1\)</span>.
+The top and wait protocol uses <span class="math notranslate nohighlight">\(m=1\)</span>, so the window size is <span class="math notranslate nohighlight">\(2^{1}-1 = 1\)</span>.
+The window size can be seen as the buffer that controls what has been sent or recieved.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the diagram, you should show that window size is the sum of:</p>
+<ul class="simple">
+<li><p>Packets already sent but not ACK’d</p></li>
+<li><p>Packets ready to be sent.</p></li>
+</ul>
+<p>When an <code class="docutils literal notranslate"><span class="pre">ACK</span></code> is recieved, the window slides the amount of positions that the <code class="docutils literal notranslate"><span class="pre">ACK</span></code> includes.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example flow diagram works like this.:</p>
+<ol class="arabic simple">
+<li><p>Since we are in stop and wait protocol, both sender and receiver use <span class="math notranslate nohighlight">\(m=1\)</span> so both have a window size of length 1. The sequence numbers are 0 or 1.</p></li>
+<li><p>The sender starts sending the packet 0. It starts a timer associated to this packet.</p></li>
+<li><p>The receiver moves its window one position and sends an <code class="docutils literal notranslate"><span class="pre">ACK</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">ACK</span> <span class="pre">1</span></code> confirms the reception of packet 0.</p></li>
+<li><p>The sender gets the ACK and moves its window one position further. The timer is stopped.</p></li>
+<li><p>The sender sends the packet 1. It starts a timer again.</p></li>
+<li><p>The packet 1 gets lost.</p></li>
+<li><p>Since nothing happens, the timer expires.</p></li>
+<li><p>The sender resend the packet 1.</p></li>
+<li><p>The receiver gets packet 1, move its window one position forward and sends the ACK.</p></li>
+<li><p>The sender receives the ACK and moves its window one position ahead. The time is stopped now.</p></li>
+<li><p>The sender tries to send packet 0 now.</p></li>
+<li><p>The receiver gets it and moves its window one position more. Note that the receiver now waits for packet 1, so it sends <code class="docutils literal notranslate"><span class="pre">ACK</span> <span class="pre">1</span></code>.</p></li>
+<li><p>The ACK 1 gets lost.</p></li>
+<li><p>Since the sender did not get any ACK, it resends packet 0.</p></li>
+<li><p>The receiver gets packet 0 but it is wainting for packet 1, so it discards it considering it as duplicated.</p></li>
+</ol>
+</div>
 </section>
 <section id="go-back-n">
 <h3>Go back N<a class="headerlink" href="#go-back-n" title="Permalink to this heading">#</a></h3>
