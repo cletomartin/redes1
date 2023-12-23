@@ -317,7 +317,7 @@ TCP assigns numbers to the data. This _byte number_ is:
 
 TCP also assigns numbers to each segment. This is known as _sequence number_ and it is generated as follows:
 
-- The _initial sequence number_ for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).
+- The _initial sequence number_ (ISN) for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).
 - The following sequence number will be the previous segment's sequence number plus the number of bytes carried by this previous segment.
 
    ```{note}
@@ -330,6 +330,171 @@ TCP also assigns numbers to each segment. This is known as _sequence number_ and
   TCP segments can carry data and/or control information. Sequence numbers are _only_ use when data is carried.
   For those segments that only carries control information, the meaning of their sequence number is different: they are not related with the data transmission.
   As we will see later, for the future sequence numbers, these segments just consume 1 sequence number (as the carried 1 byte).
+
+On top of the sequence number, TCP header can also include an _acknowledgement number_.
+The value of this number is the next byte number of the last one received.
+In other words, _it is the number of the next byte expected_.
+For example: if `ack = 5643` it means that all bytes until `5642` has been recieved and we are waiting for the next one.
+Of course, it does _not_ mean the total bytes received are 5642 because the initial byte number is random and it is likely it was not 0.
+
+#### The TCP segment
+
+A segment has two parts:
+
+- A header that can be between 20-60 bytes.
+- The payload of the TCP segment.
+
+The TCP header has the following structure:
+
+- _Source port address_
+- _Destination port address_
+- _Sequence number_: if needed, it is the value of the first byte number carried by the segment.
+  Initially it takes a random ISN as value.
+- _Acknowledgement number_: if needed, it is the value of the byte number expected.
+  The previous byte number has been received properly.
+- _Header length_: measured in 4-byte words. This field is 4-bit long and since the header can be from 20 to 60 bytes, the values of this field might be from 5 to 15.
+- _Control bits_: a 6-bit field where each bit categorise the segment:
+  - `URG`: the segment carries urgent data so the urgent pointer field is valid.
+  - `ACK`: the segment is an acknowledgement.
+  - `PSH`: the segment data should be pushed to the reciever application without waiting for buffers or windows.
+  - `RST`: the segment requires the connection to be reset.
+  - `SYN`: the segment requests the synchronisation of sequence numbers.
+  - `FIN`: the segment requests the termination of the connection.
+- _Window size_: gives the information to the sender of the the maximum amount of data that the receiver wants to receive.
+  Thus, the sender will have to respect this value.
+- _Checksum_: it is mandatory in TCP and it is calculated very similarly to UDP's one (it adds the pseudo-header on top of the TCP segment).
+- _Urgent pointer_: if `URG` was set, this field points to the last byte of the urgent data within the segment.
+  The urgent data is placed at the beginning and this pointer helps to know when it ends.
+- _Options and padding_: this optional field might incorporate extra data up to 40 bytes.
+
+
+#### The TCP connection establishment
+
+TCP is a connection-oriented protocol where a _bidirectional connection_ is established between sender and reciever before any data is exchanged.
+Once this connection is established, all segments will be logically related to this connection.
+
+The TCP connection establishment is known as the _three-way handshaking_ and it works like this (values come from the example of the slides):
+
+1. The server starts to listen for incoming connections.
+   We say the server has a _passive_ role during connection openings because it waits for the client to start them.
+
+1. The client starts creation of a connection to the server.
+   We say the client has an _active_ role during connection openings because it initiates them.
+
+   The first one is `SYN` segment which requires to the server to synchronise the sequence numbers.
+   The _ISN_ in the example is 8000.
+
+1. The server receives the `SYN`, so it sends a segment of 2 types:
+   - `SYN`: requesting the client to synchronise the sequence number. The server's ISN is 15000.
+   - `ACK`: acknowledging the previous client's `SYN`. So the `ACK` number is 8001.
+
+1. The server recieves the `SYN-ACK` segment and responses with an `ACK` segment.
+   This segment acknowledges the `SYN` request in the previous message so:
+   - The sequence number is 8001 as it is the following one to 8000.
+   - The `ACK` number is 15001 since we have recieved 15000 before.
+
+   ```{tip}
+   The client could also send data along this `ACK` segment.
+   That way it can take advantage of this `ACK` segment and start sending data instead of doing it in a different segment.
+   This is known as _piggy-backing_.
+   If the client does _not_ piggyback data within this segment, the sequence number will _not_ be increased later.
+   ```
+
+1. The connection is now established.
+
+This connection establishment procedure has an intrinsic problem: the server has to acknowledge the initial `SYN` sent by the client.
+A malicious actor can send lots of `SYN` segments with _spoofed_ source IP.
+This will make the server to send lots of `SYN-ACK` segments to clients that do not exist.
+Since they do not exist, the server will never get a response so it will wait for the `ACK` untile the timeout expires.
+If there are lots of `SYN` segments it is possible that the server waits for so many clients that it reaches its limit.
+Thus, any _new and legit_ `SYN` request will not be replied. This is a classic _Denial of Service_ (DoS) attack.
+
+#### The TCP data transfer
+
+Once the connection is established, then the bidirectional data exchange can happen:
+
+1. The client sends 1000 bytes:
+   - The `SEQ` number is again 8001 because the previous `ACK` (the last segment of the connection establishment) did not contain data.
+   - The `ACK` number is again 15001 because it is the expected byte number from the server.
+   - The `PSH` is on.
+   - Note the byte numbers go from 8001 to 9000
+
+1. The client sends another 1000 bytes:
+   - The `SEQ` number is now 9001 (8001 + 1000).
+   - The `ACK` is still 15001
+   - The `PSH` is on.
+   - The byte numbers go from 9001 to 10000
+
+1. The server has recieved both segments and it replies with an `ACK` segment piggybacked with data:
+   - The `SEQ` number is 15001.
+     It is still the same sequence number as the server has not sent data until now.
+   - The `ACK` number is 10001, meaning that both chunks of 1000 bytes have been received.
+   - The `rwnd` is set to 3000, telling the client not to send more than 3000 bytes in a segment.
+   - 2000 bytes of data, so the byte numbers will go from 15001 to 17000.
+
+1. The client recieves the segment and creates another `ACK` segment, this time with no data:
+
+   - The `SEQ` number is 10001, as it comes after 1000 bytes previously sent.
+   - The `ACK` is 17001, telling the server that it has recieved the last 2000 bytes.
+   - The `rwnd` is set to 10000, telling the server not to send more than 10000 bytes in a segment.
+
+
+#### The TCP connection termination
+
+After the data is exchanged, the connection can be terminated at any time.
+The closure can be done in 2 ways:
+
+- _Three-way handshaking_: this will fully terminate the connection.
+- _Half-close_: this will allow the server to send data to the client before closing the connection.
+
+
+The three-way handshaking connection termination is as follows:
+
+1. The client sends a `FIN` segment. The `SEQ` and `ACK` number values would depend on the previous conversation, so let's suppose `x` and `y`.
+
+   ```{tip}
+   This `FIN` segment may also piggyback data, in which case it will affect the following sequence numbers.
+   ```
+1. The server sends a `FIN-ACK` segment, acknowledging the previous `FIN` request.
+1. Finally, the client sends an `ACK` segment previous server's `FIN` segment.
+
+The half-close connection termination is as follows:
+
+1. The client sends the `FIN` segment.
+1. The server sends an `ACK` segment this time, meaning that the `FIN` has been recieved..
+   However, the server still can send data to the client as a `FIN` was not sent.
+   All the recieved data in this time period will be acknowledged by the client.
+
+1. When the server finishes the sending data, its `SEQ` number would be `z`, so a `FIN` is sent to the client with this sequence number.
+1. Finally, the client sends an `ACK` segment for `z + 1`.
+
+
+### Segment loss
+
+In a normal operation, `ACK` numbers are always recieved in order.
+
+```{note}
+In the example, a client and a server exchange data:
+
+- 200 bytes to the server
+- 1000 bytes to the client
+- Client acknowledges.
+- Server sends 2 segments of 1000 bytes each.
+- Client acknowledges both.
+```
+
+However, some segments might get lost. This is detected because client and server keep a set timers and, if the expire, segments are retransmitted.
+
+```{note}
+In the example, a client and a server exchange data:
+
+- The client sends 2 segments of 100 bytes each.
+- The server acknowledges both.
+- The client sends another 2 segments of 100 bytes each but the first one is lost.
+- The server sends `701` as `ACK` number because, even though it has recieved the second chunk, the first one was not.
+- The client's timer expired for the chunk 701, so the segment is re-sent.
+- The server now recieves it so it can now acknowledge both (701 and 901).
+```
 
 ## Reliable protocols
 

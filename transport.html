@@ -331,7 +331,14 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transport-layer-protocols-in-tcp-ip-suite">Transport-layer protocols in TCP/IP suite</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#udp">UDP</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-segment">The TCP segment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-connection-establishment">The TCP connection establishment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-data-transfer">The TCP data transfer</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-connection-termination">The TCP connection termination</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#segment-loss">Segment loss</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a><ul class="nav section-nav flex-column">
@@ -679,7 +686,7 @@ If the first byte is numbered as 5432 (generated randomly) the last byte will be
 </ul>
 <p>TCP also assigns numbers to each segment. This is known as <em>sequence number</em> and it is generated as follows:</p>
 <ul>
-<li><p>The <em>initial sequence number</em> for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).</p></li>
+<li><p>The <em>initial sequence number</em> (ISN) for the first segment is generated randomly. It will be typically the first byte number (also generated randomly).</p></li>
 <li><p>The following sequence number will be the previous segment’s sequence number plus the number of bytes carried by this previous segment.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -695,6 +702,182 @@ For those segments that only carries control information, the meaning of their s
 As we will see later, for the future sequence numbers, these segments just consume 1 sequence number (as the carried 1 byte).</p>
 </li>
 </ul>
+<p>On top of the sequence number, TCP header can also include an <em>acknowledgement number</em>.
+The value of this number is the next byte number of the last one received.
+In other words, <em>it is the number of the next byte expected</em>.
+For example: if <code class="docutils literal notranslate"><span class="pre">ack</span> <span class="pre">=</span> <span class="pre">5643</span></code> it means that all bytes until <code class="docutils literal notranslate"><span class="pre">5642</span></code> has been recieved and we are waiting for the next one.
+Of course, it does <em>not</em> mean the total bytes received are 5642 because the initial byte number is random and it is likely it was not 0.</p>
+<section id="the-tcp-segment">
+<h4>The TCP segment<a class="headerlink" href="#the-tcp-segment" title="Permalink to this heading">#</a></h4>
+<p>A segment has two parts:</p>
+<ul class="simple">
+<li><p>A header that can be between 20-60 bytes.</p></li>
+<li><p>The payload of the TCP segment.</p></li>
+</ul>
+<p>The TCP header has the following structure:</p>
+<ul class="simple">
+<li><p><em>Source port address</em></p></li>
+<li><p><em>Destination port address</em></p></li>
+<li><p><em>Sequence number</em>: if needed, it is the value of the first byte number carried by the segment.
+Initially it takes a random ISN as value.</p></li>
+<li><p><em>Acknowledgement number</em>: if needed, it is the value of the byte number expected.
+The previous byte number has been received properly.</p></li>
+<li><p><em>Header length</em>: measured in 4-byte words. This field is 4-bit long and since the header can be from 20 to 60 bytes, the values of this field might be from 5 to 15.</p></li>
+<li><p><em>Control bits</em>: a 6-bit field where each bit categorise the segment:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">URG</span></code>: the segment carries urgent data so the urgent pointer field is valid.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ACK</span></code>: the segment is an acknowledgement.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PSH</span></code>: the segment data should be pushed to the reciever application without waiting for buffers or windows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RST</span></code>: the segment requires the connection to be reset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SYN</span></code>: the segment requests the synchronisation of sequence numbers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FIN</span></code>: the segment requests the termination of the connection.</p></li>
+</ul>
+</li>
+<li><p><em>Window size</em>: gives the information to the sender of the the maximum amount of data that the receiver wants to receive.
+Thus, the sender will have to respect this value.</p></li>
+<li><p><em>Checksum</em>: it is mandatory in TCP and it is calculated very similarly to UDP’s one (it adds the pseudo-header on top of the TCP segment).</p></li>
+<li><p><em>Urgent pointer</em>: if <code class="docutils literal notranslate"><span class="pre">URG</span></code> was set, this field points to the last byte of the urgent data within the segment.
+The urgent data is placed at the beginning and this pointer helps to know when it ends.</p></li>
+<li><p><em>Options and padding</em>: this optional field might incorporate extra data up to 40 bytes.</p></li>
+</ul>
+</section>
+<section id="the-tcp-connection-establishment">
+<h4>The TCP connection establishment<a class="headerlink" href="#the-tcp-connection-establishment" title="Permalink to this heading">#</a></h4>
+<p>TCP is a connection-oriented protocol where a <em>bidirectional connection</em> is established between sender and reciever before any data is exchanged.
+Once this connection is established, all segments will be logically related to this connection.</p>
+<p>The TCP connection establishment is known as the <em>three-way handshaking</em> and it works like this (values come from the example of the slides):</p>
+<ol class="arabic">
+<li><p>The server starts to listen for incoming connections.
+We say the server has a <em>passive</em> role during connection openings because it waits for the client to start them.</p></li>
+<li><p>The client starts creation of a connection to the server.
+We say the client has an <em>active</em> role during connection openings because it initiates them.</p>
+<p>The first one is <code class="docutils literal notranslate"><span class="pre">SYN</span></code> segment which requires to the server to synchronise the sequence numbers.
+The <em>ISN</em> in the example is 8000.</p>
+</li>
+<li><p>The server receives the <code class="docutils literal notranslate"><span class="pre">SYN</span></code>, so it sends a segment of 2 types:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SYN</span></code>: requesting the client to synchronise the sequence number. The server’s ISN is 15000.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ACK</span></code>: acknowledging the previous client’s <code class="docutils literal notranslate"><span class="pre">SYN</span></code>. So the <code class="docutils literal notranslate"><span class="pre">ACK</span></code> number is 8001.</p></li>
+</ul>
+</li>
+<li><p>The server recieves the <code class="docutils literal notranslate"><span class="pre">SYN-ACK</span></code> segment and responses with an <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment.
+This segment acknowledges the <code class="docutils literal notranslate"><span class="pre">SYN</span></code> request in the previous message so:</p>
+<ul class="simple">
+<li><p>The sequence number is 8001 as it is the following one to 8000.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ACK</span></code> number is 15001 since we have recieved 15000 before.</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The client could also send data along this <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment.
+That way it can take advantage of this <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment and start sending data instead of doing it in a different segment.
+This is known as <em>piggy-backing</em>.
+If the client does <em>not</em> piggyback data within this segment, the sequence number will <em>not</em> be increased later.</p>
+</div>
+</li>
+<li><p>The connection is now established.</p></li>
+</ol>
+<p>This connection establishment procedure has an intrinsic problem: the server has to acknowledge the initial <code class="docutils literal notranslate"><span class="pre">SYN</span></code> sent by the client.
+A malicious actor can send lots of <code class="docutils literal notranslate"><span class="pre">SYN</span></code> segments with <em>spoofed</em> source IP.
+This will make the server to send lots of <code class="docutils literal notranslate"><span class="pre">SYN-ACK</span></code> segments to clients that do not exist.
+Since they do not exist, the server will never get a response so it will wait for the <code class="docutils literal notranslate"><span class="pre">ACK</span></code> untile the timeout expires.
+If there are lots of <code class="docutils literal notranslate"><span class="pre">SYN</span></code> segments it is possible that the server waits for so many clients that it reaches its limit.
+Thus, any <em>new and legit</em> <code class="docutils literal notranslate"><span class="pre">SYN</span></code> request will not be replied. This is a classic <em>Denial of Service</em> (DoS) attack.</p>
+</section>
+<section id="the-tcp-data-transfer">
+<h4>The TCP data transfer<a class="headerlink" href="#the-tcp-data-transfer" title="Permalink to this heading">#</a></h4>
+<p>Once the connection is established, then the bidirectional data exchange can happen:</p>
+<ol class="arabic simple">
+<li><p>The client sends 1000 bytes:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">SEQ</span></code> number is again 8001 because the previous <code class="docutils literal notranslate"><span class="pre">ACK</span></code> (the last segment of the connection establishment) did not contain data.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ACK</span></code> number is again 15001 because it is the expected byte number from the server.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PSH</span></code> is on.</p></li>
+<li><p>Note the byte numbers go from 8001 to 9000</p></li>
+</ul>
+</li>
+<li><p>The client sends another 1000 bytes:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">SEQ</span></code> number is now 9001 (8001 + 1000).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ACK</span></code> is still 15001</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PSH</span></code> is on.</p></li>
+<li><p>The byte numbers go from 9001 to 10000</p></li>
+</ul>
+</li>
+<li><p>The server has recieved both segments and it replies with an <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment piggybacked with data:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">SEQ</span></code> number is 15001.
+It is still the same sequence number as the server has not sent data until now.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ACK</span></code> number is 10001, meaning that both chunks of 1000 bytes have been received.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">rwnd</span></code> is set to 3000, telling the client not to send more than 3000 bytes in a segment.</p></li>
+<li><p>2000 bytes of data, so the byte numbers will go from 15001 to 17000.</p></li>
+</ul>
+</li>
+<li><p>The client recieves the segment and creates another <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment, this time with no data:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">SEQ</span></code> number is 10001, as it comes after 1000 bytes previously sent.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ACK</span></code> is 17001, telling the server that it has recieved the last 2000 bytes.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">rwnd</span></code> is set to 10000, telling the server not to send more than 10000 bytes in a segment.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="the-tcp-connection-termination">
+<h4>The TCP connection termination<a class="headerlink" href="#the-tcp-connection-termination" title="Permalink to this heading">#</a></h4>
+<p>After the data is exchanged, the connection can be terminated at any time.
+The closure can be done in 2 ways:</p>
+<ul class="simple">
+<li><p><em>Three-way handshaking</em>: this will fully terminate the connection.</p></li>
+<li><p><em>Half-close</em>: this will allow the server to send data to the client before closing the connection.</p></li>
+</ul>
+<p>The three-way handshaking connection termination is as follows:</p>
+<ol class="arabic">
+<li><p>The client sends a <code class="docutils literal notranslate"><span class="pre">FIN</span></code> segment. The <code class="docutils literal notranslate"><span class="pre">SEQ</span></code> and <code class="docutils literal notranslate"><span class="pre">ACK</span></code> number values would depend on the previous conversation, so let’s suppose <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">FIN</span></code> segment may also piggyback data, in which case it will affect the following sequence numbers.</p>
+</div>
+</li>
+<li><p>The server sends a <code class="docutils literal notranslate"><span class="pre">FIN-ACK</span></code> segment, acknowledging the previous <code class="docutils literal notranslate"><span class="pre">FIN</span></code> request.</p></li>
+<li><p>Finally, the client sends an <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment previous server’s <code class="docutils literal notranslate"><span class="pre">FIN</span></code> segment.</p></li>
+</ol>
+<p>The half-close connection termination is as follows:</p>
+<ol class="arabic simple">
+<li><p>The client sends the <code class="docutils literal notranslate"><span class="pre">FIN</span></code> segment.</p></li>
+<li><p>The server sends an <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment this time, meaning that the <code class="docutils literal notranslate"><span class="pre">FIN</span></code> has been recieved..
+However, the server still can send data to the client as a <code class="docutils literal notranslate"><span class="pre">FIN</span></code> was not sent.
+All the recieved data in this time period will be acknowledged by the client.</p></li>
+<li><p>When the server finishes the sending data, its <code class="docutils literal notranslate"><span class="pre">SEQ</span></code> number would be <code class="docutils literal notranslate"><span class="pre">z</span></code>, so a <code class="docutils literal notranslate"><span class="pre">FIN</span></code> is sent to the client with this sequence number.</p></li>
+<li><p>Finally, the client sends an <code class="docutils literal notranslate"><span class="pre">ACK</span></code> segment for <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">+</span> <span class="pre">1</span></code>.</p></li>
+</ol>
+</section>
+</section>
+<section id="segment-loss">
+<h3>Segment loss<a class="headerlink" href="#segment-loss" title="Permalink to this heading">#</a></h3>
+<p>In a normal operation, <code class="docutils literal notranslate"><span class="pre">ACK</span></code> numbers are always recieved in order.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example, a client and a server exchange data:</p>
+<ul class="simple">
+<li><p>200 bytes to the server</p></li>
+<li><p>1000 bytes to the client</p></li>
+<li><p>Client acknowledges.</p></li>
+<li><p>Server sends 2 segments of 1000 bytes each.</p></li>
+<li><p>Client acknowledges both.</p></li>
+</ul>
+</div>
+<p>However, some segments might get lost. This is detected because client and server keep a set timers and, if the expire, segments are retransmitted.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example, a client and a server exchange data:</p>
+<ul class="simple">
+<li><p>The client sends 2 segments of 100 bytes each.</p></li>
+<li><p>The server acknowledges both.</p></li>
+<li><p>The client sends another 2 segments of 100 bytes each but the first one is lost.</p></li>
+<li><p>The server sends <code class="docutils literal notranslate"><span class="pre">701</span></code> as <code class="docutils literal notranslate"><span class="pre">ACK</span></code> number because, even though it has recieved the second chunk, the first one was not.</p></li>
+<li><p>The client’s timer expired for the chunk 701, so the segment is re-sent.</p></li>
+<li><p>The server now recieves it so it can now acknowledge both (701 and 901).</p></li>
+</ul>
+</div>
 </section>
 </section>
 <section id="reliable-protocols">
@@ -792,7 +975,14 @@ As we will see later, for the future sequence numbers, these segments just consu
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#transport-layer-protocols-in-tcp-ip-suite">Transport-layer protocols in TCP/IP suite</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#udp">UDP</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tcp">TCP</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-segment">The TCP segment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-connection-establishment">The TCP connection establishment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-data-transfer">The TCP data transfer</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-tcp-connection-termination">The TCP connection termination</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#segment-loss">Segment loss</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reliable-protocols">Reliable protocols</a><ul class="nav section-nav flex-column">
