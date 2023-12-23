@@ -563,6 +563,57 @@ The example flow diagram works like this.:
 
 ### Go back N
 
+The stop and wait protocol is very inefficient.
+The communication channel might be free to be used but if the sender is waiting for an ACK then it will not be used.
+
+Go back N is a generalisation and improvement of stop and wait:
+
+- More than just one packet might be sent.
+- Multiple packets might be pending to be ACK'd at a time.
+- If errors are detected it will be required to go back N packets and retransmit them.
+
+```{note}
+The example shows the reason why the window size should be always lower then $2^{m}$.
+It is because the sequence numbers never get confused by the receiver even if all ACKs are lost.
+
+The first case (the right one) the window size is 3 which implies $m = 2$ and 0 to 3 sequence numbers.
+All packets are received but all ACKs are lost.
+This means that the sender has to go back to the first packet 0 and resend it.
+The receiver is waiting for packet 3 though, so it will discard packet 0 correctly.
+
+The second case (the wrong one) $m = 2$ but the window size is 4 (instead of being lower than 4).
+This means that the last request is packet 3. Again, all ACKs are lost so we have to retransmit from packet 0.
+In this case, the receiver had received packet 3 so it is waiting packet 0 (as the top sequence number is 3).
+The receiver can not tell if the packet 0 it has just received is a re-transmission or a new packet 0.
+```
+
+```{note}
+The next example is $m=3$ so the window size in the sender is 7, and the sequence numbers will go from 0 to 7:
+
+1. The sender sends packet 0.
+1. The receicer acks it.
+1. The sender gets the `ACK` and moves the window one position.
+1. The sender sends 3 packets: 1, 2, 3.
+1. The receiver gets all of them but the ACK for the first one is lost.
+1. The sender gets the ACK for packet 2. The window slides 2 position (packet 1 is assumed).
+   The ACK for packet 3 is yet to arrive, so it restarts the timer.
+1. The sender gets ACK for packet 3, so the window slides 1 position and timer is stopped.
+```
+
+```{note}
+The last example is similar to the previous one. Same initial conditions:
+
+1. The sender sends packet 0.
+1. The receicer acks it.
+1. The sender gets the `ACK` and moves the window one position.
+1. The sender sends 3 packets: 1, 2, 3. This time packet 1 is lost.
+1. Packet 2 arrives to reciever but it is expecting 1 so it is discarded. The receiver sends an ACK waiting for 1.
+1. Packet 3 arrives to reciever but it is expecting 1 so it is discarded. The receiver sends an ACK waiting for 1.
+1. The ACKs arrive to the sender. They tell that packet 0 has been received but packet 0 is no longer in the sender's sliding window.
+   This ACK does not make sense and it is discarded.
+1. After a while, the time expires and the sender goes back to the first sent-but-not-ack'd position in the window and starts to resend.
+1. Now all packets arrive and their associated ACKs.
+```
 ## Exercises
 
 > TBD
