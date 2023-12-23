@@ -498,9 +498,68 @@ In the example, a client and a server exchange data:
 
 ## Reliable protocols
 
+As we have mentioned, TCP is a complex protocol that uses different techniques for achieving flow, error and congestion control.
+In this section we are going to explore some of the protocols that provide reliability.
+
 ### Simple protocol
 
+The simplest protocol that provides reliability is the one that works on ideal conditions:
+
+- No packet is lost.
+- There is no corrupted packets along the way.
+- All packets arrive in order.
+
+Under this cirscunstancies, the protocol can be connectionless and there is no need of flow/error/congestion control.
+However these are ideal conditions that almost never happen in reality.
+
 ### Stop and wait
+
+This protocol is the simplest way to provide flow and error control to an unreliable network.
+It uses a _sliding window_ of size 1, which means that the sender has to wait for the ACK of a packet before sending a new one.
+With this simple approach, the flow control is provided (the reciever only sends the ACK when it is ready to receive more).
+
+In this protocol, the following mechanisms are used:
+
+- _ACK for each packet_: which means a sliding window of size 1.
+
+- _Sequence numbers_: the amount of sequence numbers depends on the size of the sliding window.
+  It uses $mod 2^{m}$. This is the same as saying that it goes from 0 to $2^{m}-1$.
+  In this case, the sequence numbers will be 0 and 1.
+
+- _Checksum_.
+- _Timers_: for each packet sent. If no ACK is recieved and timeout expires the packet will be retransmitted.
+
+In general, the sliding window size $N$ depends of a variable $m$: $N = 2^{m}-1$.
+The top and wait protocol uses $m=1$, so the window size is $2^{1}-1 = 1$.
+The window size can be seen as the buffer that controls what has been sent or recieved.
+
+```{note}
+In the diagram, you should show that window size is the sum of:
+- Packets already sent but not ACK'd
+- Packets ready to be sent.
+
+When an `ACK` is recieved, the window slides the amount of positions that the `ACK` includes.
+```
+
+```{note}
+The example flow diagram works like this.:
+
+1. Since we are in stop and wait protocol, both sender and receiver use $m=1$ so both have a window size of length 1. The sequence numbers are 0 or 1.
+1. The sender starts sending the packet 0. It starts a timer associated to this packet.
+1. The receiver moves its window one position and sends an `ACK`. Note that `ACK 1` confirms the reception of packet 0.
+1. The sender gets the ACK and moves its window one position further. The timer is stopped.
+1. The sender sends the packet 1. It starts a timer again.
+1. The packet 1 gets lost.
+1. Since nothing happens, the timer expires.
+1. The sender resend the packet 1.
+1. The receiver gets packet 1, move its window one position forward and sends the ACK.
+1. The sender receives the ACK and moves its window one position ahead. The time is stopped now.
+1. The sender tries to send packet 0 now.
+1. The receiver gets it and moves its window one position more. Note that the receiver now waits for packet 1, so it sends `ACK 1`.
+1. The ACK 1 gets lost.
+1. Since the sender did not get any ACK, it resends packet 0.
+1. The receiver gets packet 0 but it is wainting for packet 1, so it discards it considering it as duplicated.
+```
 
 ### Go back N
 
