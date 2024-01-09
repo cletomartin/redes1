@@ -19,15 +19,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'network';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -76,7 +78,7 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
 
@@ -119,12 +121,20 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <header>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <div class="bd-header navbar navbar-expand-lg bd-navbar">
+    </div>
   
+  </header>
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -317,6 +327,25 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ip-protocol">IP protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#format">Format</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fragmentation">Fragmentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addressing">Addressing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#subnetting">Subnetting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-and-management-protocols">Configuration and management protocols</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icmp">ICMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dhcp">DHCP</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ip-routing">IP routing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delivery">Delivery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#forwarding">Forwarding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#routing-tables">Routing tables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-routing">Dynamic routing</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
             </nav>
@@ -327,12 +356,138 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="network-layer">
 <h1>Network layer<a class="headerlink" href="#network-layer" title="Permalink to this heading">#</a></h1>
 <p>This lesson describes in depth the network layer. It descripts the IP addressing and routing mechanisms too.
 You can find the slides <a class="reference download internal" download="" href="_downloads/21aa61b227b4c0dae4862a599d5031c3/network.odp"><span class="xref download myst">here</span></a>.</p>
+<p>Under the transport layer, the network layer is used mainly for delivering data between hosts
+as long as the hosts are connected through a set of inter-networks.
+The following are the main features of the network layer:</p>
+<ul class="simple">
+<li><p><em>Payload encapsulation</em>: data from the transport layer is encapsulated and delivered to any point of the internet.</p></li>
+<li><p><em>Routing</em>: the data packets are sent <em>host-to-host</em> although they can travel through other hosts or networks.
+What route a packet takes is a decision made with the help of <em>routing protocols</em> and it might the case that packets of the same transport flow go through different routes (<em>connectionless</em>).</p></li>
+<li><p><em>Forwarding</em>: the <em>routing nodes</em> of the network layer are known <em>routers</em>.
+They perform packet forwarding: decide what is the next hop based on the <em>routing table</em>.</p></li>
+<li><p><em>Best-effort delivery</em>: the network layer is <em>unreliable</em>.
+There is no guarantee that a packet has arrived to destination nor it arrived in the right order.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the network example:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Link</span></code> nodes are devices that only operates at data-link layer. They just connect nodes directly.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Intermediate</span> <span class="pre">system</span></code> are nodes that can connect networks.</p></li>
+<li><p>A datagram going from the node <code class="docutils literal notranslate"><span class="pre">A</span></code> to any of the <code class="docutils literal notranslate"><span class="pre">End</span> <span class="pre">system</span></code> follows the encapsulation/decapsulation trace at the bottom of the image.
+Each node of the network uses up-to network layer.</p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this example, the <em>connectionless</em> concepto is shown clearly.
+Packets 1, 2, 3 and 4 take different routes and arrive out of order.
+Note that this is a packet-switched network where information is transmitted as individual datagrams.</p>
+</div>
+<section id="ip-protocol">
+<h2>IP protocol<a class="headerlink" href="#ip-protocol" title="Permalink to this heading">#</a></h2>
+<p>The Inter-network Protocol (IP) is the standard network protocol of the Internet.
+It can be used to interconnect different types of networks (made out of different technologies) as long as the nodes understand IP messages.</p>
+<p>In this section we are going the dive into the format of the IP datagrams, the fragmentation mechinism, how IP addresses work and how they can be strucuture using subnetting.</p>
+<section id="format">
+<h3>Format<a class="headerlink" href="#format" title="Permalink to this heading">#</a></h3>
+<p>The IP datagram has a maximum length of <span class="math notranslate nohighlight">\(2^16\)</span> bytes:</p>
+<ul class="simple">
+<li><p>The minimum header length is 20 bytes. The header can be extended 40 bytes more with options.</p></li>
+<li><p>The rest is reserved to the payload.</p></li>
+</ul>
+<p>These are the fields of the IP header:</p>
+<ul>
+<li><p><em>Version</em>: 4 bits for specifying the IP version. <code class="docutils literal notranslate"><span class="pre">4</span></code> for IPv4 and <code class="docutils literal notranslate"><span class="pre">6</span></code> for IPv6.</p></li>
+<li><p><em>Internet Header Length (IHL)</em>: 4 bits for specifying the length of the IP header in 4-byte words.</p></li>
+<li><p><em>Type of Service</em>: 8 bits for helping to service differentiation (also known as <em>quality of service</em>)</p></li>
+<li><p><em>Total Length</em>: 16 bits for specifying the total length of the IP datagram, including the header.</p></li>
+<li><p><em>Identification</em>: 16 bits for identifying the datagram if it belongs to a fragmented one.
+If a datagram is fragmented, this field is the same for all the fragments.</p></li>
+<li><p><em>Don’t Fragment (DF)</em>: 1 bit to tell routers the datagram should not be fragmented.</p></li>
+<li><p><em>More Fragments (MF)</em>: 1 bit to tell routers this datagram is not the last one of a serie of fragmented datagrams.</p></li>
+<li><p><em>Offset</em>: 13 bits to tell the position of this datagram in the series of fragmented datagrams.
+It is expressed as a value of 8-byte words, so:</p>
+<ul class="simple">
+<li><p>There can only be <span class="math notranslate nohighlight">\(2^8\)</span> fragments.</p></li>
+<li><p>The size of a fragment must be mutiple of 8, except for the last one.
+The first fragment has this value always set to 0.</p></li>
+</ul>
+</li>
+<li><p><em>Time-to-live (TTL)</em>: 8 bits to tell the router if a datagram needs to be discarded.
+Everytime a router forwards a datagram, it decreases the TTL value.
+If the value is set to 0, the packet is discarded by the router.</p></li>
+<li><p><em>Protocol</em>: 8 bits to tell what protocol is encapsulated:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Procotol</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>ICMP</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>IGMP</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>IP</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>TCP</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>UDP</p></td>
+</tr>
+<tr class="row-odd"><td><p>89</p></td>
+<td><p>OSPF</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</section>
+<section id="fragmentation">
+<h3>Fragmentation<a class="headerlink" href="#fragmentation" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="addressing">
+<h3>Addressing<a class="headerlink" href="#addressing" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="subnetting">
+<h3>Subnetting<a class="headerlink" href="#subnetting" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+<section id="configuration-and-management-protocols">
+<h2>Configuration and management protocols<a class="headerlink" href="#configuration-and-management-protocols" title="Permalink to this heading">#</a></h2>
+<section id="icmp">
+<h3>ICMP<a class="headerlink" href="#icmp" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="dhcp">
+<h3>DHCP<a class="headerlink" href="#dhcp" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+<section id="ip-routing">
+<h2>IP routing<a class="headerlink" href="#ip-routing" title="Permalink to this heading">#</a></h2>
+<section id="delivery">
+<h3>Delivery<a class="headerlink" href="#delivery" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="forwarding">
+<h3>Forwarding<a class="headerlink" href="#forwarding" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="routing-tables">
+<h3>Routing tables<a class="headerlink" href="#routing-tables" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="dynamic-routing">
+<h3>Dynamic routing<a class="headerlink" href="#dynamic-routing" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <blockquote>
@@ -398,12 +553,32 @@ You can find the slides <a class="reference download internal" download="" href=
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ip-protocol">IP protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#format">Format</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fragmentation">Fragmentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addressing">Addressing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#subnetting">Subnetting</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-and-management-protocols">Configuration and management protocols</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icmp">ICMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dhcp">DHCP</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ip-routing">IP routing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#delivery">Delivery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#forwarding">Forwarding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#routing-tables">Routing tables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-routing">Dynamic routing</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
   </nav></div>
@@ -446,8 +621,8 @@ By Cleto Martín
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
 
   <footer class="bd-footer">
   </footer>
