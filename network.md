@@ -35,8 +35,45 @@ Note that this is a packet-switched network where information is transmitted as 
 The Inter-network Protocol (IP) is the standard network protocol of the Internet.
 It can be used to interconnect different types of networks (made out of different technologies) as long as the nodes understand IP messages.
 
+In this section we are going the dive into the format of the IP datagrams, the fragmentation mechinism, how IP addresses work and how they can be strucuture using subnetting.
 
 ### Format
+
+The IP datagram has a maximum length of $2^16$ bytes:
+
+- The minimum header length is 20 bytes. The header can be extended 40 bytes more with options.
+- The rest is reserved to the payload.
+
+These are the fields of the IP header:
+
+- _Version_: 4 bits for specifying the IP version. `4` for IPv4 and `6` for IPv6.
+- _Internet Header Length (IHL)_: 4 bits for specifying the length of the IP header in 4-byte words.
+- _Type of Service_: 8 bits for helping to service differentiation (also known as _quality of service_)
+- _Total Length_: 16 bits for specifying the total length of the IP datagram, including the header.
+- _Identification_: 16 bits for identifying the datagram if it belongs to a fragmented one.
+  If a datagram is fragmented, this field is the same for all the fragments.
+- _Don't Fragment (DF)_: 1 bit to tell routers the datagram should not be fragmented.
+- _More Fragments (MF)_: 1 bit to tell routers this datagram is not the last one of a serie of fragmented datagrams.
+- _Offset_: 13 bits to tell the position of this datagram in the series of fragmented datagrams.
+  It is expressed as a value of 8-byte words, so:
+  - There can only be $2^8$ fragments.
+  - The size of a fragment must be mutiple of 8, except for the last one.
+  The first fragment has this value always set to 0.
+- _Time-to-live (TTL)_: 8 bits to tell the router if a datagram needs to be discarded.
+  Everytime a router forwards a datagram, it decreases the TTL value.
+  If the value is set to 0, the packet is discarded by the router.
+
+- _Protocol_: 8 bits to tell what protocol is encapsulated:
+
+  | Value | Procotol |
+  |-------|----------|
+  | 1     | ICMP     |
+  | 2     | IGMP     |
+  | 4     | IP       |
+  | 6     | TCP      |
+  | 17    | UDP      |
+  | 89    | OSPF     |
+
 
 ### Fragmentation
 
@@ -46,9 +83,9 @@ It can be used to interconnect different types of networks (made out of differen
 
 ## Configuration and management protocols
 
-#### ICMP
+### ICMP
 
-#### DHCP
+### DHCP
 
 ## IP routing
 
