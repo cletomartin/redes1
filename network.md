@@ -116,6 +116,37 @@ The fragmentation example should be explained as follows:
 - `f2` requires one more fragmentation step in `R4` as it goes to a smaller MTU.
 - In total, 5 fragments will arrive.
 
+In the following slide, you should explain how the data is distributed across the different fragments:
+
+- An important aspect to take into account is that if the IP header is 20 bytes, these 20 bytes must be _always_ included.
+  So `R1` will only be able to send 1400 bytes (plus 20 bytes of the IP header) through the bottom network.
+  This is why the `f1` contains 1400 bytes (from 0 to 1399), `f2` contains 1400 bytes (from 1400 to 2799) and `f3` contains 1200 bytes (from 2800 to 3999).
+
+  The identification field for all these fragments are the same as the original datagram (14567).
+
+  The total length of each fragment changes to reflect the new size of the datagrams: 1420 (1400 + 20 for the header) for `f1` and `f2`, and 1220 for `f3`.
+
+  The `M` bit is set to 1 for `f1` and `f2` but is set to 0 for `f3`. This bit indicates if there is more fragments to come. `f1` and `f2` has more fragments to come but `f3` is the last one.
+
+  The last field that needs to be kept into account is the _fragmentation offset_.
+  This field is calculated based on the first byte number of data of each fragment divided by 8:
+  - `f1`: $0 / 8 = 0$
+  - `f2`: $1400 / 8 = 175$
+  - `f3`: $2800 / 8 = 350$
+
+- `f2` is split in 2 more fragments: `f2.1` and `f2.2`. This would be a good exercise to calculate the different fields with the students.
+
+   The original size of the datagram is 1400 bytes (plus 20 bytes for the header).
+   The MTU is 820, so we can split this datagram is 2: `f2.1` of size 800 bytes (from 1400 to 2199) and `f2.2` of 600 bytes (from 2200 to 2799).
+
+   The idenfication field remains the same.
+
+   The total length now is set to 820 and 620 respectively.
+
+   The fragment offset remains the same for `f2.1` ($1400 / 8$ was already calculated) but it is different for `f2.2` ($2200 / 8 = 275$).
+
+   An important detail is that the `M` bit is 1 too all of them. `f2.2` is _not_ the last fragment of the original IP datagram,
+   it is just another fragment within
 ```
 
 
