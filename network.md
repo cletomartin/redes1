@@ -69,13 +69,55 @@ These are the fields of the IP header:
   |-------|----------|
   | 1     | ICMP     |
   | 2     | IGMP     |
-  | 4     | IP       |
+  | 4     | IPv4     |
   | 6     | TCP      |
   | 17    | UDP      |
   | 89    | OSPF     |
 
+- _Checksum_: 16 bits for detecting errors of the header.
+  It needs to be checked on every hop of the route.
+  The payload is not included and it is left to the upper layers to perform their own check.
+
+  The field is computed by dividing the hearder in 2-byte fields, sum them all and complement the sum.
+  If the final sum overflows, it is wrapped.
+
+- _Source IP_: 32 bits for the source IP address.
+- _Destination IP_: 32 bits for the destination IP address.
+- _Options_: up-to 40 bytes is reserved for options that are used in specific scenarios and debugging.
+  Although it is not mandatory to use options in the IP protocol, all IP devices should handle them if they are present.
+  An option has the following structure:
+  - _Code_: 8 bits for indicating the option
+    - _Copy_: 1 bit for indicating whether the option needs to be copy or not to all the fragments.
+    - _Class_: 2 bits for indicating the general category of the option.
+    - _Number_: 5 bits for identifying the option. There are $2^5$ options avaiable but only a few of them are frequently used.
+  - _Length_: 8 bits for specifiying the length of the data of this option.
+  - _Data_: variable-length field containing the data of the option.
 
 ### Fragmentation
+
+All networks are not the same.
+Each network may have its own features and capabilities and an important one is the _Maximum Transfer Unit_ (MTU).
+This is the maximum size of a frame that can be transmitted through a link. This value might be different from one network to another,
+so routers will need to adapt the IP datagram size to it.
+
+This process of routers slicing IP datagrams is known as _fragmentation_ and the IP protocol provides support to handle the problems associated with it.
+At destination, the fragments are reassembled so the original IP datagram is built.
+
+```{note}
+The fragmentation can only happen at destination because intermediate routers might not see all the fragments passing through them.
+Since IP datagrams might take different routes, because they are independent datagrams, only the destination is capable of reassembling them.
+```
+
+```{note}
+The fragmentation example should be explained as follows:
+- A datagram is going to be sent from `source` to `destination`.
+- The router `R1` will have to fragment it in 3 fragments ($4020 / 1420 = 2.5$ so we need 3 fragments).
+- `f1` and `f3`  will no need more fragmentation because the MTU will be enough for the rest of the hops.
+- `f2` requires one more fragmentation step in `R4` as it goes to a smaller MTU.
+- In total, 5 fragments will arrive.
+
+```
+
 
 ### Addressing
 
