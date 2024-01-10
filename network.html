@@ -500,6 +500,32 @@ Since IP datagrams might take different routes, because they are independent dat
 <li><p><code class="docutils literal notranslate"><span class="pre">f2</span></code> requires one more fragmentation step in <code class="docutils literal notranslate"><span class="pre">R4</span></code> as it goes to a smaller MTU.</p></li>
 <li><p>In total, 5 fragments will arrive.</p></li>
 </ul>
+<p>In the following slide, you should explain how the data is distributed across the different fragments:</p>
+<ul>
+<li><p>An important aspect to take into account is that if the IP header is 20 bytes, these 20 bytes must be <em>always</em> included.
+So <code class="docutils literal notranslate"><span class="pre">R1</span></code> will only be able to send 1400 bytes (plus 20 bytes of the IP header) through the bottom network.
+This is why the <code class="docutils literal notranslate"><span class="pre">f1</span></code> contains 1400 bytes (from 0 to 1399), <code class="docutils literal notranslate"><span class="pre">f2</span></code> contains 1400 bytes (from 1400 to 2799) and <code class="docutils literal notranslate"><span class="pre">f3</span></code> contains 1200 bytes (from 2800 to 3999).</p>
+<p>The identification field for all these fragments are the same as the original datagram (14567).</p>
+<p>The total length of each fragment changes to reflect the new size of the datagrams: 1420 (1400 + 20 for the header) for <code class="docutils literal notranslate"><span class="pre">f1</span></code> and <code class="docutils literal notranslate"><span class="pre">f2</span></code>, and 1220 for <code class="docutils literal notranslate"><span class="pre">f3</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">M</span></code> bit is set to 1 for <code class="docutils literal notranslate"><span class="pre">f1</span></code> and <code class="docutils literal notranslate"><span class="pre">f2</span></code> but is set to 0 for <code class="docutils literal notranslate"><span class="pre">f3</span></code>. This bit indicates if there is more fragments to come. <code class="docutils literal notranslate"><span class="pre">f1</span></code> and <code class="docutils literal notranslate"><span class="pre">f2</span></code> has more fragments to come but <code class="docutils literal notranslate"><span class="pre">f3</span></code> is the last one.</p>
+<p>The last field that needs to be kept into account is the <em>fragmentation offset</em>.
+This field is calculated based on the first byte number of data of each fragment divided by 8:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">f1</span></code>: <span class="math notranslate nohighlight">\(0 / 8 = 0\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f2</span></code>: <span class="math notranslate nohighlight">\(1400 / 8 = 175\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f3</span></code>: <span class="math notranslate nohighlight">\(2800 / 8 = 350\)</span></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f2</span></code> is split in 2 more fragments: <code class="docutils literal notranslate"><span class="pre">f2.1</span></code> and <code class="docutils literal notranslate"><span class="pre">f2.2</span></code>. This would be a good exercise to calculate the different fields with the students.</p>
+<p>The original size of the datagram is 1400 bytes (plus 20 bytes for the header).
+The MTU is 820, so we can split this datagram is 2: <code class="docutils literal notranslate"><span class="pre">f2.1</span></code> of size 800 bytes (from 1400 to 2199) and <code class="docutils literal notranslate"><span class="pre">f2.2</span></code> of 600 bytes (from 2200 to 2799).</p>
+<p>The idenfication field remains the same.</p>
+<p>The total length now is set to 820 and 620 respectively.</p>
+<p>The fragment offset remains the same for <code class="docutils literal notranslate"><span class="pre">f2.1</span></code> (<span class="math notranslate nohighlight">\(1400 / 8\)</span> was already calculated) but it is different for <code class="docutils literal notranslate"><span class="pre">f2.2</span></code> (<span class="math notranslate nohighlight">\(2200 / 8 = 275\)</span>).</p>
+<p>An important detail is that the <code class="docutils literal notranslate"><span class="pre">M</span></code> bit is 1 too all of them. <code class="docutils literal notranslate"><span class="pre">f2.2</span></code> is <em>not</em> the last fragment of the original IP datagram,
+it is just another fragment within</p>
+</li>
+</ul>
 </div>
 </section>
 <section id="addressing">
