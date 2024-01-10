@@ -438,7 +438,7 @@ If the value is set to 0, the packet is discarded by the router.</p></li>
 <td><p>IGMP</p></td>
 </tr>
 <tr class="row-even"><td><p>4</p></td>
-<td><p>IP</p></td>
+<td><p>IPv4</p></td>
 </tr>
 <tr class="row-odd"><td><p>6</p></td>
 <td><p>TCP</p></td>
@@ -452,10 +452,55 @@ If the value is set to 0, the packet is discarded by the router.</p></li>
 </tbody>
 </table>
 </li>
+<li><p><em>Checksum</em>: 16 bits for detecting errors of the header.
+It needs to be checked on every hop of the route.
+The payload is not included and it is left to the upper layers to perform their own check.</p>
+<p>The field is computed by dividing the hearder in 2-byte fields, sum them all and complement the sum.
+If the final sum overflows, it is wrapped.</p>
+</li>
+<li><p><em>Source IP</em>: 32 bits for the source IP address.</p></li>
+<li><p><em>Destination IP</em>: 32 bits for the destination IP address.</p></li>
+<li><p><em>Options</em>: up-to 40 bytes is reserved for options that are used in specific scenarios and debugging.
+Although it is not mandatory to use options in the IP protocol, all IP devices should handle them if they are present.
+An option has the following structure:</p>
+<ul class="simple">
+<li><p><em>Code</em>: 8 bits for indicating the option</p>
+<ul>
+<li><p><em>Copy</em>: 1 bit for indicating whether the option needs to be copy or not to all the fragments.</p></li>
+<li><p><em>Class</em>: 2 bits for indicating the general category of the option.</p></li>
+<li><p><em>Number</em>: 5 bits for identifying the option. There are <span class="math notranslate nohighlight">\(2^5\)</span> options avaiable but only a few of them are frequently used.</p></li>
+</ul>
+</li>
+<li><p><em>Length</em>: 8 bits for specifiying the length of the data of this option.</p></li>
+<li><p><em>Data</em>: variable-length field containing the data of the option.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="fragmentation">
 <h3>Fragmentation<a class="headerlink" href="#fragmentation" title="Permalink to this heading">#</a></h3>
+<p>All networks are not the same.
+Each network may have its own features and capabilities and an important one is the <em>Maximum Transfer Unit</em> (MTU).
+This is the maximum size of a frame that can be transmitted through a link. This value might be different from one network to another,
+so routers will need to adapt the IP datagram size to it.</p>
+<p>This process of routers slicing IP datagrams is known as <em>fragmentation</em> and the IP protocol provides support to handle the problems associated with it.
+At destination, the fragments are reassembled so the original IP datagram is built.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fragmentation can only happen at destination because intermediate routers might not see all the fragments passing through them.
+Since IP datagrams might take different routes, because they are independent datagrams, only the destination is capable of reassembling them.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fragmentation example should be explained as follows:</p>
+<ul class="simple">
+<li><p>A datagram is going to be sent from <code class="docutils literal notranslate"><span class="pre">source</span></code> to <code class="docutils literal notranslate"><span class="pre">destination</span></code>.</p></li>
+<li><p>The router <code class="docutils literal notranslate"><span class="pre">R1</span></code> will have to fragment it in 3 fragments (<span class="math notranslate nohighlight">\(4020 / 1420 = 2.5\)</span> so we need 3 fragments).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f1</span></code> and <code class="docutils literal notranslate"><span class="pre">f3</span></code>  will no need more fragmentation because the MTU will be enough for the rest of the hops.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f2</span></code> requires one more fragmentation step in <code class="docutils literal notranslate"><span class="pre">R4</span></code> as it goes to a smaller MTU.</p></li>
+<li><p>In total, 5 fragments will arrive.</p></li>
+</ul>
+</div>
 </section>
 <section id="addressing">
 <h3>Addressing<a class="headerlink" href="#addressing" title="Permalink to this heading">#</a></h3>
