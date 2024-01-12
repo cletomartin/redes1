@@ -149,8 +149,99 @@ In the following slide, you should explain how the data is distributed across th
    it is just another fragment within
 ```
 
+```{note}
+The DIY examples:
+
+- We use `ping` for sending 1 ICMP packet with 4000 bytes of data. Note that the MTU is 1500 bytes.
+  `tshark` is used for capturing traffic. It shows that the datagram is split in 3 fragments.
+
+  `ping` is actually sending 4028 bytes: 4000 bytes of data, 20 bytes for the IP header and 8 bytes corresponding to the ICMP header.
+
+- In this case, the ICMP packet contains 3992 bytes of data, thus it is sent 4020 bytes (including the IP and ICMP headers).
+
+- Here we use a Python library called scapy for generating an IP datagram. We add a payload of 7000 bytes and this generates 5 fragments.
+```
 
 ### Addressing
+
+The IP protocol addresses are 32-bit integers.
+Each node of an IP network will have, at least, one IP address that will identify it _uniquely_ within the network.
+Note that a node can belong to multiple networks (like a router) so it could have multiple IP addresses associated to it.
+
+The addresses are hierarchical, similar to a postal address (e.g. country/city/street).
+The 32 bits that make the IP address are divided in 2 groups:
+
+- _Prefix_: that identifies the _network_.
+- _Suffix_: that identifies the _host_ within that network.
+
+```{note}
+For example, the address `192.168.1.128` with a prefix of n=24, the network is `192.168.1` and the host is `128` within that network.
+However, if n=8 the network is `192` and the host would be `168.1.128`.
+```
+
+There are a few special addresses:
+
+- `0.0.0.0`: indicates _this host_. Its meaning might vary depending the context it is used.
+  For example, it might indicate that a service can listen on _any_ interface of the host.
+  In DHCP, as we will see, refers to the host that is requesting an IP address.
+- `255.255.255.255`: is the broadcast address. Any message send to this direction will be received by all hosts.
+- `X.X...0000`: is the network address. It is the first address of the range defined by the prefix.
+- `X.X...1111`: is the broadcast address within the network. It is the last address of the range defined by the prefix.
+- `0.0...X`: identifies a host within the network.
+- `127.0.0.0`: the loopback network used for testing network applications without the need of using real Internet connection.
+
+Originally, the Internet was divided in classes:
+
+- _Class A_: start with `0` and uses 8 bits for the prefix.
+- _Class B_: start with `10` and uses 16 bits for the prefix.
+- _Class C_: start with `110` and uses 24 bits for the prefix.
+- _Class D_: start with `1110` and use for multicast addresses.
+- _Class E_: start with `1111` and reserved for future use.
+
+```{note}
+Classful addressing is now _obsolete_ because it couldn't fit well to address demand.
+The class A addresses provide a ver large range of hosts that can be in the network ($2^24$)
+but only 128 networks can be defined.
+The class C only provides 256 host addresses but the next step (the class B) provides $2^16$.
+Organisations and companies that need to go from C to D might not make a good use of all that range.
+
+In general terms, classful addressing makes the address ranges to be not well used and do not adapt to the real demand.
+```
+
+Currently, the Internet uses classless addressing, where we just need to fix the prefix lentgh _n_ to fully define a network address.
+We can define this _n_ as we wish, based on our needs, so very little amount of addresses will be wasted.
+The notation of an address will be: `XXX.XXX.XXX.XXX/n`. This fully define the host within the network.
+
+```{note}
+In the example of `167.199.170.82/27`:
+
+- There allows a block of $2^5$ addresses.
+- The first one is the network address: `167.199.170.64`
+- The last one is the network broadcast address: `167.199.170.95`
+- `167.199.170.82` is the address of the host and, for example, `167.199.170.195` do not belong to this network.
+```
+
+Routers forward datagrams from one network to another, depending on the destination IP.
+This is an operation that must be quick because they will be doing _a lot_.
+In order to know what is the network address of a given IP can use the concept of _network mask_.
+The mask is a 32-bit number where the first _n_ bits (the length of the prexi) are set to 1 and the rest to 0.
+For example: `167.199.170.82/27` has a mask of `11111111.11111111.11111111.11100000`.
+By using this mask, it is only required an `AND` operation to get the network address:
+
+```
+167.199.170.82   -  10100111.11000111.10101010.01010010
+255.255.255.224  -  11111111.11111111.11111111.11100000
+-------------------------------------------------------
+                    10100111.11000111.10101010.01000000  - 167.199.170.64
+```
+
+There has been defined a few IP addresses for private use.
+These means that these IP ranges will not go through the public Internet and can be used within an organisation:
+
+- `10/8`
+- `172.16/12`
+- `192.168/16`
+
 
 ### Subnetting
 
