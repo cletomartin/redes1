@@ -586,7 +586,7 @@ Organisations and companies that need to go from C to D might not make a good us
 </div>
 <p>Currently, the Internet uses classless addressing, where we just need to fix the prefix lentgh <em>n</em> to fully define a network address.
 We can define this <em>n</em> as we wish, based on our needs, so very little amount of addresses will be wasted.
-The notation of an address will be: <code class="docutils literal notranslate"><span class="pre">XXX.XXX.XXX.XXX/n</span></code>. This fully define the host within the network.</p>
+The notation of an address will be: <code class="docutils literal notranslate"><span class="pre">XXX.XXX.XXX.XXX/n</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In the example of <code class="docutils literal notranslate"><span class="pre">167.199.170.82/27</span></code>:</p>
@@ -594,13 +594,15 @@ The notation of an address will be: <code class="docutils literal notranslate"><
 <li><p>There allows a block of <span class="math notranslate nohighlight">\(2^5\)</span> addresses.</p></li>
 <li><p>The first one is the network address: <code class="docutils literal notranslate"><span class="pre">167.199.170.64</span></code></p></li>
 <li><p>The last one is the network broadcast address: <code class="docutils literal notranslate"><span class="pre">167.199.170.95</span></code></p></li>
+<li><p>Note that <code class="docutils literal notranslate"><span class="pre">167.199.170.64</span></code> and <code class="docutils literal notranslate"><span class="pre">167.199.170.95</span></code> are <em>not</em> used for hosts.
+So for addressing hosts in that range we would have <span class="math notranslate nohighlight">\(2^5 - 2\)</span> addresses.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">167.199.170.82</span></code> is the address of the host and, for example, <code class="docutils literal notranslate"><span class="pre">167.199.170.195</span></code> do not belong to this network.</p></li>
 </ul>
 </div>
 <p>Routers forward datagrams from one network to another, depending on the destination IP.
 This is an operation that must be quick because they will be doing <em>a lot</em>.
 In order to know what is the network address of a given IP can use the concept of <em>network mask</em>.
-The mask is a 32-bit number where the first <em>n</em> bits (the length of the prexi) are set to 1 and the rest to 0.
+The mask is a 32-bit number where the first <em>n</em> bits (the length of the prefix) are set to 1 and the rest to 0.
 For example: <code class="docutils literal notranslate"><span class="pre">167.199.170.82/27</span></code> has a mask of <code class="docutils literal notranslate"><span class="pre">11111111.11111111.11111111.11100000</span></code>.
 By using this mask, it is only required an <code class="docutils literal notranslate"><span class="pre">AND</span></code> operation to get the network address:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">167.199.170.82</span>   <span class="o">-</span>  <span class="mf">10100111.11000111.10101010.01010010</span>
@@ -609,6 +611,11 @@ By using this mask, it is only required an <code class="docutils literal notrans
                     <span class="mf">10100111.11000111.10101010.01000000</span>  <span class="o">-</span> <span class="mf">167.199.170.64</span>
 </pre></div>
 </div>
+<p>In classless addressing, the IP must be provided along its mask. That way, the host is fully defined in the Internet.
+<code class="docutils literal notranslate"><span class="pre">IP/mask</span></code> format is known as <em>CIDR notation</em>.
+Classless Inter-Domain Routing (CIDR) is a method of allocating IP addresses which was created for replacing the classful approach of the Internet.
+IANA delegates the assignation of the IP addresses world-wide by providing different ranges to local entities like ISPs or similar companies.
+As we have seen, CIDR is based on <em>VLSM</em> where the network mask can be of different length to provide accurate ranges for different needs without wasting too many IPs.</p>
 <p>There has been defined a few IP addresses for private use.
 These means that these IP ranges will not go through the public Internet and can be used within an organisation:</p>
 <ul class="simple">
@@ -616,9 +623,13 @@ These means that these IP ranges will not go through the public Internet and can
 <li><p><code class="docutils literal notranslate"><span class="pre">172.16/12</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">192.168/16</span></code></p></li>
 </ul>
+<p>There are also the <em>link-local addresses</em> that are used for automatic configuration of the hosts in a network: hosts without an IP address select an IP address from the range <code class="docutils literal notranslate"><span class="pre">169.254/16</span></code>.
+Although these addresses will never go to the Internet, they can be useful for contacting neighbours though.</p>
 </section>
 <section id="subnetting">
 <h3>Subnetting<a class="headerlink" href="#subnetting" title="Permalink to this heading">#</a></h3>
+<p>Subnetting is the process of subdividing a network into smaller networks so the IPs provided by the original range can be better used.
+If you ever get assigned to a class A or B, it if</p>
 </section>
 </section>
 <section id="configuration-and-management-protocols">
