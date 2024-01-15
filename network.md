@@ -210,7 +210,7 @@ In general terms, classful addressing makes the address ranges to be not well us
 
 Currently, the Internet uses classless addressing, where we just need to fix the prefix lentgh _n_ to fully define a network address.
 We can define this _n_ as we wish, based on our needs, so very little amount of addresses will be wasted.
-The notation of an address will be: `XXX.XXX.XXX.XXX/n`. This fully define the host within the network.
+The notation of an address will be: `XXX.XXX.XXX.XXX/n`.
 
 ```{note}
 In the example of `167.199.170.82/27`:
@@ -218,13 +218,15 @@ In the example of `167.199.170.82/27`:
 - There allows a block of $2^5$ addresses.
 - The first one is the network address: `167.199.170.64`
 - The last one is the network broadcast address: `167.199.170.95`
+- Note that `167.199.170.64` and `167.199.170.95` are _not_ used for hosts.
+  So for addressing hosts in that range we would have $2^5 - 2$ addresses.
 - `167.199.170.82` is the address of the host and, for example, `167.199.170.195` do not belong to this network.
 ```
 
 Routers forward datagrams from one network to another, depending on the destination IP.
 This is an operation that must be quick because they will be doing _a lot_.
 In order to know what is the network address of a given IP can use the concept of _network mask_.
-The mask is a 32-bit number where the first _n_ bits (the length of the prexi) are set to 1 and the rest to 0.
+The mask is a 32-bit number where the first _n_ bits (the length of the prefix) are set to 1 and the rest to 0.
 For example: `167.199.170.82/27` has a mask of `11111111.11111111.11111111.11100000`.
 By using this mask, it is only required an `AND` operation to get the network address:
 
@@ -235,6 +237,12 @@ By using this mask, it is only required an `AND` operation to get the network ad
                     10100111.11000111.10101010.01000000  - 167.199.170.64
 ```
 
+In classless addressing, the IP must be provided along its mask. That way, the host is fully defined in the Internet.
+`IP/mask` format is known as _CIDR notation_.
+Classless Inter-Domain Routing (CIDR) is a method of allocating IP addresses which was created for replacing the classful approach of the Internet.
+IANA delegates the assignation of the IP addresses world-wide by providing different ranges to local entities like ISPs or similar companies.
+As we have seen, CIDR is based on _VLSM_ where the network mask can be of different length to provide accurate ranges for different needs without wasting too many IPs.
+
 There has been defined a few IP addresses for private use.
 These means that these IP ranges will not go through the public Internet and can be used within an organisation:
 
@@ -242,8 +250,13 @@ These means that these IP ranges will not go through the public Internet and can
 - `172.16/12`
 - `192.168/16`
 
+There are also the _link-local addresses_ that are used for automatic configuration of the hosts in a network: hosts without an IP address select an IP address from the range `169.254/16`.
+Although these addresses will never go to the Internet, they can be useful for contacting neighbours though.
 
 ### Subnetting
+
+Subnetting is the process of subdividing a network into smaller networks so the IPs provided by the original range can be better used.
+If you ever get assigned to a class A or B, it if
 
 ## Configuration and management protocols
 
