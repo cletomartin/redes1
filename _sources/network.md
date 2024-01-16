@@ -160,6 +160,7 @@ The DIY examples:
 - In this case, the ICMP packet contains 3992 bytes of data, thus it is sent 4020 bytes (including the IP and ICMP headers).
 
 - Here we use a Python library called scapy for generating an IP datagram. We add a payload of 7000 bytes and this generates 5 fragments.
+  You can find the [code here](src/scapy/frag.py).
 ```
 
 ### Addressing
@@ -256,11 +257,134 @@ Although these addresses will never go to the Internet, they can be useful for c
 ### Subnetting
 
 Subnetting is the process of subdividing a network into smaller networks so the IPs provided by the original range can be better used.
-If you ever get assigned to a class A or B, it if
+If you ever get assigned to a class A or B, it is clear that the amount of hosts available in that range could be excessive for your needs.
+Using subnetting you can split the available space into sub-networks.
+Each sub-network could also be split in other sub-sub-networks and so on.
+This way, it is possible to organise a big range of IPs and make better use of the available addresses for hosts on each network.
+
+```{note}
+In the example:
+
+- The orginal n is 16 (a class B network).
+- We use 4 bits more for creating subnets.
+  This means we can have up-to 16 subnets ($2^4$).
+- Each sub-net will be able to address $2^{32 - 20} - 2$ hosts.
+  Note we substract 2 because we need network and broadcast addresses.
+```
+
+Because we _extend_ the prefix length to create subnets, the number of possible subnets will be always power of 2.
+I can be applied to any block as long as it is not used already.
+
+```{note}
+In the example we need to build 4 subnetworks for the network 141.14.0.0/24.
+This means that we will need to use 2 bits more, so the resulting subnets will be `/26` but with different values of course.
+
+- 141.14.0.`00 000000`/26
+  - 141.14.0.`00 000000` -> 141.14.0.0/26 net
+  - 141.14.0.`00 111111` -> 141.14.0.63/26 brd
+- 141.14.0.`01 000000`/26
+  - 141.14.0.`01 000000` -> 141.14.0.64/26 net
+  - 141.14.0.`01 111111` -> 141.14.0.127/26 brd
+- 141.14.0.`10 000000`/26
+  - 141.14.0.`10 000000` -> 141.14.0.128/26 net
+  - 141.14.0.`10 111111` -> 141.14.0.191/26 brd
+- 141.14.0.`11 000000`/26
+  - 141.14.0.`11 000000` -> 141.14.0.192/26 net
+  - 141.14.0.`11 111111` -> 141.14.0.255/26 brd
+```
 
 ## Configuration and management protocols
 
+In this section we are going to explain two important protocols that help the network layer in some sense.
+
 ### ICMP
+
+IP is a network protocol that delivers datagrams. This delivery, even it is not reliable, requires some basic mechanisms to detect errors, network congestions, etc.
+The Internet Control Message Protocol (ICMP) works on top of IP to provide:
+
+- _Error detection_ at multiple levels.
+- _Information_ about the network status (hosts, routers, etc).
+
+Each ICMP message is encapsulated in an IP datagram and the message format is as follows:
+
+- _ICMP Header_: the header is 8-byte long.
+  - _Type_: 1 byte for the type of the ICMP message.
+    An ICMP message can contain different information based on the type, a _request_, an _error_, a _reply_, etc.
+    Depending of the value of this field it would be one or the other.
+
+    | Type | Description             |
+    |------|-------------------------|
+    | 0    | Echo Reply              |
+    | 8    | Echo Request            |
+    | 3    | Destination Unreachable |
+
+  - _Code_: 1 byte for the subtype of the ICMP message.
+    For example code `1` of type `3` means the destination _port_ was unreachable,
+    whereas code `1` of the same type means destination _host_ was unreachable.
+  - _Checksum_: 2 bytes for the checksum that is calculated like the IP's checksum field.
+  - _Rest of header_: 4 bytes more whose value will depend on the specific ICMP message.
+- _ICMP Data_: the content of the message.
+
+#### Errors
+
+The ICMP errors are used for signalling problems.
+They are always reported from the place they are generated _back to the source host_.
+There are some special cases in which errors are not reported:
+
+- An error of an ICMP message.
+- IP datagrams failures with special addresses like 127.0.0.1 or multicast.
+- A failure of an IP fragment that is not the first one.
+
+```{note}
+In all these cases, it is possible to generate lots of error messages.
+```
+
+For reference, the ICMP error messages have the following values in the ICMP Data field:
+1. The IP header of the affected datagram, and
+1. the first 8 bytes of the affected datagram's payload.
+
+```{note}
+In the [RFC 792](https://www.rfc-editor.org/rfc/rfc792) we can read:
+
+:::
+Internet Header + 64 bits of Data Datagram
+
+      The internet header plus the first 64 bits of the original
+      datagram's data.  This data is used by the host to match the
+      message to the appropriate process.  If a higher level protocol
+      uses port numbers, they are assumed to be in the first 64 data
+      bits of the original datagram's data.
+:::
+```
+
+Some examples of ICMP errors:
+
+- _Destination unreachable_: sent by the router or host that detects the datagram cannot be delivered to its destination.
+  The code provides more specific reasons.
+- _Source quench_: a very basic congestion/flow control mechanism. Requests to the source to reduce the data rate.
+- _Time exceeded_: sent by the router to indicate that found a TTL set to 0 or by a destination host where a fragmentation timeout expired (e.g. some piece is missing).
+- _Parameter problem_: sent by the router or host indicating that a datagram was malformed or has missing fields.
+- _Redirect_: typically sent by routers to hosts to inform them that there are better routes for an IP datagram.
+  The host could update its routing table after receiving that information.
+  For example, for a specific datagram, there might be a better route than the one used by a host.
+
+#### Requests
+
+Some examples of ICMP requests and replies:
+
+- _Echo_: used to verify connectivity between 2 nodes. An Echo Request is replied by an Echo Reply.
+- _Timestamp_: used to measure latency between 2 nodes.
+- _Address mask_: used by a host to query the network address mask to use to a router.
+- _Router Solicitation_: used by a host to identify what local routers are available around it.
+
+```{note}
+The example of `ping google.com` shows how to measure the round trip time (RTT).
+This is the time between the Echo Request is sent and the Echo Reply is received.
+```
+
+```{note}
+See the code of ping in Scapy [here](src/scapy/ping.py).
+```
 
 ### DHCP
 

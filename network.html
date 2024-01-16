@@ -335,7 +335,11 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-and-management-protocols">Configuration and management protocols</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icmp">ICMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icmp">ICMP</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#requests">Requests</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dhcp">DHCP</a></li>
 </ul>
 </li>
@@ -536,7 +540,8 @@ it is just another fragment within</p>
 <p><code class="docutils literal notranslate"><span class="pre">ping</span></code> is actually sending 4028 bytes: 4000 bytes of data, 20 bytes for the IP header and 8 bytes corresponding to the ICMP header.</p>
 </li>
 <li><p>In this case, the ICMP packet contains 3992 bytes of data, thus it is sent 4020 bytes (including the IP and ICMP headers).</p></li>
-<li><p>Here we use a Python library called scapy for generating an IP datagram. We add a payload of 7000 bytes and this generates 5 fragments.</p></li>
+<li><p>Here we use a Python library called scapy for generating an IP datagram. We add a payload of 7000 bytes and this generates 5 fragments.
+You can find the <a class="reference download internal" download="" href="_downloads/7f46341be83b165c103e70d9bdbfbf47/frag.py"><span class="xref download myst">code here</span></a>.</p></li>
 </ul>
 </div>
 </section>
@@ -629,13 +634,165 @@ Although these addresses will never go to the Internet, they can be useful for c
 <section id="subnetting">
 <h3>Subnetting<a class="headerlink" href="#subnetting" title="Permalink to this heading">#</a></h3>
 <p>Subnetting is the process of subdividing a network into smaller networks so the IPs provided by the original range can be better used.
-If you ever get assigned to a class A or B, it if</p>
+If you ever get assigned to a class A or B, it is clear that the amount of hosts available in that range could be excessive for your needs.
+Using subnetting you can split the available space into sub-networks.
+Each sub-network could also be split in other sub-sub-networks and so on.
+This way, it is possible to organise a big range of IPs and make better use of the available addresses for hosts on each network.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example:</p>
+<ul class="simple">
+<li><p>The orginal n is 16 (a class B network).</p></li>
+<li><p>We use 4 bits more for creating subnets.
+This means we can have up-to 16 subnets (<span class="math notranslate nohighlight">\(2^4\)</span>).</p></li>
+<li><p>Each sub-net will be able to address <span class="math notranslate nohighlight">\(2^{32 - 20} - 2\)</span> hosts.
+Note we substract 2 because we need network and broadcast addresses.</p></li>
+</ul>
+</div>
+<p>Because we <em>extend</em> the prefix length to create subnets, the number of possible subnets will be always power of 2.
+I can be applied to any block as long as it is not used already.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example we need to build 4 subnetworks for the network 141.14.0.0/24.
+This means that we will need to use 2 bits more, so the resulting subnets will be <code class="docutils literal notranslate"><span class="pre">/26</span></code> but with different values of course.</p>
+<ul class="simple">
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">000000</span></code>/26</p>
+<ul>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">000000</span></code> -&gt; 141.14.0.0/26 net</p></li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">111111</span></code> -&gt; 141.14.0.63/26 brd</p></li>
+</ul>
+</li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">000000</span></code>/26</p>
+<ul>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">000000</span></code> -&gt; 141.14.0.64/26 net</p></li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">111111</span></code> -&gt; 141.14.0.127/26 brd</p></li>
+</ul>
+</li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">000000</span></code>/26</p>
+<ul>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">000000</span></code> -&gt; 141.14.0.128/26 net</p></li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">111111</span></code> -&gt; 141.14.0.191/26 brd</p></li>
+</ul>
+</li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">11</span> <span class="pre">000000</span></code>/26</p>
+<ul>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">11</span> <span class="pre">000000</span></code> -&gt; 141.14.0.192/26 net</p></li>
+<li><p>141.14.0.<code class="docutils literal notranslate"><span class="pre">11</span> <span class="pre">111111</span></code> -&gt; 141.14.0.255/26 brd</p></li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 </section>
 <section id="configuration-and-management-protocols">
 <h2>Configuration and management protocols<a class="headerlink" href="#configuration-and-management-protocols" title="Permalink to this heading">#</a></h2>
+<p>In this section we are going to explain two important protocols that help the network layer in some sense.</p>
 <section id="icmp">
 <h3>ICMP<a class="headerlink" href="#icmp" title="Permalink to this heading">#</a></h3>
+<p>IP is a network protocol that delivers datagrams. This delivery, even it is not reliable, requires some basic mechanisms to detect errors, network congestions, etc.
+The Internet Control Message Protocol (ICMP) works on top of IP to provide:</p>
+<ul class="simple">
+<li><p><em>Error detection</em> at multiple levels.</p></li>
+<li><p><em>Information</em> about the network status (hosts, routers, etc).</p></li>
+</ul>
+<p>Each ICMP message is encapsulated in an IP datagram and the message format is as follows:</p>
+<ul>
+<li><p><em>ICMP Header</em>: the header is 8-byte long.</p>
+<ul>
+<li><p><em>Type</em>: 1 byte for the type of the ICMP message.
+An ICMP message can contain different information based on the type, a <em>request</em>, an <em>error</em>, a <em>reply</em>, etc.
+Depending of the value of this field it would be one or the other.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Echo Reply</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Echo Request</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Destination Unreachable</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><em>Code</em>: 1 byte for the subtype of the ICMP message.
+For example code <code class="docutils literal notranslate"><span class="pre">1</span></code> of type <code class="docutils literal notranslate"><span class="pre">3</span></code> means the destination <em>port</em> was unreachable,
+whereas code <code class="docutils literal notranslate"><span class="pre">1</span></code> of the same type means destination <em>host</em> was unreachable.</p></li>
+<li><p><em>Checksum</em>: 2 bytes for the checksum that is calculated like the IP’s checksum field.</p></li>
+<li><p><em>Rest of header</em>: 4 bytes more whose value will depend on the specific ICMP message.</p></li>
+</ul>
+</li>
+<li><p><em>ICMP Data</em>: the content of the message.</p></li>
+</ul>
+<section id="errors">
+<h4>Errors<a class="headerlink" href="#errors" title="Permalink to this heading">#</a></h4>
+<p>The ICMP errors are used for signalling problems.
+They are always reported from the place they are generated <em>back to the source host</em>.
+There are some special cases in which errors are not reported:</p>
+<ul class="simple">
+<li><p>An error of an ICMP message.</p></li>
+<li><p>IP datagrams failures with special addresses like 127.0.0.1 or multicast.</p></li>
+<li><p>A failure of an IP fragment that is not the first one.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In all these cases, it is possible to generate lots of error messages.</p>
+</div>
+<p>For reference, the ICMP error messages have the following values in the ICMP Data field:</p>
+<ol class="arabic simple">
+<li><p>The IP header of the affected datagram, and</p></li>
+<li><p>the first 8 bytes of the affected datagram’s payload.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the <a class="reference external" href="https://www.rfc-editor.org/rfc/rfc792">RFC 792</a> we can read:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Internet</span> <span class="n">Header</span> <span class="o">+</span> <span class="mi">64</span> <span class="n">bits</span> <span class="n">of</span> <span class="n">Data</span> <span class="n">Datagram</span>
+
+      <span class="n">The</span> <span class="n">internet</span> <span class="n">header</span> <span class="n">plus</span> <span class="n">the</span> <span class="n">first</span> <span class="mi">64</span> <span class="n">bits</span> <span class="n">of</span> <span class="n">the</span> <span class="n">original</span>
+      <span class="n">datagram</span><span class="s1">&#39;s data.  This data is used by the host to match the</span>
+      <span class="n">message</span> <span class="n">to</span> <span class="n">the</span> <span class="n">appropriate</span> <span class="n">process</span><span class="o">.</span>  <span class="n">If</span> <span class="n">a</span> <span class="n">higher</span> <span class="n">level</span> <span class="n">protocol</span>
+      <span class="n">uses</span> <span class="n">port</span> <span class="n">numbers</span><span class="p">,</span> <span class="n">they</span> <span class="n">are</span> <span class="n">assumed</span> <span class="n">to</span> <span class="n">be</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">first</span> <span class="mi">64</span> <span class="n">data</span>
+      <span class="n">bits</span> <span class="n">of</span> <span class="n">the</span> <span class="n">original</span> <span class="n">datagram</span><span class="s1">&#39;s data.</span>
+</pre></div>
+</div>
+</div>
+<p>Some examples of ICMP errors:</p>
+<ul class="simple">
+<li><p><em>Destination unreachable</em>: sent by the router or host that detects the datagram cannot be delivered to its destination.
+The code provides more specific reasons.</p></li>
+<li><p><em>Source quench</em>: a very basic congestion/flow control mechanism. Requests to the source to reduce the data rate.</p></li>
+<li><p><em>Time exceeded</em>: sent by the router to indicate that found a TTL set to 0 or by a destination host where a fragmentation timeout expired (e.g. some piece is missing).</p></li>
+<li><p><em>Parameter problem</em>: sent by the router or host indicating that a datagram was malformed or has missing fields.</p></li>
+<li><p><em>Redirect</em>: typically sent by routers to hosts to inform them that there are better routes for an IP datagram.
+The host could update its routing table after receiving that information.
+For example, for a specific datagram, there might be a better route than the one used by a host.</p></li>
+</ul>
+</section>
+<section id="requests">
+<h4>Requests<a class="headerlink" href="#requests" title="Permalink to this heading">#</a></h4>
+<p>Some examples of ICMP requests and replies:</p>
+<ul class="simple">
+<li><p><em>Echo</em>: used to verify connectivity between 2 nodes. An Echo Request is replied by an Echo Reply.</p></li>
+<li><p><em>Timestamp</em>: used to measure latency between 2 nodes.</p></li>
+<li><p><em>Address mask</em>: used by a host to query the network address mask to use to a router.</p></li>
+<li><p><em>Router Solicitation</em>: used by a host to identify what local routers are available around it.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example of <code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">google.com</span></code> shows how to measure the round trip time (RTT).
+This is the time between the Echo Request is sent and the Echo Reply is received.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See the code of ping in Scapy <a class="reference download internal" download="" href="_downloads/9358dda2f84b4aec0f06f5cc3b502438/ping.py"><span class="xref download myst">here</span></a>.</p>
+</div>
+</section>
 </section>
 <section id="dhcp">
 <h3>DHCP<a class="headerlink" href="#dhcp" title="Permalink to this heading">#</a></h3>
@@ -736,7 +893,11 @@ If you ever get assigned to a class A or B, it if</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-and-management-protocols">Configuration and management protocols</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icmp">ICMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#icmp">ICMP</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#requests">Requests</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dhcp">DHCP</a></li>
 </ul>
 </li>

@@ -1,4 +1,4 @@
-b(application)=
+(application)=
 # Application layer
 
 This lesson describes in depth the application layer and describes multiple application-layer protocols.
