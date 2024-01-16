@@ -160,6 +160,7 @@ The DIY examples:
 - In this case, the ICMP packet contains 3992 bytes of data, thus it is sent 4020 bytes (including the IP and ICMP headers).
 
 - Here we use a Python library called scapy for generating an IP datagram. We add a payload of 7000 bytes and this generates 5 fragments.
+  You can find the [code here](src/scapy/frag.py).
 ```
 
 ### Addressing
@@ -375,6 +376,15 @@ Some examples of ICMP requests and replies:
 - _Timestamp_: used to measure latency between 2 nodes.
 - _Address mask_: used by a host to query the network address mask to use to a router.
 - _Router Solicitation_: used by a host to identify what local routers are available around it.
+
+```{note}
+The example of `ping google.com` shows how to measure the round trip time (RTT).
+This is the time between the Echo Request is sent and the Echo Reply is received.
+```
+
+```{note}
+See the code of ping in Scapy [here](src/scapy/ping.py).
+```
 
 ### DHCP
 
