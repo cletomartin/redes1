@@ -2,7 +2,7 @@
 # Computer Networks I
 
 This is the _private_ documentation for the subject _Computer Networks I_,
-given in English language during of the [1st course of Degree in Computer Engineering at ][degree].
+given in English language during of the [1st course of Degree in Computer Engineering at ESI (UCLM)][degree].
 
 You can get the slides for the subject presentation [here](slides/presentation.odp).
 
