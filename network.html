@@ -796,6 +796,64 @@ This is the time between the Echo Request is sent and the Echo Reply is received
 </section>
 <section id="dhcp">
 <h3>DHCP<a class="headerlink" href="#dhcp" title="Permalink to this heading">#</a></h3>
+<p>Dynamic Host Configuration Protocol (DHCP) is an application-layer protocol for assigning IP addresses to hosts automatically.
+It follows the <em>client-server</em> paradigm where the hosts (clients) request to the DHCP servers to be assigned with a configuration.
+This configuration usually includes:</p>
+<ul class="simple">
+<li><p>An IP address.</p></li>
+<li><p>A network mask.</p></li>
+<li><p>A default gateway.</p></li>
+<li><p>A set of DNS name servers.</p></li>
+</ul>
+<p>Less fequently the configuration can also include:</p>
+<ul class="simple">
+<li><p>A hostname.</p></li>
+<li><p>Date and time.</p></li>
+</ul>
+<p>The format of a DHCP message is based on BOOTP as it was already widely used at the time DHCP was desgined:</p>
+<ul class="simple">
+<li><p><em>Operation code</em>: 1 byte for telling if the message is a request or a reply.</p></li>
+<li><p><em>HW type</em>: 1 byte to specify the hardware transmission medium.</p></li>
+<li><p><em>HW address length</em>: 1 byte to specify how many bytes the hardware address is long. For Ethernet, this values is 6.</p></li>
+<li><p><em>Hop count</em>: 1 byte to control the number of forwardings done by DHCP relays. Very similat to IP’s TTL.</p></li>
+<li><p><em>Transaction ID</em>: 4 bytes for an ID of the transaction. Randomly initialised by the client and repeated by the server.</p></li>
+<li><p><em>Time elapsed</em>: 2 bytes to inform the number seconds since the client started.</p></li>
+<li><p><em>Flags</em>: 2 bytes for flags. The first bit indicates if the message is unicast or multicast.</p></li>
+<li><p><em>Client IP address</em>: the client IP. If the client does not know it, then <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> is used.</p></li>
+<li><p><em>Your IP address</em>: the assigned client IP. This is set by the server.</p></li>
+<li><p><em>Server IP address</em>: the server IP. If the client does not know it, then <code class="docutils literal notranslate"><span class="pre">255.255.255.255</span></code> is used.</p></li>
+<li><p><em>Gateway IP address</em>: the default gateway associated to the network the client should use.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The example of the DHCP operations can be explained as follows:</p>
+<ol class="arabic simple">
+<li><p>The client creates a <code class="docutils literal notranslate"><span class="pre">DHCPDISCOVER</span></code>. It does not know what DHCP servers are around.
+The message is sent to the broadcast address. Note that the source port and the destination port are fixec (68 and 67).
+We will see later why.</p></li>
+<li><p>Every server that receieved the <code class="docutils literal notranslate"><span class="pre">DHCPDISCOVER</span></code> might reply with a <code class="docutils literal notranslate"><span class="pre">DHCPOFFER</span></code>.
+This message gives the client a possible configuration to use.
+Since the client does not have an IP yet, this message is sent to the broadcast address too.</p></li>
+<li><p>The client might receive many <code class="docutils literal notranslate"><span class="pre">DHCPOFFER</span></code>. After that, it would select one of them and create a <code class="docutils literal notranslate"><span class="pre">DHCPREQUEST</span></code>.
+This request goes straight to the server that gave the offer to make sure that the configuration provided can be used for up-to <code class="docutils literal notranslate"><span class="pre">3600</span></code> seconds.</p></li>
+<li><p>The server replies with a <code class="docutils literal notranslate"><span class="pre">DHCPACK</span></code> meaning that agrees with client’s configuration request.</p></li>
+<li><p>When the <code class="docutils literal notranslate"><span class="pre">DHCPACK</span></code> is received by the client, it can assume that it will be <em>bound</em> for that IP address for the leased time period.</p></li>
+</ol>
+<p>DHCP uses the fixed source port 68 in order to prevent other UDP applications to receive DHCP messages from servers.
+Suppose an ephemeral port 12345 is used instead of 68.
+If there is an UDP application running somewhere in the network at the same port,
+the <code class="docutils literal notranslate"><span class="pre">DHCPOFFER</span></code> messages will arrive to this application too because they are all sent to the broadcast address.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The state diagram shows how DHCP works. It is worth noting that the IP addresses are leased for a certain period of time.
+It’s client’s reponsibility to renew these leases on time.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">dhclient</span> <span class="pre">-v</span></code> to see how the DHCP client starts the renewal of the configuration.
+Note that it will go to all interfaces of the computer.</p>
+</div>
 </section>
 </section>
 <section id="ip-routing">

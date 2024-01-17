@@ -388,6 +388,67 @@ See the code of ping in Scapy [here](src/scapy/ping.py).
 
 ### DHCP
 
+Dynamic Host Configuration Protocol (DHCP) is an application-layer protocol for assigning IP addresses to hosts automatically.
+It follows the _client-server_ paradigm where the hosts (clients) request to the DHCP servers to be assigned with a configuration.
+This configuration usually includes:
+- An IP address.
+- A network mask.
+- A default gateway.
+- A set of DNS name servers.
+
+Less fequently the configuration can also include:
+
+- A hostname.
+- Date and time.
+
+The format of a DHCP message is based on BOOTP as it was already widely used at the time DHCP was desgined:
+
+- _Operation code_: 1 byte for telling if the message is a request or a reply.
+- _HW type_: 1 byte to specify the hardware transmission medium.
+- _HW address length_: 1 byte to specify how many bytes the hardware address is long. For Ethernet, this values is 6.
+- _Hop count_: 1 byte to control the number of forwardings done by DHCP relays. Very similat to IP's TTL.
+- _Transaction ID_: 4 bytes for an ID of the transaction. Randomly initialised by the client and repeated by the server.
+- _Time elapsed_: 2 bytes to inform the number seconds since the client started.
+- _Flags_: 2 bytes for flags. The first bit indicates if the message is unicast or multicast.
+- _Client IP address_: the client IP. If the client does not know it, then `0.0.0.0` is used.
+- _Your IP address_: the assigned client IP. This is set by the server.
+- _Server IP address_: the server IP. If the client does not know it, then `255.255.255.255` is used.
+- _Gateway IP address_: the default gateway associated to the network the client should use.
+
+```{note}
+The example of the DHCP operations can be explained as follows:
+
+1. The client creates a `DHCPDISCOVER`. It does not know what DHCP servers are around.
+   The message is sent to the broadcast address. Note that the source port and the destination port are fixec (68 and 67).
+   We will see later why.
+
+1. Every server that receieved the `DHCPDISCOVER` might reply with a `DHCPOFFER`.
+   This message gives the client a possible configuration to use.
+   Since the client does not have an IP yet, this message is sent to the broadcast address too.
+
+1. The client might receive many `DHCPOFFER`. After that, it would select one of them and create a `DHCPREQUEST`.
+   This request goes straight to the server that gave the offer to make sure that the configuration provided can be used for up-to `3600` seconds.
+
+1. The server replies with a `DHCPACK` meaning that agrees with client's configuration request.
+
+1. When the `DHCPACK` is received by the client, it can assume that it will be _bound_ for that IP address for the leased time period.
+
+DHCP uses the fixed source port 68 in order to prevent other UDP applications to receive DHCP messages from servers.
+Suppose an ephemeral port 12345 is used instead of 68.
+If there is an UDP application running somewhere in the network at the same port,
+the `DHCPOFFER` messages will arrive to this application too because they are all sent to the broadcast address.
+```
+
+```{note}
+The state diagram shows how DHCP works. It is worth noting that the IP addresses are leased for a certain period of time.
+It's client's reponsibility to renew these leases on time.
+```
+
+```{note}
+You can run `sudo dhclient -v` to see how the DHCP client starts the renewal of the configuration.
+Note that it will go to all interfaces of the computer.
+```
+
 ## IP routing
 
 
