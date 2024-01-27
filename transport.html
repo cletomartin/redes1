@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Transport layer &#8212; Computer Networks I</title>
   
@@ -19,49 +18,53 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'transport';</script>
@@ -81,7 +84,6 @@ const thebe_selector_output = ".output, .cell_output"
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -121,20 +123,15 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
-    </div>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -162,7 +159,18 @@ const thebe_selector_output = ".output, .cell_output"
     <p class="title logo__title">Computer Networks I</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -368,7 +376,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="transport-layer">
-<h1>Transport layer<a class="headerlink" href="#transport-layer" title="Permalink to this heading">#</a></h1>
+<h1>Transport layer<a class="headerlink" href="#transport-layer" title="Link to this heading">#</a></h1>
 <p>This lesson describes in depth the transport layer and describes some protocols for reliable data transmission.
 You can find the slides <a class="reference download internal" download="" href="_downloads/ff636a4051d34dee3bf1ed498d618481/transport.odp"><span class="xref download myst">here</span></a>.</p>
 <p>The transport layer provides a way to communicate <em>processes</em> that are located in different places.
@@ -380,11 +388,11 @@ The transport layer uses the network layer to transmit information between hosts
 </div>
 <p>In this section we are going to study the services provided by the transport layer to the application layer.</p>
 <section id="services">
-<h2>Services<a class="headerlink" href="#services" title="Permalink to this heading">#</a></h2>
+<h2>Services<a class="headerlink" href="#services" title="Link to this heading">#</a></h2>
 <p>In this section some general concepts and transport-layer services are described.
 These services are provided to the application layer.</p>
 <section id="port-addressing-and-sockets">
-<h3>Port addressing and sockets<a class="headerlink" href="#port-addressing-and-sockets" title="Permalink to this heading">#</a></h3>
+<h3>Port addressing and sockets<a class="headerlink" href="#port-addressing-and-sockets" title="Link to this heading">#</a></h3>
 <p>As it has been already mentioned, the transport layer communicates processes running on hosts.
 Because an application could send data to one or more applications on another host, some kind of process addressing would be required.
 The transport layer uses <em>port numbers</em> for distinguish applications within a server.</p>
@@ -446,7 +454,7 @@ With <code class="docutils literal notranslate"><span class="pre">netstat</span>
 </div>
 </section>
 <section id="encapsulation-and-decapsulation">
-<h3>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Permalink to this heading">#</a></h3>
+<h3>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Link to this heading">#</a></h3>
 <p>As any intermediate layer, the transport layer receives messages from the application layer and from the network layer:</p>
 <ul class="simple">
 <li><p><em>Encapsulation</em>: application messages are transformed into <em>segments</em> or <em>datagrams</em> (depending on the transport protocol we use).
@@ -458,7 +466,7 @@ This process happens on the <em>receiver</em> side.</p></li>
 </ul>
 </section>
 <section id="multiplexing-and-demultiplexing">
-<h3>Multiplexing and demultiplexing<a class="headerlink" href="#multiplexing-and-demultiplexing" title="Permalink to this heading">#</a></h3>
+<h3>Multiplexing and demultiplexing<a class="headerlink" href="#multiplexing-and-demultiplexing" title="Link to this heading">#</a></h3>
 <p>Multiple processes can be communicating all at the same time, exchanging information with different remote processes.
 The transport layer needs to be able to perform the following operations in order to achieve this:</p>
 <ul class="simple">
@@ -469,7 +477,7 @@ This is performed at the receiver side.</p></li>
 </ul>
 </section>
 <section id="flow-control">
-<h3>Flow control<a class="headerlink" href="#flow-control" title="Permalink to this heading">#</a></h3>
+<h3>Flow control<a class="headerlink" href="#flow-control" title="Link to this heading">#</a></h3>
 <p>It is important to control the amount of data a sender can <em>produce</em> and a receiver can <em>consume</em>.
 There needs to be a <em>balance</em> between them:</p>
 <ul class="simple">
@@ -496,7 +504,7 @@ In this case, a flow control mechanism is not required as the application consum
 <p>The transport layer provides this flow control mechanism as we will see by the end of this chapter.</p>
 </section>
 <section id="error-control">
-<h3>Error control<a class="headerlink" href="#error-control" title="Permalink to this heading">#</a></h3>
+<h3>Error control<a class="headerlink" href="#error-control" title="Link to this heading">#</a></h3>
 <p>The transport layer might work on top of an <em>unreliable network layer</em>. That’s the case, for example, for the TCP/IP stack.
 For this reason, the transport layer provides a way to detect errors of the data transmitted.
 Specifically, it has to deal with:</p>
@@ -517,7 +525,7 @@ Thus, the sender knows which packets arrived and which ones did not.</p></li>
 </ul>
 </section>
 <section id="congestion-control">
-<h3>Congestion control<a class="headerlink" href="#congestion-control" title="Permalink to this heading">#</a></h3>
+<h3>Congestion control<a class="headerlink" href="#congestion-control" title="Link to this heading">#</a></h3>
 <p>Congestion may happen on any system shared by different users that try to make use of it at the same time.
 A congested network is a network where nodes <em>need to wait</em> for transmitting data.</p>
 <p>The networking nodes (e.g. routers) use queues internally for dispatching packets to different routes.
@@ -525,7 +533,7 @@ These queues can be full if the networking nodes cannot consume packets at highe
 The problem usually happens at network level and it manifests at transport layer too.</p>
 </section>
 <section id="connectionless-and-connection-oriented-protocols">
-<h3>Connectionless and connection-oriented protocols<a class="headerlink" href="#connectionless-and-connection-oriented-protocols" title="Permalink to this heading">#</a></h3>
+<h3>Connectionless and connection-oriented protocols<a class="headerlink" href="#connectionless-and-connection-oriented-protocols" title="Link to this heading">#</a></h3>
 <p>Since the transport layer might work on different context and applications,
 it is possible that not all features might be required because another layer is already providing them or they are not required for a particular context.
 For these reason, the transport layer might be:</p>
@@ -551,7 +559,7 @@ This is the case of TCP.</p>
 </section>
 </section>
 <section id="transport-layer-protocols-in-tcp-ip-suite">
-<h2>Transport-layer protocols in TCP/IP suite<a class="headerlink" href="#transport-layer-protocols-in-tcp-ip-suite" title="Permalink to this heading">#</a></h2>
+<h2>Transport-layer protocols in TCP/IP suite<a class="headerlink" href="#transport-layer-protocols-in-tcp-ip-suite" title="Link to this heading">#</a></h2>
 <p>TCP/IP protocol stack defines 3 transport protocols that can be used:</p>
 <ul class="simple">
 <li><p>UDP: User Datagram Procotol (connectionless)</p></li>
@@ -560,7 +568,7 @@ This is the case of TCP.</p>
 </ul>
 <p>We are going to focus on UDP and TCP. SCTP offers more complex services than TCP and it is used only in few context.</p>
 <section id="udp">
-<h3>UDP<a class="headerlink" href="#udp" title="Permalink to this heading">#</a></h3>
+<h3>UDP<a class="headerlink" href="#udp" title="Link to this heading">#</a></h3>
 <p>The User Datagram Protocol (UDP) is the <em>connectionless</em> transport protocol included in the TCP/IP protocol suite.
 It should be consider <em>unreliable</em> so it is up to the application layer to provide reliability if it is required.
 This protocol is useful when a minimal overhead is required (e.g. real-time applications) and reliability/control is not strongly required (e.g. video/audio transmission).</p>
@@ -596,40 +604,40 @@ This means that a datagram can carry up-to 64KB (<span class="math notranslate n
 <p class="admonition-title">Note</p>
 <p>Show some of the well-known UDP protocols.</p>
 <p>In Debian, you can install <code class="docutils literal notranslate"><span class="pre">inetsim</span></code> which includes many fake servers for different UDP protocols:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">inetsim</span>
-</pre></div>
+<div class="docutils">
+<p>sudo apt install inetsim</p>
 </div>
 <p>Make sure that the Echo UDP service is running:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">service</span>  <span class="n">inetsim</span> <span class="n">status</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">echo</span>
-</pre></div>
+<div class="docutils">
+<p>sudo service  inetsim status | grep echo</p>
 </div>
 <p>In one terminal, you can show the log of <code class="docutils literal notranslate"><span class="pre">inetsim</span></code> so people can see the actions taken by each server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">tail</span> <span class="o">-</span><span class="n">f</span>  <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">inetsim</span><span class="o">/</span><span class="n">service</span><span class="o">.</span><span class="n">log</span>
-</pre></div>
+<div class="docutils">
+<p>sudo tail -f  /var/log/inetsim/service.log</p>
 </div>
 <p>Then you can use the following to show it working:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nc -u 127.0.0.1 7
+<div class="docutils">
+<p>$ nc -u 127.0.0.1 7
 Hello!
-Hello!
-</pre></div>
+Hello!</p>
 </div>
 <p>Another interesting example is Daytime.
 Show <a class="reference external" href="https://datatracker.ietf.org/doc/html/rfc867">RFC867</a> at UDP datagram.
 You can run the following:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nc -u 127.0.0.1 13
+<div class="docutils">
+<p>$ nc -u 127.0.0.1 13
 type whatever
-Sat Dec 16 16:15:40 2023
-</pre></div>
+Sat Dec 16 16:15:40 2023</p>
 </div>
 <p>Also show the <a class="reference download internal" download="" href="_downloads/2f856c193d33d32f768a5dd418dbd6b1/main.py"><span class="xref download myst">DNS example</span></a>.
 Just run it with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python src/simple-dns/main.py
-</pre></div>
+<div class="docutils">
+<p>$ python src/simple-dns/main.py</p>
 </div>
 </div>
 </section>
 <section id="tcp">
-<h3>TCP<a class="headerlink" href="#tcp" title="Permalink to this heading">#</a></h3>
+<h3>TCP<a class="headerlink" href="#tcp" title="Link to this heading">#</a></h3>
 <p>The Transmission Control Protocol (TCP) is a <em>connection-oriented</em> protocol that provides a reliable packet transport to the application layer:</p>
 <ul class="simple">
 <li><p>It is based on a combination of <em>Go Back N</em> and _Selective-Repeat_algorithms.
@@ -716,7 +724,7 @@ In other words, <em>it is the number of the next byte expected</em>.
 For example: if <code class="docutils literal notranslate"><span class="pre">ack</span> <span class="pre">=</span> <span class="pre">5643</span></code> it means that all bytes until <code class="docutils literal notranslate"><span class="pre">5642</span></code> has been recieved and we are waiting for the next one.
 Of course, it does <em>not</em> mean the total bytes received are 5642 because the initial byte number is random and it is likely it was not 0.</p>
 <section id="the-tcp-segment">
-<h4>The TCP segment<a class="headerlink" href="#the-tcp-segment" title="Permalink to this heading">#</a></h4>
+<h4>The TCP segment<a class="headerlink" href="#the-tcp-segment" title="Link to this heading">#</a></h4>
 <p>A segment has two parts:</p>
 <ul class="simple">
 <li><p>A header that can be between 20-60 bytes.</p></li>
@@ -750,7 +758,7 @@ The urgent data is placed at the beginning and this pointer helps to know when i
 </ul>
 </section>
 <section id="the-tcp-connection-establishment">
-<h4>The TCP connection establishment<a class="headerlink" href="#the-tcp-connection-establishment" title="Permalink to this heading">#</a></h4>
+<h4>The TCP connection establishment<a class="headerlink" href="#the-tcp-connection-establishment" title="Link to this heading">#</a></h4>
 <p>TCP is a connection-oriented protocol where a <em>bidirectional connection</em> is established between sender and reciever before any data is exchanged.
 Once this connection is established, all segments will be logically related to this connection.</p>
 <p>The TCP connection establishment is known as the <em>three-way handshaking</em> and it works like this (values come from the example of the slides):</p>
@@ -792,7 +800,7 @@ If there are lots of <code class="docutils literal notranslate"><span class="pre
 Thus, any <em>new and legit</em> <code class="docutils literal notranslate"><span class="pre">SYN</span></code> request will not be replied. This is a classic <em>Denial of Service</em> (DoS) attack.</p>
 </section>
 <section id="the-tcp-data-transfer">
-<h4>The TCP data transfer<a class="headerlink" href="#the-tcp-data-transfer" title="Permalink to this heading">#</a></h4>
+<h4>The TCP data transfer<a class="headerlink" href="#the-tcp-data-transfer" title="Link to this heading">#</a></h4>
 <p>Once the connection is established, then the bidirectional data exchange can happen:</p>
 <ol class="arabic simple">
 <li><p>The client sends 1000 bytes:</p>
@@ -830,7 +838,7 @@ It is still the same sequence number as the server has not sent data until now.<
 </ol>
 </section>
 <section id="the-tcp-connection-termination">
-<h4>The TCP connection termination<a class="headerlink" href="#the-tcp-connection-termination" title="Permalink to this heading">#</a></h4>
+<h4>The TCP connection termination<a class="headerlink" href="#the-tcp-connection-termination" title="Link to this heading">#</a></h4>
 <p>After the data is exchanged, the connection can be terminated at any time.
 The closure can be done in 2 ways:</p>
 <ul class="simple">
@@ -860,7 +868,7 @@ All the recieved data in this time period will be acknowledged by the client.</p
 </section>
 </section>
 <section id="segment-loss">
-<h3>Segment loss<a class="headerlink" href="#segment-loss" title="Permalink to this heading">#</a></h3>
+<h3>Segment loss<a class="headerlink" href="#segment-loss" title="Link to this heading">#</a></h3>
 <p>In a normal operation, <code class="docutils literal notranslate"><span class="pre">ACK</span></code> numbers are always recieved in order.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -889,11 +897,11 @@ All the recieved data in this time period will be acknowledged by the client.</p
 </section>
 </section>
 <section id="reliable-protocols">
-<h2>Reliable protocols<a class="headerlink" href="#reliable-protocols" title="Permalink to this heading">#</a></h2>
+<h2>Reliable protocols<a class="headerlink" href="#reliable-protocols" title="Link to this heading">#</a></h2>
 <p>As we have mentioned, TCP is a complex protocol that uses different techniques for achieving flow, error and congestion control.
 In this section we are going to explore some of the protocols that provide reliability.</p>
 <section id="simple-protocol">
-<h3>Simple protocol<a class="headerlink" href="#simple-protocol" title="Permalink to this heading">#</a></h3>
+<h3>Simple protocol<a class="headerlink" href="#simple-protocol" title="Link to this heading">#</a></h3>
 <p>The simplest protocol that provides reliability is the one that works on ideal conditions:</p>
 <ul class="simple">
 <li><p>No packet is lost.</p></li>
@@ -904,7 +912,7 @@ In this section we are going to explore some of the protocols that provide relia
 However these are ideal conditions that almost never happen in reality.</p>
 </section>
 <section id="stop-and-wait">
-<h3>Stop and wait<a class="headerlink" href="#stop-and-wait" title="Permalink to this heading">#</a></h3>
+<h3>Stop and wait<a class="headerlink" href="#stop-and-wait" title="Link to this heading">#</a></h3>
 <p>This protocol is the simplest way to provide flow and error control to an unreliable network.
 It uses a <em>sliding window</em> of size 1, which means that the sender has to wait for the ACK of a packet before sending a new one.
 With this simple approach, the flow control is provided (the reciever only sends the ACK when it is ready to receive more).</p>
@@ -952,7 +960,7 @@ The window size can be seen as the buffer that controls what has been sent or re
 </div>
 </section>
 <section id="go-back-n">
-<h3>Go back N<a class="headerlink" href="#go-back-n" title="Permalink to this heading">#</a></h3>
+<h3>Go back N<a class="headerlink" href="#go-back-n" title="Link to this heading">#</a></h3>
 <p>The stop and wait protocol is very inefficient.
 The communication channel might be free to be used but if the sender is waiting for an ACK then it will not be used.</p>
 <p>Go back N is a generalisation and improvement of stop and wait:</p>
@@ -1007,7 +1015,7 @@ This ACK does not make sense and it is discarded.</p></li>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <blockquote>
 <div><p>TBD</p>
 </div></blockquote>
@@ -1148,8 +1156,8 @@ By Cleto Martín
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Network architecture &#8212; Computer Networks I</title>
   
@@ -19,49 +18,53 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=bd9e20870c6007c4c509" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'architecture';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -79,7 +82,6 @@ const thebe_selector_output = ".output, .cell_output"
   <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -119,20 +121,15 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <header>
   
-    <div class="bd-header navbar navbar-expand-lg bd-navbar">
-    </div>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
-  </header>
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -160,7 +157,18 @@ const thebe_selector_output = ".output, .cell_output"
     <p class="title logo__title">Computer Networks I</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -351,11 +359,11 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="network-architecture">
-<span id="arch"></span><h1>Network architecture<a class="headerlink" href="#network-architecture" title="Permalink to this heading">#</a></h1>
+<span id="arch"></span><h1>Network architecture<a class="headerlink" href="#network-architecture" title="Link to this heading">#</a></h1>
 <p>This lesson introduces the concept of protocol layering, showing ISO and TCP/IP models.
 You can find the slides <a class="reference download internal" download="" href="_downloads/8587437cff0967e8aee670f6f1897e01/architecture.odp"><span class="xref download myst">here</span></a>.</p>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>A network architecture describes how a network is organised, its components and its <em>protocols</em> or communication rule set.</p>
 <p>When the communication is simple we may need a simple <em>protocol</em> to reach an effective exchange of information between peers.
 However, automating this communication is usually a complex process that requires the implementation of specific rules (protocols) in order to be achieved.
@@ -394,12 +402,12 @@ For example, the translator has a field called <code class="docutils literal not
 </div>
 </section>
 <section id="reference-models">
-<h2>Reference models<a class="headerlink" href="#reference-models" title="Permalink to this heading">#</a></h2>
+<h2>Reference models<a class="headerlink" href="#reference-models" title="Link to this heading">#</a></h2>
 <p>In this section two main reference protocol models are shown. They describe how different protocol layers can cooperate so a computer network can be implemented.
 Depending of the defined details, the model can be <em>more specific</em> by describing the detailed behaviour of each layer and the protocols used,
 or it can be <em>more general</em> defining the model conceptually.</p>
 <section id="osi">
-<h3>OSI<a class="headerlink" href="#osi" title="Permalink to this heading">#</a></h3>
+<h3>OSI<a class="headerlink" href="#osi" title="Link to this heading">#</a></h3>
 <p>The Open System Interconnection (OSI) model is a reference model created by the ISO by the late 1970s. This is a general and conceptual model that can be used for describing other computer communication models too.</p>
 <p>This model defines 3 key components for each layer:</p>
 <ol class="arabic simple">
@@ -428,7 +436,7 @@ It can also provide data encryption/decryption or compression/decompression.</p>
 </ol>
 </section>
 <section id="tcp-ip">
-<h3>TCP/IP<a class="headerlink" href="#tcp-ip" title="Permalink to this heading">#</a></h3>
+<h3>TCP/IP<a class="headerlink" href="#tcp-ip" title="Link to this heading">#</a></h3>
 <p>The TCP/IP model is published a few years after the first implementations where already in used so it was an attempt to formalise its use and development.
 It is a more specific model as it describes what protocols should be used at some levels although other layers are not fully defined.
 The semantics of each layer are very similar to the OSI one.</p>
@@ -446,7 +454,7 @@ The semantics of each layer are very similar to the OSI one.</p>
 </ol>
 </section>
 <section id="hybrid-model">
-<h3>Hybrid model<a class="headerlink" href="#hybrid-model" title="Permalink to this heading">#</a></h3>
+<h3>Hybrid model<a class="headerlink" href="#hybrid-model" title="Link to this heading">#</a></h3>
 <p>The OSI and TCP/IP models are very similar. In fact, as the OSI model is so general, it can be simplified so it is adjusted to the TCP/IP model’s layers.
 For terminology simplicity, in this course we are going to follow an hybrid model with 5 layers:</p>
 <ul class="simple">
@@ -459,7 +467,7 @@ For terminology simplicity, in this course we are going to follow an hybrid mode
 </section>
 </section>
 <section id="encapsulation-and-decapsulation">
-<h2>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Permalink to this heading">#</a></h2>
+<h2>Encapsulation and decapsulation<a class="headerlink" href="#encapsulation-and-decapsulation" title="Link to this heading">#</a></h2>
 <p>As we have seen intuitively in the previons sections, each layer groups data in different types.
 These groups are known as <em>Protocol Data Units</em> (PDUs).
 PDUs are built by <em>encapsulating</em> the data to be sent with extra information appended to the data.
@@ -518,7 +526,7 @@ As all values are shown in hexadecimal, it is important to show the ASCII table 
 </div>
 </section>
 <section id="addressing-fundamentals">
-<h2>Addressing fundamentals<a class="headerlink" href="#addressing-fundamentals" title="Permalink to this heading">#</a></h2>
+<h2>Addressing fundamentals<a class="headerlink" href="#addressing-fundamentals" title="Link to this heading">#</a></h2>
 <p>We have seen 2 main addressing mechanisms: <em>physical</em> and <em>logical</em> addresses.
 The main differences are:</p>
 <ul class="simple">
@@ -527,7 +535,7 @@ The main differences are:</p>
 <li><p>The physical addresses is not meant to be changed at any time. The logical address can change frequently.</p></li>
 </ul>
 <section id="physical-address">
-<h3>Physical address<a class="headerlink" href="#physical-address" title="Permalink to this heading">#</a></h3>
+<h3>Physical address<a class="headerlink" href="#physical-address" title="Link to this heading">#</a></h3>
 <p>For simplicity, in this course we are going to use <em>physical address</em>, <em>MAC address</em>, and <em>Ethernet address</em> indistinctly.
 All of them is going to reference to the physical address that identifies nodes that are <em>directly connected</em> (data-link layer).
 It is important to note that this addressing mechanism allows data exchange between nodes that are directly connected without any intermediate node or router.</p>
@@ -538,7 +546,7 @@ All nodes are connected to the shared communication medium and only the destinat
 </div>
 </section>
 <section id="logical-address">
-<h3>Logical address<a class="headerlink" href="#logical-address" title="Permalink to this heading">#</a></h3>
+<h3>Logical address<a class="headerlink" href="#logical-address" title="Link to this heading">#</a></h3>
 <p>For simplicity, in this course we are going to use <em>logical address</em>, <em>network addresses</em> and <em>IP address</em> indistinctly.
 Both references to the address that identifies a node <em>within a network</em> (network layer).
 It is important to note that this addressing mechanism allows data exchange between nodes that are not connected directly and networking devices (routers) will help on routing datagrams through different networks.</p>
@@ -557,7 +565,7 @@ It also changes the source physical address to its own.</p></li>
 </section>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <blockquote>
 <div><p>TBD</p>
 </div></blockquote>
@@ -683,8 +691,8 @@ By Cleto Martín
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=bd9e20870c6007c4c509"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
