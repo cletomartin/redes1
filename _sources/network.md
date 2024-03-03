@@ -451,8 +451,30 @@ Note that it will go to all interfaces of the computer.
 
 ## IP routing
 
+In this section we are going to focus on how the hosts and routers manage the IP datagrams so they can reach their destination.
 
-### Delivery
+### Delivery methods
+
+Every host of an IP network keeps a _routing table_.
+This table contains the required information for sending IP datagrams based on their destination address.
+The format of this table is as follows:
+
+| Net Address | Mask | Delivery Method |
+|-------------|------|-----------------|
+| 11.11.11.0  | 24   | 10.0.0.5        |
+| 10.0.0.0    | 8    | direct          |
+
+In this example, there are 2 entries that can be read like this:
+
+1. Any datagram sent to the 11.11.11.0/24 network (for example, to 11.11.11.45) should be sent to 10.0.0.5.
+   This is likely to be a router that knows how to reach the destination host.
+1. Any datagram sent to the 10.0.0.0/8 network (for example, to 10.10.0.1), it should be delivered directly.
+   This means that the destination host is in the same network, so no need to send it to a router.
+
+More formally, there are 2 delivery methods:
+
+- _Direct_: if a datagram's destination is in the same network of the processing node then it is direct delivery.
+- _Indirect_: the rest. This uses a _next-hop_ address where datagrams will be sent.
 
 ### Forwarding
 
