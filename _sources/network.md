@@ -478,7 +478,172 @@ More formally, there are 2 delivery methods:
 
 ### Forwarding
 
+Forwarding is the mechanismin where an IP datagram _is moved from one path to another_ during a route from its source to destation.
+This requires:
+
+- A _router_: which will move the datagram from one network to another.
+- A _routing table_: which contains the information about the possible routes.
+  Routers will query the routing table to make a decision about a specific datagram based on its destination address.
+
+#### Methods
+
+There are multiple methods that can implement a forwarding mechanism.
+In this section we are going to compare some of them, listing the its pros and cons.
+
+- _Route method_ vs _Next-hop method_: for each destination we could store:
+  - The entire route: meaning that `A` needs to know `R1`, `R2` and finally `B`.
+  - Just the next hop: meaning that `A` only needs to know `R1`.
+	Note that `R2`'s next hop for reaching `B` is null because it would be direct delivery.
+
+  Obviously, the next-hop method simplifies the routing tables that routers need to keep, so it seems a much better option.
+  However, there is something good of having the entire route in the routing table: the context that the router has is bigger and could make smarter decisions (like foreseeing problematic branches).
+  In any case, route method requires so much space and complexity to keep the routes up-to-date that it is not worth to implement.
+
+- _Host-specific_ vs _Network-specific_: the destinations can be:
+  - All the possible hosts: this means that `S` will have to store one row for `A`, `B`, `C`, and `D`.
+  - Just the destination network: meaning that `S` will only need to store the destination network address to know how to each _any_ node from that network.
+
+  Network-specific approach is better because simplifies the routing table and the process of updating them.
+
+- _Default route_: a node or a router can be connected to a network that provide access to multiple inter-networks (like the Internet).
+  We cannot store all the possible destination networks in our table.
+  For that reason, the _default_ route can be placed at the end of the forwarding table.
+  If the route for a given destination address is not found then the datagram will be forwarded to the next hop that pointed by the default route.
+
+```{note}
+We can define a forwarding mechanism in pseudo-code:
+
+1. Get the destination address of the datagram.
+1. Loop through each row of the routing table.
+1. Perform an `AND` operation between the destination address and the network mask specified in the row.
+1. If the result is equals to destination value of the row, then forward the datagram to the next hop.
+1. If no row matched and there is a default route, then follow the default route.
+1. If there is no a default route, then return an ICMP error stating that there is not a route for the given datagram.
+```
+
 ### Routing tables
+
+Given the previous procedure, each row in the routing table should contain the following fields:
+
+- _Destination network address_: required to know what network address the route goes to.
+- _Destination network mask_: required so the `AND` operation can be performed.
+- _Next-hop address_: required to know what node will handle a matched datagram for this specific route.
+- _Interface_: required to know through what interface the forwarded datagram should be sent.
+
+The next-hop address and the interface is used downstream by ARP,
+a link-layer protocol that translates an IP address to a link-layer address.
+The link-layer address can be used by the link-layer to send frames containing the IP datagram.
+We will study ARP in more detail in the following chapter.
+
+```{note}
+The example shows the routing table of the second router that has 2 interfaces: `eth0` and `eth1`.
+`eth0` is connected to 40.0.0.0/8 network and its assigned IP is 40.0.0.8.
+`eth1` is connected to 128.1.0.0/16 network and its assigned IP is 128.1.0.8.
+
+Any datagram to any of the these networks will be considered for _direct delibery_ because the router is connected to them.
+However datagrams to 30.0.0.0/8 network will need to be sent to 40.0.0.7 which has access to that network.
+Datagrams to 192.4.10.0/24  will need to be sent to 128.1.0.9 for the same reason.
+
+It is important to note that any other destination address, like 8.8.8.8, will generate an ICMP error because there is no route for it.
+```
+
+```{note}
+The next example shows the routing table of R1 which has 3 interfaces.
+In this case, a default route is configured.
+```
+
+```{note}
+Based on the previous example, let's explain what it would happen if a datagram arrives to R1 with destionation address 180.70.65.140:
+
+1. The first row's mask would be applied to the destination address:
+
+   180.70.65.140 & 255.255.255.192 = 180.70.65.128
+
+   It does not match the first row's destination field.
+
+1. The second row's mask would be applied to the destination address:
+
+   180.70.65.140 & 255.255.255.128 = 180.70.65.128
+
+   In this case, it matches so the next-hop address and the interface is passed to ARP.
+```
+
+```{note}
+Based on the previous example, let's explain what it would happen if a datagram arrives to R1 with destionation address 201.4.22.35:
+
+1. The first row's mask would be applied to the destination address:
+
+   201.4.22.35 & 255.255.255.192 = 201.4.22.0
+
+   It does not match the first row's destination field.
+
+1. The second row's mask would be applied to the destination address:
+
+   201.4.22.35 & 255.255.255.128 = 201.4.22.0
+
+   It does not match the first row's destination field.
+
+1. The third row's mask would be applied to the destination address:
+
+   201.4.22.35 & 255.255.255.0 = 201.4.22.0
+
+   In this case, the result matches so the next-hop address and the interface is passed to ARP.
+```
+
+
+```{note}
+Based on the previous example, let's explain what it would happen if a datagram arrives to R1 with destionation address 18.24.32.78:
+
+All rows in the table will be queried and no one will provide a match except the latest one: the default route.
+```
+
+Now that each destination network address and mask need to be kept on each row,
+one can think that in a real environment with lots of networks,
+routers might need to keep lot of destination networks if neighbours are connected to multiple networks.
+
+However, routers can use _address aggregation_ to simplify their routing tables.
+Many network addresses can be collapsed into just one that includes many of them.
+That way, only one table row is required to reach multiple networks.
+
+```{note}
+In the example, R1 is connected to 4 networks, all of them /26.
+R2 does not need to know all those networks, it only needs one row for 140.24.7.0/24.
+
+And it is /24 because R1 uses 2 bits for subnetting (/24 + 2 = /26).
+```
+
+However, address aggregation introduces a new problem.
+What if one of the 4 networks is removed from R1 (for example, 140.24.7.192/26)  and now it is placed in a separated router.
+Now R2 seems like it will not be able to use 140.24.7.0/24 in just one row.
+It will need 2 rows: one for 140.24.7.0/24 and one for 140.24.7.192/26 because each of them are connected to different interfaces.
+But one includes the other so both will match.
+
+In order to disambiguate what row to pick the _longest mask matching_ criteria will be followed.
+This means that the row in the routing table whose mask is the longest will be selected in case there are others shorter.
+In our case, `/26` is longer than `/24` so both rows can coexist without any problem in R2.
+
+```{note}
+To see how this address aggregation provides a hierarchical routing, let's consider the following example:
+
+- A regional ISP is assigned with 120.14.64.0/18. This means that it has $2^{16}$ addresses.
+- This ISP divides this block in 4 to give each block to local 3 ISPs
+  It needs 2 bits for subnetting. One block will not be used but the other 3 will be assigned to the local ISPs:
+  1. 120.14.64.0/20: this local ISP subdivide this block in 8 subnetworks that will be assigned to small providers.
+	 That requires 3 bits so the result in /23 networks:
+	 - 120.14.64.0/23, to
+	 - 120.14.78.0/23
+
+	 And each of these small ISPs divide them into 128 blocks that will be assigned to households.
+	 That requires 7 bits, so the resulting networks will be /30:
+
+	 - 120.14.64.0/30 - ..., to
+	 - 120.14.78.0/30 - ...
+
+  1. 120.14.80.0/20: not assigned and reserved for future use.
+  1. 120.14.96.0/20: this local ISP breaks down the network in 4 subnetworks, resulting in /22.
+  1. 120.14.112.0/20: this local ISP breaks down the network in 16 subnetworks, resulting in /24.
+```
+
 
 ### Dynamic routing
 
