@@ -644,8 +644,40 @@ To see how this address aggregation provides a hierarchical routing, let's consi
   1. 120.14.112.0/20: this local ISP breaks down the network in 16 subnetworks, resulting in /24.
 ```
 
+In GNU/Linux there are tools that can be used for querying the routing table and the host configuration.
+
+- `ip route`: shows the routing table.
+  This can be also done with `route` or `netstat -rn`.
+- `ip addr show`: shows the interface configuration (its IP address, network mask and much more).
+  This can be also done with `ifconfig`.
 
 ### Dynamic routing
+
+Each row of the routing tables represent a route that can be reachable from the host or router where the routing table lives.
+The routes can be added and removed manually from the routing table.
+However, that will not provide a good user experience as the Internet is constantly changes.
+There are nodes that are not available anymore and new routes that can be used very frequently.
+
+In order to update the routes automatically, we will need a _routing protocol_ between routing nodes so they can configure themselves.
+With this type of protocols, routing nodes can discover new routes from their neighbours, announce a faulty path, etc.
+
+As mentioned, these routing protocols are used between routing nodes. Specifically, they are effective at the level of _autonomous systems_ (AS).
+The Internet is built out of autonomous systems can be a single big network of a set of networks of networks.
+The main point of an AS is that it defines a single routing policy and owns a set of IPs (its IP address space).
+An _AS number_ (ASN) is assigned to each AS that is connected to the Internet.
+
+```{note}
+In the slide there is 4 AS that are interconnected.
+Some routers within the AS can connect to external AS routers.
+```
+
+The routing protocols can be:
+- _Intra-domain_: they are used within an AS (domain). The most common one are:
+  - _RIP_: _Routing Information Protocol_ is based on the distance vector algorithms that tries to get the best route to a destination based on the number hops and other metrics.x
+  - _OSPF_: _Open Shortest Path First_ builds a database of the link status with a _cost_ metric.
+
+- _Inter-domain_: they are used between AS (domains). Here it is used BGP (_Border Gateway Protocol_) where routes are announced and routers take that information for keeping their tables up-to-date.
+  BGP allows having multiple route selection with different weights.
 
 ## Exercises
 > TBD
