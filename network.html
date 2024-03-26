@@ -1062,9 +1062,42 @@ That requires 7 bits, so the resulting networks will be /30:</p>
 </li>
 </ul>
 </div>
+<p>In GNU/Linux there are tools that can be used for querying the routing table and the host configuration.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">route</span></code>: shows the routing table.
+This can be also done with <code class="docutils literal notranslate"><span class="pre">route</span></code> or <code class="docutils literal notranslate"><span class="pre">netstat</span> <span class="pre">-rn</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">addr</span> <span class="pre">show</span></code>: shows the interface configuration (its IP address, network mask and much more).
+This can be also done with <code class="docutils literal notranslate"><span class="pre">ifconfig</span></code>.</p></li>
+</ul>
 </section>
 <section id="dynamic-routing">
 <h3>Dynamic routing<a class="headerlink" href="#dynamic-routing" title="Link to this heading">#</a></h3>
+<p>Each row of the routing tables represent a route that can be reachable from the host or router where the routing table lives.
+The routes can be added and removed manually from the routing table.
+However, that will not provide a good user experience as the Internet is constantly changes.
+There are nodes that are not available anymore and new routes that can be used very frequently.</p>
+<p>In order to update the routes automatically, we will need a <em>routing protocol</em> between routing nodes so they can configure themselves.
+With this type of protocols, routing nodes can discover new routes from their neighbours, announce a faulty path, etc.</p>
+<p>As mentioned, these routing protocols are used between routing nodes. Specifically, they are effective at the level of <em>autonomous systems</em> (AS).
+The Internet is built out of autonomous systems can be a single big network of a set of networks of networks.
+The main point of an AS is that it defines a single routing policy and owns a set of IPs (its IP address space).
+An <em>AS number</em> (ASN) is assigned to each AS that is connected to the Internet.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the slide there is 4 AS that are interconnected.
+Some routers within the AS can connect to external AS routers.</p>
+</div>
+<p>The routing protocols can be:</p>
+<ul class="simple">
+<li><p><em>Intra-domain</em>: they are used within an AS (domain). The most common one are:</p>
+<ul>
+<li><p><em>RIP</em>: <em>Routing Information Protocol</em> is based on the distance vector algorithms that tries to get the best route to a destination based on the number hops and other metrics.x</p></li>
+<li><p><em>OSPF</em>: <em>Open Shortest Path First</em> builds a database of the link status with a <em>cost</em> metric.</p></li>
+</ul>
+</li>
+<li><p><em>Inter-domain</em>: they are used between AS (domains). Here it is used BGP (<em>Border Gateway Protocol</em>) where routes are announced and routers take that information for keeping their tables up-to-date.
+BGP allows having multiple route selection with different weights.</p></li>
+</ul>
 </section>
 </section>
 <section id="exercises">
