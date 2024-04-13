@@ -108,7 +108,10 @@ The IEEE organisation started a project in 1985 called "Project 802" to define t
 They subdivided the data-link in 2 sublayers:
 
 - The _logical link control_ (LLC): similar to our already known DLC.
-- The _media access control_ (MAC): similat to our already known MAC.
+  LLC is optional if the upper-layer protocols do not need them.
+  For TCP/IP traffic, they are not usually required.
+- The _media access control_ (MAC): similar to our already known MAC.
+  In Ethernet, this layer is always present.
 
 Ethernet is one of the few protocols that have survived since the very beginning and today is common to find LANs at 10Gbps which is the forth generation.
 Ethernet is connectionless and unreliable:
@@ -131,6 +134,9 @@ The structure of a MAC address can be divided in 2 groups:
 
 - The _organisationally unique identifier_ (OUI): the first 3 bytes, that identifies a specific manufacturer.
   IEEE assigns them.
+  When an OUI is used, then the last 2 bits of the first byte will be always `00`.
+  All addresses using an OUI will be _globally unique_.
+  If an administrator replaces the OUI and uses a _locally unique_ identifier, then it is expected that these bits are `10`.
 - The _NIC specific_: the last 3 bytes.
 
 When a MAC address is used as destination address, the last bit of the first byte determines the type of the frame:
@@ -151,8 +157,71 @@ However, only the affected node will reply to it.
 
 ### Ethernet MAC layer
 
+The MAC sublayer of Ethernet provides a way to access to a _shared medium_.
+Shared media are problematic:
+
+- Multiple nodes want to transmit at the same time. It requires a way to provide access to the transmission media in turn.
+- Collisions: when 2 or more nodes transmit at the same time a _collision_ is produced.
+  This degrade the media utilisation, waste resources and increases the delay during communcation.
+
+The solution to this problem proposed by Ethernet is to use a technique called _carrier sense multiple access with collision detection_ (CSMA/CD).
+This mechanism to avoid collisions work as follows:
+
+1. Nodes listen to the channel before start transmitting.
+1. If it is used, then wait for a certain time.
+1. If not used, then transmit and listen for other frames coming in.
+   If you can only see your message, then OK. If not, then abort the transmission and as a collision has been detected.
+   The frame will need to be resent again.
+
+### Ethernet frame
+
+The standard Ethernet frame size goes from 64 to 1518 bytes. It can carry from 46 to 1500 bytes of data:
+
+- _Preamble_: 8 bytes that is not counted as part of the frame legnth.
+  The preamble is made of 8 bytes:
+  1. First 7 bytes are `10101010` (55 decimal).
+  1. Last byte is the _start frame delimiter_ (SFD) and it is `10101011` (213).
+- _Target address_: 6 bytes.
+- _Source address_: 6 bytes.
+- _Type_: 2 bytes defined by the IANA:
+  1. From 0 to 45 are invalid values.
+  1. From 46 to 1500 are reserved to encapsulate LLC frames (802.2).
+	 _In this case, the field indicates the length of the data field and not just the type_.
+  1. From 1500+ uses values assigned by the IANA to define the type of the protocol encapsulated.
+	 For example `0x8000` is IPv4.
+- _Data_: from 46 to 1500 bytes. If the data is lower than 46, then it is fill with 0s.
+- _Frame check sequence_: the CRC for detecting transmission errors.
+
+It is interesting that, if the `type` field value is between 46 and 1500, this field actually tells the length of the data field because it will carry an LLC frame encapsulated in it.
+These frames are useful for supporting upper layers protocols that:
+- Protocols that do not have a length field for the data.
+- Protocols that use flow control features like NetBIOS.
+- Protocols that require the _subnetwork access protocol_ (SNAP header) since they used private protocol identifiers.
+
+In these situations, the LLC frame is the one carrying the data and because of some extra headers introduced by LLC, the minium and maximum data that they can carry changes from 46-1500 to 38-1492 (8 bytes less).
 
 ## ARP
+
+```{note}
+Now it is time to revisit the encapsulation process from top (application) to bottom (data-link).
+Whatever message we generate at the application layer, we will have to send no less than 64 bytes at the link layer (14B of header and 46B of data encapsulating multiple and 4B as tail).
+This means that if the application layer generates 4 bytes of data, it will fit in this minimal frame size.
+Note that if not, the data will be filled with 0s.
+```
+
+```{note}
+Let's suppose our PC sends an HTTP request to a web server:
+
+1. The PC generates the message with the right source and destination IP addresses and, based in its routing table, it is sent to its gateway.
+1. The router analyses the destination IP and, based in its routing table, forward the IP packet to its next hop.
+1. The second router analyses the destination IP and, based in its routing table, locally delivers the packet to the web server.
+
+The local delivery performed in the first and last step is performed within the same network, at link level.
+There must be a mechanism that transforms the destination IPs to the actual MAC addresses of the devices.
+```
+
+_Address resolution protocol_ (ARP) is a neighbour discovery protocol that helps with the problem of getting the MAC address given an IP address.
+
 
 ## Bridges and Switchers
 
