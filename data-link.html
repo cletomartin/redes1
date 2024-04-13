@@ -334,6 +334,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet">Ethernet</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-addresses">Ethernet addresses</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-mac-layer">Ethernet MAC layer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-frame">Ethernet frame</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arp">ARP</a></li>
@@ -466,8 +467,11 @@ Some WLAN protocols and point-to-point WAN protocols use this approach.</p></li>
 The IEEE organisation started a project in 1985 called “Project 802” to define the link layer of the Internet stacks (OSI and TCP/IP).
 They subdivided the data-link in 2 sublayers:</p>
 <ul class="simple">
-<li><p>The <em>logical link control</em> (LLC): similar to our already known DLC.</p></li>
-<li><p>The <em>media access control</em> (MAC): similat to our already known MAC.</p></li>
+<li><p>The <em>logical link control</em> (LLC): similar to our already known DLC.
+LLC is optional if the upper-layer protocols do not need them.
+For TCP/IP traffic, they are not usually required.</p></li>
+<li><p>The <em>media access control</em> (MAC): similar to our already known MAC.
+In Ethernet, this layer is always present.</p></li>
 </ul>
 <p>Ethernet is one of the few protocols that have survived since the very beginning and today is common to find LANs at 10Gbps which is the forth generation.
 Ethernet is connectionless and unreliable:</p>
@@ -491,7 +495,10 @@ The MAC address identifies the NIC in a particular LAN.</p>
 <p>The structure of a MAC address can be divided in 2 groups:</p>
 <ul class="simple">
 <li><p>The <em>organisationally unique identifier</em> (OUI): the first 3 bytes, that identifies a specific manufacturer.
-IEEE assigns them.</p></li>
+IEEE assigns them.
+When an OUI is used, then the last 2 bits of the first byte will be always <code class="docutils literal notranslate"><span class="pre">00</span></code>.
+All addresses using an OUI will be <em>globally unique</em>.
+If an administrator replaces the OUI and uses a <em>locally unique</em> identifier, then it is expected that these bits are <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
 <li><p>The <em>NIC specific</em>: the last 3 bytes.</p></li>
 </ul>
 <p>When a MAC address is used as destination address, the last bit of the first byte determines the type of the frame:</p>
@@ -512,10 +519,79 @@ However, only the affected node will reply to it.</p>
 </section>
 <section id="ethernet-mac-layer">
 <h3>Ethernet MAC layer<a class="headerlink" href="#ethernet-mac-layer" title="Link to this heading">#</a></h3>
+<p>The MAC sublayer of Ethernet provides a way to access to a <em>shared medium</em>.
+Shared media are problematic:</p>
+<ul class="simple">
+<li><p>Multiple nodes want to transmit at the same time. It requires a way to provide access to the transmission media in turn.</p></li>
+<li><p>Collisions: when 2 or more nodes transmit at the same time a <em>collision</em> is produced.
+This degrade the media utilisation, waste resources and increases the delay during communcation.</p></li>
+</ul>
+<p>The solution to this problem proposed by Ethernet is to use a technique called <em>carrier sense multiple access with collision detection</em> (CSMA/CD).
+This mechanism to avoid collisions work as follows:</p>
+<ol class="arabic simple">
+<li><p>Nodes listen to the channel before start transmitting.</p></li>
+<li><p>If it is used, then wait for a certain time.</p></li>
+<li><p>If not used, then transmit and listen for other frames coming in.
+If you can only see your message, then OK. If not, then abort the transmission and as a collision has been detected.
+The frame will need to be resent again.</p></li>
+</ol>
+</section>
+<section id="ethernet-frame">
+<h3>Ethernet frame<a class="headerlink" href="#ethernet-frame" title="Link to this heading">#</a></h3>
+<p>The standard Ethernet frame size goes from 64 to 1518 bytes. It can carry from 46 to 1500 bytes of data:</p>
+<ul class="simple">
+<li><p><em>Preamble</em>: 8 bytes that is not counted as part of the frame legnth.
+The preamble is made of 8 bytes:</p>
+<ol class="arabic simple">
+<li><p>First 7 bytes are <code class="docutils literal notranslate"><span class="pre">10101010</span></code> (55 decimal).</p></li>
+<li><p>Last byte is the <em>start frame delimiter</em> (SFD) and it is <code class="docutils literal notranslate"><span class="pre">10101011</span></code> (213).</p></li>
+</ol>
+</li>
+<li><p><em>Target address</em>: 6 bytes.</p></li>
+<li><p><em>Source address</em>: 6 bytes.</p></li>
+<li><p><em>Type</em>: 2 bytes defined by the IANA:</p>
+<ol class="arabic simple">
+<li><p>From 0 to 45 are invalid values.</p></li>
+<li><p>From 46 to 1500 are reserved to encapsulate LLC frames (802.2).
+<em>In this case, the field indicates the length of the data field and not just the type</em>.</p></li>
+<li><p>From 1500+ uses values assigned by the IANA to define the type of the protocol encapsulated.
+For example <code class="docutils literal notranslate"><span class="pre">0x8000</span></code> is IPv4.</p></li>
+</ol>
+</li>
+<li><p><em>Data</em>: from 46 to 1500 bytes. If the data is lower than 46, then it is fill with 0s.</p></li>
+<li><p><em>Frame check sequence</em>: the CRC for detecting transmission errors.</p></li>
+</ul>
+<p>It is interesting that, if the <code class="docutils literal notranslate"><span class="pre">type</span></code> field value is between 46 and 1500, this field actually tells the length of the data field because it will carry an LLC frame encapsulated in it.
+These frames are useful for supporting upper layers protocols that:</p>
+<ul class="simple">
+<li><p>Protocols that do not have a length field for the data.</p></li>
+<li><p>Protocols that use flow control features like NetBIOS.</p></li>
+<li><p>Protocols that require the <em>subnetwork access protocol</em> (SNAP header) since they used private protocol identifiers.</p></li>
+</ul>
+<p>In these situations, the LLC frame is the one carrying the data and because of some extra headers introduced by LLC, the minium and maximum data that they can carry changes from 46-1500 to 38-1492 (8 bytes less).</p>
 </section>
 </section>
 <section id="arp">
 <h2>ARP<a class="headerlink" href="#arp" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Now it is time to revisit the encapsulation process from top (application) to bottom (data-link).
+Whatever message we generate at the application layer, we will have to send no less than 64 bytes at the link layer (14B of header and 46B of data encapsulating multiple and 4B as tail).
+This means that if the application layer generates 4 bytes of data, it will fit in this minimal frame size.
+Note that if not, the data will be filled with 0s.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Let’s suppose our PC sends an HTTP request to a web server:</p>
+<ol class="arabic simple">
+<li><p>The PC generates the message with the right source and destination IP addresses and, based in its routing table, it is sent to its gateway.</p></li>
+<li><p>The router analyses the destination IP and, based in its routing table, forward the IP packet to its next hop.</p></li>
+<li><p>The second router analyses the destination IP and, based in its routing table, locally delivers the packet to the web server.</p></li>
+</ol>
+<p>The local delivery performed in the first and last step is performed within the same network, at link level.
+There must be a mechanism that transforms the destination IPs to the actual MAC addresses of the devices.</p>
+</div>
+<p><em>Address resolution protocol</em> (ARP) is a neighbour discovery protocol that helps with the problem of getting the MAC address given an IP address.</p>
 </section>
 <section id="bridges-and-switchers">
 <h2>Bridges and Switchers<a class="headerlink" href="#bridges-and-switchers" title="Link to this heading">#</a></h2>
@@ -590,6 +666,7 @@ However, only the affected node will reply to it.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet">Ethernet</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-addresses">Ethernet addresses</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-mac-layer">Ethernet MAC layer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-frame">Ethernet frame</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arp">ARP</a></li>
