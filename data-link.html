@@ -324,7 +324,18 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet">Ethernet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functionality">Functionality</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#framing">Framing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control-and-congestion-control">Flow control and congestion control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-control">Error control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connectionless-and-connection-oriented">Connectionless and connection-oriented</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet">Ethernet</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-addresses">Ethernet addresses</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-mac-layer">Ethernet MAC layer</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arp">ARP</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges-and-switchers">Bridges and Switchers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#networking-examples">Networking examples</a></li>
@@ -343,8 +354,165 @@ document.write(`
 <h1>Data-link layer<a class="headerlink" href="#data-link-layer" title="Link to this heading">#</a></h1>
 <p>This lesson describes in depth the data-link layer. It descripts its functionality, the link-layer addressing and ARP.
 You can find the slides <a class="reference download internal" download="" href="_downloads/90c8d130cc10f7234e70919cc3cd188c/data-link.pdf"><span class="xref download myst">here</span></a>.</p>
+<p>The data-link layer (or just link layer) is in charge of the <em>node-to-node</em> communication.
+It is important to note that the <em>domain</em> of the link layer is limited to the nodes that are <em>directly</em> connected.
+This means there is <em>no mediators</em> in the communication provided by this layer.</p>
+<p>It is located under the network layer, so it receives/sends <em>frames</em> of data that are going to be used by the network layer.
+It is also located on top of the physical layer so it does not deal with the transformation of the data into the physical signals that will be sent through the communication medium.
+However, it will have to deal with some problems that the physical medium generates like transmission errors, propagation delays, etc.</p>
+<section id="functionality">
+<h2>Functionality<a class="headerlink" href="#functionality" title="Link to this heading">#</a></h2>
+<p>The data-link layer is usually divided in 2 sublayers that perform operations at different abstraction layer:</p>
+<ol class="arabic simple">
+<li><p>The <em>data link control</em> layer (DLC): focused on error and flow control on both point-to-point and broadcast links.</p></li>
+<li><p>The <em>media access control</em> layer (MAC): focused on the problems associated with sharing a medium like a broadcast links.
+This sublayer is not required in those situations where only point-to-point links are used.</p></li>
+</ol>
+<section id="framing">
+<h3>Framing<a class="headerlink" href="#framing" title="Link to this heading">#</a></h3>
+<p>The first fundamental service that provided is <em>framing</em>.
+The PDU is called <em>frame</em>. The network datagrams are encapsulated in frames that are going to be sent to the destination.
+In the destination, those frames are going to be decapsulated and passed the transported datagram to the network layer.
+The <em>intermediate nodes</em> perform these 2 operations all the time.
+This is required because:</p>
+<ul class="simple">
+<li><p>They connect two different physical technologies</p></li>
+<li><p>The addresses between link domains are different, so the frames need to be updated.</p></li>
+</ul>
+<p>Each frame has the following parts (shown in the slide):</p>
+<ul class="simple">
+<li><p><em>Flag</em>: used at the beginning and at the end of the frame to mark when it starts and when it ends.
+The byte <code class="docutils literal notranslate"><span class="pre">01111110</span></code> is used for this.</p></li>
+<li><p><em>Header</em>: with the source and destination addresses, sizes, etc.</p></li>
+<li><p><em>Payload</em>: the data coming from the network layer.</p></li>
+<li><p><em>Trailer</em>: typically used for error checking.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This framing process can be seen as our <em>postal</em> code.
+When we put a message in an envelope, we are delimiting the information to be transported in a <em>frame</em> (the envelope).</p>
+</div>
+<p>The frame size can be:</p>
+<ul>
+<li><p><em>Fixed</em>: in which case there is no need of using any kind of delimiters as the fixed size itself can be used to distinguish different frames.
+ATM (mostly used for WAN connections) uses this type of fixed frames called <em>cells</em>.</p></li>
+<li><p><em>Variable</em>: prevalent in LAN environments and need the use of delimiters.
+We have seen that we are going to use a known flag as a delimiter but: what would it happen if the flag is part of the network data?
+In order to solve this problem, an <em>escape</em> value is used:</p>
+<ol class="arabic simple">
+<li><p>If FLAG is in the data, then add a special value ESC in front of it.</p></li>
+<li><p>If ESC is also in data, then add ESC again as a prefix to avoid it.</p></li>
+</ol>
+<p>Since this is done at byte level, this technique is known as <em>byte stuffing</em>.
+This process is performed for every single FLAG or ESC by found in the data.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the figure, the data contains FLAG and ESC.
+The generated frame will have <code class="docutils literal notranslate"><span class="pre">ESC</span> <span class="pre">FLAG</span></code> and <code class="docutils literal notranslate"><span class="pre">ESC</span> <span class="pre">ESC</span></code>.
+When this frame is received, the receiver will just to remove the escaping characters to get the original data.</p>
+</div>
+<p>Since process is done at byte level, it does not work well with today’s data encoding like Unicode that uses 16 or 32 bits.
+For this reason, most of the protocols perform the this escaping technique at bit level. This is known as <em>bit stuffing</em>:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since de flag is <code class="docutils literal notranslate"><span class="pre">01111110</span></code>, the algorithm for escaping a problematic sequence goes as this:</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">11111</span></code> is found in the data then a <code class="docutils literal notranslate"><span class="pre">0</span></code> is appended to avoid matching the FLAG.
+Then the next bit is added normally.</p></li>
+<li><p>If the receiver detects <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">11111</span> <span class="pre">0</span></code>, then it transforms it to <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">11111</span></code>.</p></li>
+<li><p>The real flag is never stuffed so there is no possible conflict.</p></li>
+</ul>
+</div>
+</li>
+</ul>
+</section>
+<section id="flow-control-and-congestion-control">
+<h3>Flow control and congestion control<a class="headerlink" href="#flow-control-and-congestion-control" title="Link to this heading">#</a></h3>
+<p>As we have seen in other layers, a frame producer can overwhelm a receiver if the number of frames pushed from the first one to the second one is too fast.
+The link layer provides flow control by:</p>
+<ul class="simple">
+<li><p>Using buffers on both sides so those frames that cannot be processed at a certain time can be done later.</p></li>
+<li><p>Use control frames for signalling the producer to reduce the transmission rate.</p></li>
+</ul>
+</section>
+<section id="error-control">
+<h3>Error control<a class="headerlink" href="#error-control" title="Link to this heading">#</a></h3>
+<p>The physical layer is not reliable.
+Even technologies like fibre optic can produce transmission errors and corrupt data while sending bits through the transmission medium.
+In order to detect this kind of problems, a <em>Cyclic Redundancy Check</em> (CRC) is added to the frames by the sender and tested by the receiver.
+This is very similar to the checksum fields we have seen so far.
+If a corrupted frame is silently discarded, meaning that the network layer will not receive any of those.
+For those that are <em>not</em> corrupted it needs to:</p>
+<ol class="arabic simple">
+<li><p>Pass it to the network layer,</p></li>
+<li><p>Optionally, signal the sender with an ACK frame that the sent frame was received correctly.
+This approach is also related with the flow control.</p></li>
+</ol>
+</section>
+<section id="connectionless-and-connection-oriented">
+<h3>Connectionless and connection-oriented<a class="headerlink" href="#connectionless-and-connection-oriented" title="Link to this heading">#</a></h3>
+<p>Depending on the protocol used, the data transmission can happen:</p>
+<ul class="simple">
+<li><p><em>Connectionless</em>: where each frame is independent from each other and it is independent from the others.
+Most wired LAN protocols use this.</p></li>
+<li><p><em>Connection-oriented</em>: where the establishment of a connection is required prior the data transmission.
+Some WLAN protocols and point-to-point WAN protocols use this approach.</p></li>
+</ul>
+</section>
+</section>
 <section id="ethernet">
 <h2>Ethernet<a class="headerlink" href="#ethernet" title="Link to this heading">#</a></h2>
+<p>This was the first LAN protocol in history designed by Xerox in 1976 and made it available in 1980.
+The IEEE organisation started a project in 1985 called “Project 802” to define the link layer of the Internet stacks (OSI and TCP/IP).
+They subdivided the data-link in 2 sublayers:</p>
+<ul class="simple">
+<li><p>The <em>logical link control</em> (LLC): similar to our already known DLC.</p></li>
+<li><p>The <em>media access control</em> (MAC): similat to our already known MAC.</p></li>
+</ul>
+<p>Ethernet is one of the few protocols that have survived since the very beginning and today is common to find LANs at 10Gbps which is the forth generation.
+Ethernet is connectionless and unreliable:</p>
+<ul>
+<li><p>It does not require the creation of a connection.</p></li>
+<li><p>Frames can overwhelm the receiver and being discarded silently.
+Frames can also be corrupted and the will be discarded silently.
+If frames are discarded the sender will never know.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is up to the upper layers to provide reliability. IP nor UDP do it, so unless the application layer provides it, we can only rely on TCP to get a frame restransmitted.</p>
+</div>
+</li>
+</ul>
+<section id="ethernet-addresses">
+<h3>Ethernet addresses<a class="headerlink" href="#ethernet-addresses" title="Link to this heading">#</a></h3>
+<p>The Ethernet protocol defines 6 byte long (48 bits). They are represented as 6 bytes in hexadecimal separated by colons.
+These addresses are associated to the NICs (<em>network interface controller</em>) attached to the node.
+Each interface has its own MAC address. That way, a node can have multiple NICs attached to it each of them with a different MAC address.
+The MAC address identifies the NIC in a particular LAN.</p>
+<p>The structure of a MAC address can be divided in 2 groups:</p>
+<ul class="simple">
+<li><p>The <em>organisationally unique identifier</em> (OUI): the first 3 bytes, that identifies a specific manufacturer.
+IEEE assigns them.</p></li>
+<li><p>The <em>NIC specific</em>: the last 3 bytes.</p></li>
+</ul>
+<p>When a MAC address is used as destination address, the last bit of the first byte determines the type of the frame:</p>
+<ul class="simple">
+<li><p><em>Unicast</em>: if the last bit is 0.</p></li>
+<li><p><em>Multicast</em>: if the last bit is 1. A <em>broadcast</em> frame is really a special case of a multicast one as all bytes are set to <code class="docutils literal notranslate"><span class="pre">FF</span></code>.</p></li>
+</ul>
+<p>The MAC addresses are written as 6 bytes separated by colons.
+However, they are <em>not</em> transmitted like that.
+Instead, each byte is transmitted in the reversed order so the LSB of each byte is sent first.
+This is why the last bits of the first byte contains the type of the frame: <em>they are transmitted and received first</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Important to note: even though a frame is unicast, that does not mean that, in a <em>shared medium</em> the frame is only received by the destination.
+In a shared medium like a bridged cable LAN or a WLAN environment, <em>all</em> nodes will receive the unicast frame.
+However, only the affected node will reply to it.</p>
+</div>
+</section>
+<section id="ethernet-mac-layer">
+<h3>Ethernet MAC layer<a class="headerlink" href="#ethernet-mac-layer" title="Link to this heading">#</a></h3>
+</section>
 </section>
 <section id="arp">
 <h2>ARP<a class="headerlink" href="#arp" title="Link to this heading">#</a></h2>
@@ -412,7 +580,18 @@ You can find the slides <a class="reference download internal" download="" href=
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet">Ethernet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functionality">Functionality</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#framing">Framing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control-and-congestion-control">Flow control and congestion control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-control">Error control</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connectionless-and-connection-oriented">Connectionless and connection-oriented</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet">Ethernet</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-addresses">Ethernet addresses</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ethernet-mac-layer">Ethernet MAC layer</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arp">ARP</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges-and-switchers">Bridges and Switchers</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#networking-examples">Networking examples</a></li>
