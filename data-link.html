@@ -338,8 +338,11 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arp">ARP</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges-and-switchers">Bridges and Switchers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#networking-examples">Networking examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges-and-switches">Bridges and Switches</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges">Bridges</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#switches">Switches</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -591,13 +594,90 @@ Note that if not, the data will be filled with 0s.</p>
 <p>The local delivery performed in the first and last step is performed within the same network, at link level.
 There must be a mechanism that transforms the destination IPs to the actual MAC addresses of the devices.</p>
 </div>
-<p><em>Address resolution protocol</em> (ARP) is a neighbour discovery protocol that helps with the problem of getting the MAC address given an IP address.</p>
+<p><em>Address resolution protocol</em> (ARP) is a neighbour discovery protocol that helps with the problem of getting the MAC address given an IP address.
+When a node needs the MAC address of a given IP for delivering a frame to a local neighbour it sends a broadcast request.
+The answers are stored in a cache for future use.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ARP cache can be managed using <code class="docutils literal notranslate"><span class="pre">arp</span></code> and <code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">neigh</span></code> commands:</p>
+<div class="docutils">
+<p>$ ip neigh
+192.168.223.238 dev wlp0s20f3 lladdr 11:22:33:44:55:66 REACHABLE
+172.17.0.2 dev docker0 lladdr 01:02:03:04:05:06 STALE</p>
+<p>$ sudo ip neigh add 192.168.1.1 lladdr 66:11:66:11:66:11 dev wlp0s20f3</p>
+<p>$ ip neigh
+192.168.223.238 dev wlp0s20f3 lladdr 11:22:33:44:55:66 REACHABLE
+192.168.1.1 dev wlp0s20f3 lladdr 66:11:66:11:66:11 PERMANENT
+172.17.0.2 dev docker0 lladdr 01:02:03:04:05:06 STALE</p>
+<p>$ sudo ip neigh del 192.168.1.1 dev wlp0s20f3</p>
+</div>
+</div>
+<ol class="arabic simple">
+<li><p>The <em>ARP request</em> is broadcasted to all the nodes. The request is for discovering the MAC address of a certain IP.</p></li>
+<li><p>The <em>ARP reply</em> is unicast, from the node that has the matched IP. It includes its MAC address.</p></li>
+</ol>
+<p>The ARP message is encapsulated in an Ethernet frame of type <code class="docutils literal notranslate"><span class="pre">0x0806</span></code> and has the following structure:</p>
+<ul class="simple">
+<li><p><em>HW type</em>: 2 bytes. Tells the type of the link layer protocol. For Ethernet <code class="docutils literal notranslate"><span class="pre">0x0001</span></code> is used.</p></li>
+<li><p><em>Network type</em>: 2 bytes. Tells the type of the network layer protocol. For IP <code class="docutils literal notranslate"><span class="pre">0x0800</span></code> is used.</p></li>
+<li><p><em>HW len</em>: 1 byte. The length of the link-layer addresses. <code class="docutils literal notranslate"><span class="pre">0x06</span></code> for Ethernet.</p></li>
+<li><p><em>Protocol len</em>: 1 byte. The length of the network-layer addresses. <code class="docutils literal notranslate"><span class="pre">0x04</span></code> for IP.</p></li>
+<li><p><em>Operation type</em>: 2 bytes. The ARP operation. <code class="docutils literal notranslate"><span class="pre">0x0001</span></code> for request or <code class="docutils literal notranslate"><span class="pre">0x0002</span></code> for replies.</p></li>
+<li><p><em>Sender HW address</em>: variable length.</p></li>
+<li><p><em>Sender Network address</em>: variable length.</p></li>
+<li><p><em>Target HW address</em>: variable length.</p></li>
+<li><p><em>Target Network address</em>: variable length.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example, node A wants to know the MAC address of B. It sends an ARP requests (the example needs to be read from the right to the left):</p>
+<ul class="simple">
+<li><p>The frame’s detination address is the broadcast: <code class="docutils literal notranslate"><span class="pre">FF:FF:FF:FF:FF:FF</span></code>.</p></li>
+<li><p>The frame’s type is ARP (<code class="docutils literal notranslate"><span class="pre">0x0806</span></code>).</p></li>
+<li><p>The data in the frame is an ARP message with the following content:</p>
+<ul>
+<li><p>HW type and network type sets to Ethernet and IP. (there is a mistake in the slide: it is <code class="docutils literal notranslate"><span class="pre">0x0001</span></code> not <code class="docutils literal notranslate"><span class="pre">0x0002</span></code>)</p></li>
+<li><p>HW len and protocol len are set to 6 and 4 because of the length of the Ethernet and IP addresses.</p></li>
+<li><p>The operation type is <code class="docutils literal notranslate"><span class="pre">0x0001</span></code> for a request.</p></li>
+<li><p>The sender’s addresses are filled accordingly.</p></li>
+<li><p>The target HW address is set to <code class="docutils literal notranslate"><span class="pre">00:00:00:00:00:00</span></code> as it is unkown</p></li>
+</ul>
+</li>
+</ul>
+<p>B replies with a unicast ARP reply and it contains its IP address (as part of the sender’s protocol address).</p>
+</div>
 </section>
-<section id="bridges-and-switchers">
-<h2>Bridges and Switchers<a class="headerlink" href="#bridges-and-switchers" title="Link to this heading">#</a></h2>
+<section id="bridges-and-switches">
+<h2>Bridges and Switches<a class="headerlink" href="#bridges-and-switches" title="Link to this heading">#</a></h2>
+<p>As we have seen before, connecting multiple devices requires sharing a transmission medium.
+That is problematic in many cases because of collisions.
+The use of CSMA/CD (and other techniques) reduces the chance of collisions.
+However, collisions may still happen and that reduces the utilisation of the channel.</p>
+<p>Ethernet has evolved to provide better performance and in its earlier stages used <em>bridges</em> (also known as <em>hubs</em>) to connect multiple hosts and reduce the amount of collisions.
+<em>Switches</em> were introduced later as an improvement of bridges to avoid collisions even further.</p>
+<section id="bridges">
+<h3>Bridges<a class="headerlink" href="#bridges" title="Link to this heading">#</a></h3>
+<p>Bridges (hubs) are used to split a collision domain in multiple ones.
+They forward the frames coming from one collision domain (connected to one of the bridge <em>port</em>) to the other ones (connected to the rest of the ports).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Let’s suppose the 2 port hub of the slide:</p>
+<ol class="arabic simple">
+<li><p>A frame coming from the left side is forwarded to the right side to <em>all</em> hosts.</p></li>
+<li><p>Only the target host generates a reponse and send the frame back to the left side.</p></li>
+<li><p>The bridge forward the response to <em>all</em> the nodes at the left side.</p></li>
+<li><p>Again, only the target host processes the response.</p></li>
+</ol>
+</div>
+<p>By separating the collision domains, bridges improve the bandwidth of the shared medium.
+For example, 6 nodes connected to a shared medium of <code class="docutils literal notranslate"><span class="pre">10Mbps</span></code> would have <code class="docutils literal notranslate"><span class="pre">10/6</span> <span class="pre">=</span> <span class="pre">1.6Mbps</span></code>.
+Adding a bridge of 2 ports, the collision domains can be split in 2, so each domain will have 3 hosts.
+Now, the bandwidth will be <code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">/</span> <span class="pre">(3</span> <span class="pre">+</span> <span class="pre">1)</span></code> (as we should count the bridge itself too) which is <code class="docutils literal notranslate"><span class="pre">2.5Mbps</span></code>.</p>
+<p>Bridges are not smart enough for <em>filtering</em>. In fact, they are physical-layer devices. They do not have any knowledge of</p>
 </section>
-<section id="networking-examples">
-<h2>Networking examples<a class="headerlink" href="#networking-examples" title="Link to this heading">#</a></h2>
+<section id="switches">
+<h3>Switches<a class="headerlink" href="#switches" title="Link to this heading">#</a></h3>
+</section>
 </section>
 </section>
 
@@ -670,8 +750,11 @@ There must be a mechanism that transforms the destination IPs to the actual MAC 
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arp">ARP</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges-and-switchers">Bridges and Switchers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#networking-examples">Networking examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges-and-switches">Bridges and Switches</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges">Bridges</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#switches">Switches</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

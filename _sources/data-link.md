@@ -221,8 +221,86 @@ There must be a mechanism that transforms the destination IPs to the actual MAC 
 ```
 
 _Address resolution protocol_ (ARP) is a neighbour discovery protocol that helps with the problem of getting the MAC address given an IP address.
+When a node needs the MAC address of a given IP for delivering a frame to a local neighbour it sends a broadcast request.
+The answers are stored in a cache for future use.
+
+```{note}
+The ARP cache can be managed using `arp` and `ip neigh` commands:
+
+:::
+$ ip neigh
+192.168.223.238 dev wlp0s20f3 lladdr 11:22:33:44:55:66 REACHABLE
+172.17.0.2 dev docker0 lladdr 01:02:03:04:05:06 STALE
+
+$ sudo ip neigh add 192.168.1.1 lladdr 66:11:66:11:66:11 dev wlp0s20f3
+
+$ ip neigh
+192.168.223.238 dev wlp0s20f3 lladdr 11:22:33:44:55:66 REACHABLE
+192.168.1.1 dev wlp0s20f3 lladdr 66:11:66:11:66:11 PERMANENT
+172.17.0.2 dev docker0 lladdr 01:02:03:04:05:06 STALE
+
+$ sudo ip neigh del 192.168.1.1 dev wlp0s20f3
+:::
+```
+
+1. The _ARP request_ is broadcasted to all the nodes. The request is for discovering the MAC address of a certain IP.
+1. The _ARP reply_ is unicast, from the node that has the matched IP. It includes its MAC address.
+
+The ARP message is encapsulated in an Ethernet frame of type `0x0806` and has the following structure:
+
+- _HW type_: 2 bytes. Tells the type of the link layer protocol. For Ethernet `0x0001` is used.
+- _Network type_: 2 bytes. Tells the type of the network layer protocol. For IP `0x0800` is used.
+- _HW len_: 1 byte. The length of the link-layer addresses. `0x06` for Ethernet.
+- _Protocol len_: 1 byte. The length of the network-layer addresses. `0x04` for IP.
+- _Operation type_: 2 bytes. The ARP operation. `0x0001` for request or `0x0002` for replies.
+- _Sender HW address_: variable length.
+- _Sender Network address_: variable length.
+- _Target HW address_: variable length.
+- _Target Network address_: variable length.
 
 
-## Bridges and Switchers
+```{note}
+In the example, node A wants to know the MAC address of B. It sends an ARP requests (the example needs to be read from the right to the left):
+- The frame's detination address is the broadcast: `FF:FF:FF:FF:FF:FF`.
+- The frame's type is ARP (`0x0806`).
+- The data in the frame is an ARP message with the following content:
+  - HW type and network type sets to Ethernet and IP. (there is a mistake in the slide: it is `0x0001` not `0x0002`)
+  - HW len and protocol len are set to 6 and 4 because of the length of the Ethernet and IP addresses.
+  - The operation type is `0x0001` for a request.
+  - The sender's addresses are filled accordingly.
+  - The target HW address is set to `00:00:00:00:00:00` as it is unkown
 
-## Networking examples
+B replies with a unicast ARP reply and it contains its IP address (as part of the sender's protocol address).
+```
+
+## Bridges and Switches
+
+As we have seen before, connecting multiple devices requires sharing a transmission medium.
+That is problematic in many cases because of collisions.
+The use of CSMA/CD (and other techniques) reduces the chance of collisions.
+However, collisions may still happen and that reduces the utilisation of the channel.
+
+Ethernet has evolved to provide better performance and in its earlier stages used _bridges_ (also known as _hubs_) to connect multiple hosts and reduce the amount of collisions.
+_Switches_ were introduced later as an improvement of bridges to avoid collisions even further.
+
+### Bridges
+
+Bridges (hubs) are used to split a collision domain in multiple ones.
+They forward the frames coming from one collision domain (connected to one of the bridge _port_) to the other ones (connected to the rest of the ports).
+
+```{note}
+Let's suppose the 2 port hub of the slide:
+1. A frame coming from the left side is forwarded to the right side to _all_ hosts.
+1. Only the target host generates a reponse and send the frame back to the left side.
+1. The bridge forward the response to _all_ the nodes at the left side.
+1. Again, only the target host processes the response.
+```
+
+By separating the collision domains, bridges improve the bandwidth of the shared medium.
+For example, 6 nodes connected to a shared medium of `10Mbps` would have `10/6 = 1.6Mbps`.
+Adding a bridge of 2 ports, the collision domains can be split in 2, so each domain will have 3 hosts.
+Now, the bandwidth will be `10 / (3 + 1)` (as we should count the bridge itself too) which is `2.5Mbps`.
+
+Bridges are not smart enough for _filtering_. In fact, they are physical-layer devices. They do not have any knowledge of
+
+### Switches
