@@ -42,7 +42,7 @@
   <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
@@ -673,10 +673,33 @@ They forward the frames coming from one collision domain (connected to one of th
 For example, 6 nodes connected to a shared medium of <code class="docutils literal notranslate"><span class="pre">10Mbps</span></code> would have <code class="docutils literal notranslate"><span class="pre">10/6</span> <span class="pre">=</span> <span class="pre">1.6Mbps</span></code>.
 Adding a bridge of 2 ports, the collision domains can be split in 2, so each domain will have 3 hosts.
 Now, the bandwidth will be <code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">/</span> <span class="pre">(3</span> <span class="pre">+</span> <span class="pre">1)</span></code> (as we should count the bridge itself too) which is <code class="docutils literal notranslate"><span class="pre">2.5Mbps</span></code>.</p>
-<p>Bridges are not smart enough for <em>filtering</em>. In fact, they are physical-layer devices. They do not have any knowledge of</p>
+<p>Bridges are not smart enough for <em>filtering</em>.
+In fact, they are physical-layer devices because they do not check the link layer addressing at all.
+It would be a great improvement if bridges could check the link layer so they send frames to the right ports.</p>
 </section>
 <section id="switches">
 <h3>Switches<a class="headerlink" href="#switches" title="Link to this heading">#</a></h3>
+<p>Switches are link-layer devices beucase they check link layer addresses to perform a smarter forwarding of the frames.
+In order to do so, a <em>switch table</em> is required. This table tells, for each destination MAC address, what port needs to be used.
+However, this table starts empty when the switch starts and needs to be filled.
+Switches can learn to fill the table like this:</p>
+<ol class="arabic simple">
+<li><p>When a frame arrives, the switch writes down in the table the <em>source address</em> and the <em>port</em> from which it arrived.
+Incoming frames are useful for learning new paths.</p></li>
+<li><p>The switch reads the <em>target address</em> and look for it in the table.
+If it is present, then the frame is sent through the designated port.
+If not, then send it through all the rest of ports.</p></li>
+<li><p>The rows of the time are removed if they are not used for a certain period of time.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the slide, the table is built out of the frames that are being sent between hosts:</p>
+<ul class="simple">
+<li><p>A to D: A is learnt. The frame to D goes to ports 2 and 3.</p></li>
+<li><p>E to A: E is learnt. The frame is sent to port 1 because we knew A already.</p></li>
+<li><p>B to C: B is learnt. The frame is sent to ports 2 and 3.</p></li>
+</ul>
+</div>
 </section>
 </section>
 </section>

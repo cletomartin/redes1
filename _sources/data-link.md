@@ -301,6 +301,27 @@ For example, 6 nodes connected to a shared medium of `10Mbps` would have `10/6 =
 Adding a bridge of 2 ports, the collision domains can be split in 2, so each domain will have 3 hosts.
 Now, the bandwidth will be `10 / (3 + 1)` (as we should count the bridge itself too) which is `2.5Mbps`.
 
-Bridges are not smart enough for _filtering_. In fact, they are physical-layer devices. They do not have any knowledge of
+Bridges are not smart enough for _filtering_.
+In fact, they are physical-layer devices because they do not check the link layer addressing at all.
+It would be a great improvement if bridges could check the link layer so they send frames to the right ports.
 
 ### Switches
+
+Switches are link-layer devices beucase they check link layer addresses to perform a smarter forwarding of the frames.
+In order to do so, a _switch table_ is required. This table tells, for each destination MAC address, what port needs to be used.
+However, this table starts empty when the switch starts and needs to be filled.
+Switches can learn to fill the table like this:
+
+1. When a frame arrives, the switch writes down in the table the _source address_ and the _port_ from which it arrived.
+   Incoming frames are useful for learning new paths.
+1. The switch reads the _target address_ and look for it in the table.
+   If it is present, then the frame is sent through the designated port.
+   If not, then send it through all the rest of ports.
+1. The rows of the time are removed if they are not used for a certain period of time.
+
+```{note}
+In the slide, the table is built out of the frames that are being sent between hosts:
+- A to D: A is learnt. The frame to D goes to ports 2 and 3.
+- E to A: E is learnt. The frame is sent to port 1 because we knew A already.
+- B to C: B is learnt. The frame is sent to ports 2 and 3.
+```
